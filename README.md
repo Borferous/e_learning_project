@@ -8,3 +8,6 @@ This project is a web-based e-learning platform built with React, TypeScript, PH
 -  **Tailwind CSS**: For utility-first CSS styling.
 -  **PHP**: For server-side logic.
 -  **MySQL**: For database management.
+-  **Mantine UI**: For responsive UI components
+-  **LiveKit**: For meeting stuff
+  
