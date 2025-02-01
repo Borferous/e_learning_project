@@ -1,4 +1,3 @@
-<!-- Will Contains enums -->
 <?php
 
     // Sample
