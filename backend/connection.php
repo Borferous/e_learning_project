@@ -1,15 +1,16 @@
 <?php
-    include_once 'headers.php';
-    include_once 'message_response.php';
+    $host = "localhost";
+    $user = "root";
+    $password = "";
+    $database = "bini_academy_db";
 
-    $db_server = "localhost";
-    $db_user = "root";
-    $db_pass = "";
-    $db_name = "bini_academy_db";
+    // Create connection
+    $conn = mysqli_connect($host, $user, $password, $database);
 
-    $conn = mysqli_connect($db_server, $db_user, $db_pass, $db_name);
-
-    if ($conn->connect_error) {
-        die(errorMessage("Connection failed: " . $conn->connect_error));
+    // Check connection
+    if (!$conn) {
+        die("Connection failed: " . mysqli_connect_error());
     }
-?>
+
+
+    

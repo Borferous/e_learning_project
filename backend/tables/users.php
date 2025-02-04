@@ -1,35 +1,53 @@
 <?php
-    include_once '../headers.php';
-    include_once '../message_response.php';
-    include_once '../connection.php';
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Content-Type: application/json");
+include '../connection.php';
 
-    switch ($_SERVER['REQUEST_METHOD']) {
-        case 'GET':
-            $query = "SELECT * FROM users";
-            $result = mysqli_query($conn, $query);
 
-            if (!$result) {
-                echo errorMessage("Database query failed: " . mysqli_error($conn));
-                break;
-            }
+function getAllUsers($conn) {
+    $query = 'SELECT * FROM users';
+    $result = mysqli_query($conn, $query);
 
-            $users = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
-            if (count($users) > 0) {
-                echo successMessage('Get users success', $users);
-            } else {
-                echo errorMessage('No users found.');
-            }
-            break;
-
-        case 'POST':
-            echo successMessage('User creation functionality goes here');
-            break;
-
-        default:
-            echo errorMessage('Unsupported request method.');
-            break;
+    $users = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $users[] = $row;
     }
 
-    include_once '../close_connection.php';
-?>
+    return $users;
+}
+
+
+function getUserById($conn, $id) {
+    $query = 'SELECT * FROM users WHERE user_id = ?';
+    $stmt = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($stmt, 'i', $id);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    return mysqli_fetch_assoc($result) ?: [];
+}
+
+// Get request parameters
+$method = $_SERVER['REQUEST_METHOD'];
+$action = $_GET['action'] ?? null;
+$id = $_GET['user_id'] ?? null;
+
+// Define routes
+$routes = [
+    'GET' => [
+        'get-all-users' => fn() => getAllUsers($conn),
+        'get-user-by-id' => fn() => getUserById($conn, $id),
+    ]
+];
+
+// Process the request
+if ($method === 'GET' && isset($routes['GET'][$action])) {
+    $response = $routes['GET'][$action]();
+    header('Content-Type: application/json');
+    echo json_encode($response);
+} else {
+    http_response_code(400);
+    echo json_encode(['error' => 'Invalid request']);
+}
