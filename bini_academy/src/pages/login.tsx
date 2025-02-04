@@ -1,43 +1,59 @@
-import { Fieldset, Button, Center } from "@mantine/core";
+import { Button, Center, NumberInput } from "@mantine/core";
 import axios from "axios";
-import { JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+
+import { userEndpoint } from "../api";
+import { User, UserIdInput } from "../types";
+
 
 export const LoginPage = () => {
-    const [showUsers, setShowUsers] = useState(false);
 
-    const fetchUsers = async () => {
-        await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate a delay of 2 seconds
-        const response = await axios.get("http://localhost:8000/tables/users.php");
-        return response.data.data;
-    };
+    async function getAllUsers() {
+        try {
+            const response = await axios.get(userEndpoint.getAllUsers());
+            console.log("All Users:", response.data);
+            setFetchedUser(response.data);
+        } catch (error: any) {
+            console.error("Error fetching users:", error.response?.data || error.message);
+        }
+    }
 
-    const { data: users, refetch, isLoading, error } = useQuery({
-        queryKey: ["users"],
-        queryFn: fetchUsers,
-        enabled: false, // Prevent auto-fetching
-    });
 
-    const handleClick = () => {
-        setShowUsers(true);
-        refetch(); // Fetch users on button click
-    };
+    async function getUserById({ userId }: UserIdInput) {
+        try {
+            const response = await axios.get(userEndpoint.getUserById({ userId: userId }));
+            console.log(`User ${userId}:`, response.data);
+            setFetchedUser([response.data]);
+        } catch (error: any) {
+            console.error(`Error fetching user ${userId}:`, error.response?.data || error.message);
+        }
+    }
+
+    const [idInput, setIdInput] = useState<number>(0);
+    const [fetchedUser, setFetchedUser] = useState<User[] | null>(null);
 
     return (
         <Center>
-            <Fieldset legend="User List">
-                <Button onClick={handleClick} disabled={isLoading}>
-                    {isLoading ? "Loading..." : "Show Users"}
-                </Button>
-                {error && <p style={{ color: "red" }}>Error fetching users.</p>}
-                {showUsers && users && (
-                    <ul>
-                        {users.map((user: { user_id: Key | null | undefined; username: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined; }) => (
-                            <li key={user.user_id}>{user.username}</li>
-                        ))}
-                    </ul>
-                )}
-            </Fieldset>
+            <Button onClick={getAllUsers}>Get All User</Button>
+
+            <NumberInput placeholder="Enter User ID" value={idInput} onChange={(value) => setIdInput(value as number)}></NumberInput>
+            <Button onClick={() => getUserById({ userId: idInput })}>Get</Button>
+
+            <div className="flex flex-row">
+                {
+                    fetchedUser && (
+                        fetchedUser.map((user) =>
+                            (
+                                <div key={user.user_id}>
+                                    <h1>{user.name}</h1>
+                                    <p>{user.email}</p>
+                                </div>
+                            )
+                        )
+                    )
+                }
+            </div>
+
         </Center>
     );
 };
