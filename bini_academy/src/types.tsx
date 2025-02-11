@@ -1,13 +1,13 @@
 export interface UserIdInput {
-    userId: number;
+    userId?: number | null;
 }
 
 export interface CreateUserInput {
-    name: string;
-    password: string;
-    address: string;
-    user_role: string;
-    email: string;
+    name?: string | null;
+    password?: string | null;
+    address?: string | null;
+    user_role?: string | null;
+    email?: string | null;
 }
 
 export interface User {
@@ -17,7 +17,7 @@ export interface User {
     address: string,
     user_role: string,
     email: string,
-    profile_picture: string,
+    profile_picture?: string,
 }
 
 export enum UserRole {
@@ -31,3 +31,8 @@ export const UserRoleLabel = [
     {value: UserRole.Admin , label: "Admin"},
     {value: UserRole.Teacher , label: "Teacher"},
 ]
+
+export enum ResponseStatus {
+    Success = 'success',
+    Error = 'error'
+}
