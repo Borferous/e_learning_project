@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 03, 2025 at 07:25 AM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Generation Time: Feb 11, 2025 at 05:17 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -48,7 +48,7 @@ CREATE TABLE `users` (
   `address` varchar(255) NOT NULL,
   `user_role` varchar(11) NOT NULL,
   `email` varchar(255) NOT NULL,
-  `profile_picture` blob NOT NULL
+  `profile_picture` blob DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -56,8 +56,12 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `name`, `password`, `address`, `user_role`, `email`, `profile_picture`) VALUES
-(1, 'myusername', 'mypaassword', '', '', '', ''),
-(2, 'hello', 'world', '', '', '', '');
+(18, 'Ellis', 'password123', 'university of the immaculate conception', 'admin', 'ellis@gmail.com', NULL),
+(19, 'Chloe', 'password123', 'university of the immaculate conception', 'teacher', 'chloy@gmail.com', NULL),
+(20, 'Cister', 'password123', 'university of the immaculate conception', 'teacher', 'juswa@gmail.com', NULL),
+(21, 'Lemuel', 'password123', 'university of the immaculate conception', 'student', 'lem@gmail.com', NULL),
+(22, 'Yuichi', 'asd', 'university of the immaculate conception', 'student', 'yoich@gmail.com', NULL),
+(23, 'test', 'test', 'test', 'student', 'test', NULL);
 
 -- --------------------------------------------------------
 
@@ -111,7 +115,7 @@ ALTER TABLE `course`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `user_course`
