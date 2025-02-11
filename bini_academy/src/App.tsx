@@ -1,14 +1,14 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { LoginPage } from './pages/login';
-import { UserPage } from './test/user';
 
 import '@mantine/core/styles.css'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { MantineProvider } from '@mantine/core';
+import { MainTest } from './test/main';
 
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 
 function App() {
   return (
@@ -18,8 +18,7 @@ function App() {
           <Router>
             <Routes>
               <Route path="/" element={<LoginPage/>} />
-              <Route path='/test' element={<UserPage/>}></Route>
-              {/* Add more routes here */}
+              <Route path='/test' element={<MainTest/>}></Route>
             </Routes>
           </Router>
         </MantineProvider>
