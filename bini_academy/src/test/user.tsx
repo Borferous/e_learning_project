@@ -1,4 +1,4 @@
-import { Button, Center, Fieldset, Flex, Select, Table, TextInput } from "@mantine/core"
+import { Button, Center, Fieldset, Flex, Pagination, Select, Table, TextInput } from "@mantine/core"
 import { useEffect, useState } from "react"
 import { createUser, deleteUser, getAllUser, updateUser } from "../api"
 import { User, UserRoleLabel } from "../types"
@@ -8,7 +8,7 @@ export const UserPage = () => {
         <Center>
             <Flex direction={"column"}>
                 <GetAllUser />
-                <CreateUserForm/>
+                <CreateUserForm />
             </Flex>
         </Center>
     )
@@ -16,9 +16,10 @@ export const UserPage = () => {
 
 export const GetAllUser = () => {
     const [users, setUsers] = useState<User[] | null>(null);
-    const [error, setError] = useState<string | null>(null);
+    const [, setError] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [editingUser, setEditingUser] = useState<User | null>(null);
+    const usersPerPage = 5;
 
     const fetchUser = async () => {
         try {
@@ -31,6 +32,8 @@ export const GetAllUser = () => {
         }
     };
 
+    const totalPages = users ? Math.ceil(users.length / usersPerPage) : 1;
+
     return (
         <Fieldset legend="Get All Users">
             <Button onClick={fetchUser}>Fetch Users</Button>
@@ -39,31 +42,49 @@ export const GetAllUser = () => {
             ) : (
                 <>
                     {users?.length ? (
-                        <Table>
-                            <Table.Thead>
-                                <Table.Tr>
-                                    <Table.Th>Name</Table.Th>
-                                    <Table.Th>Email</Table.Th>
-                                    <Table.Th>Address</Table.Th>
-                                    <Table.Th>Role</Table.Th>
-                                    <Table.Th>Actions</Table.Th>
-                                </Table.Tr>
-                            </Table.Thead>
-                            <Table.Tbody>
-                                {users.slice((currentPage - 1) * 5, currentPage * 5).map((user) => (
-                                    <Table.Tr key={user.user_id}>
-                                        <Table.Td>{user.name}</Table.Td>
-                                        <Table.Td>{user.email}</Table.Td>
-                                        <Table.Td>{user.address}</Table.Td>
-                                        <Table.Td>{user.user_role}</Table.Td>
-                                        <Table.Td>
-                                            <Button onClick={() => setEditingUser(user)} className="mr-1">Edit</Button>
-                                            <Button onClick={() => deleteUser(parseInt(user.user_id))}>Delete</Button>
-                                        </Table.Td>
+                        <>
+                            <Table>
+                                <Table.Thead>
+                                    <Table.Tr>
+                                        <Table.Th>Name</Table.Th>
+                                        <Table.Th>Email</Table.Th>
+                                        <Table.Th>Address</Table.Th>
+                                        <Table.Th>Role</Table.Th>
+                                        <Table.Th>Actions</Table.Th>
                                     </Table.Tr>
-                                ))}
-                            </Table.Tbody>
-                        </Table>
+                                </Table.Thead>
+                                <Table.Tbody>
+                                    {users.slice((currentPage - 1) * usersPerPage, currentPage * usersPerPage).map((user) => (
+                                        <Table.Tr key={user.user_id}>
+                                            <Table.Td>{user.name}</Table.Td>
+                                            <Table.Td>{user.email}</Table.Td>
+                                            <Table.Td>{user.address}</Table.Td>
+                                            <Table.Td>{user.user_role}</Table.Td>
+                                            <Table.Td>
+                                                <Button onClick={() => {
+                                                    setEditingUser(user)
+                                                }} className="mr-1">Edit</Button>
+                                                <Button onClick={() => {
+                                                    deleteUser(parseInt(user.user_id))
+                                                    fetchUser()
+                                                }}>Delete</Button>
+                                            </Table.Td>
+                                        </Table.Tr>
+                                    ))}
+                                </Table.Tbody>
+                            </Table>
+
+                            {/* Mantine Pagination */}
+                            <Flex justify="center" mt="md">
+                                <Pagination
+                                    value={currentPage}
+                                    onChange={setCurrentPage}
+                                    total={totalPages}
+                                    color="blue"
+                                    size="md"
+                                />
+                            </Flex>
+                        </>
                     ) : (
                         <p>No Users Found</p>
                     )}
@@ -72,6 +93,7 @@ export const GetAllUser = () => {
         </Fieldset>
     );
 };
+
 
 
 const CreateUserForm = () => {

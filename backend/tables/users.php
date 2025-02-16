@@ -1,54 +1,24 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
-header('Content-Type: application/json');
+
+include '../headers.php';
+include '../connection.php';
+include '../helper.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     http_response_code(200);
     exit();
 }
 
-include '../connection.php';
-include '../errors.php';
+
 
 function getAllUsers()
 {
-    global $conn;
-
-    $query = 'SELECT * FROM users';
-    $result = mysqli_query($conn, $query);
-
-    $users = [];
-    while ($row = mysqli_fetch_assoc($result)) {
-        $users[] = $row;
-    }
-
-    echo json_encode($users);
-    exit();
+    getFromTable('users');
 }
 
 function getUserById()
 {
-    global $conn;
-
-    $data = json_decode(file_get_contents("php://input"), true);
-    $id = $data['user_id'] ?? null;
-
-    if (!$id) {
-        sendError(422, 'Missing user_id');
-    }
-
-    $query = 'SELECT * FROM users WHERE user_id = ?';
-    $stmt = mysqli_prepare($conn, $query);
-    mysqli_stmt_bind_param($stmt, 'i', $id);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-
-    $user = mysqli_fetch_assoc($result) ?: [];
-
-    echo json_encode($user);
-    exit();
+    getTableById('users','user_id');
 }
 
 function createUser()
