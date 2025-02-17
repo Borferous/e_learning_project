@@ -2,7 +2,7 @@
     $host = "localhost";
     $user = "root";
     $password = "";
-    $database = "bini_academy_db";
+    $database = "bini_acdemy_db";
 
     // Create connection
     $conn = mysqli_connect($host, $user, $password, $database);
