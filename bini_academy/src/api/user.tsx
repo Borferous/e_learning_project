@@ -71,3 +71,18 @@ export const updateUser = async ({
         throw throwErr(error as Error, "Failed to Update User")
     }
 }
+
+export const loginUser = async ({
+    email,
+    password
+} : {
+    email: string,
+    password: string
+}) => {
+    try {
+        const response = await axios.post(`${baseUrl}?action=login-user`,{ email, password})
+        return response
+    } catch (error) {
+        throw throwErr(error as Error, "Login Fail")
+    }
+}
