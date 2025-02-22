@@ -1,18 +1,21 @@
 import { Button, Center, Fieldset, Flex, Pagination, Select, Table, TextInput } from "@mantine/core"
 import { useEffect, useState } from "react"
-import { createUser, deleteUser, getAllUser, updateUser } from "../api"
+import { createUser, deleteUser, getAllUser, updateUser } from "../api/user"
 import { User, UserRoleLabel } from "../types"
 
 export const UserPage = () => {
     return (
         <Center>
             <Flex direction={"column"}>
+                {/* <GetUserById/> */}
                 <GetAllUser />
                 <CreateUserForm />
             </Flex>
         </Center>
     )
 }
+
+
 
 export const GetAllUser = () => {
     const [users, setUsers] = useState<User[] | null>(null);
