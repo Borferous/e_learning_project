@@ -2,8 +2,9 @@ import { Grid, Container, Paper, TextInput, PasswordInput, Checkbox, Button, Tit
 import bapaLogo from '../assets/bapalogo.svg'; // Import logo
 import campusImage from '../assets/campus.jpg'; // Import background image
 import { Header } from '../components/header.tsx';
+import { Link } from 'react-router-dom';
 
-export const LoginPage = () => {
+export const UserCreatePage = () => {
   return (
     
     <Container fluid style={{ height: '100vh', padding: 0 }}>
@@ -41,7 +42,7 @@ export const LoginPage = () => {
           </div>
         </Grid.Col>
 
-        {/* Right side - Signin Form */}
+        {/* Right side - Signup Form */}
         <Grid.Col 
           span={{ base: 12, md: 6 }} 
           style={{ 
@@ -49,16 +50,18 @@ export const LoginPage = () => {
             alignItems: 'center', 
             justifyContent: 'center', 
             height: '100vh' 
-          }}
+          }} 
         >
           <Paper p={20} radius="md" style={{ width: '100%', maxWidth: 400 }}>
             <Center>
-              <Title order={2} mb="md">Sign in to your account</Title>
+              <Title order={2} mb="md">Create your account</Title>
             </Center>
+            <TextInput label="Full Name" placeholder="Full name..." required />
             <TextInput label="Email" placeholder="Email address..." type="email" mt="md" required />
             <PasswordInput label="Password" placeholder="Create password" mt="md" required />
-            <Checkbox label="Remember me" mt="md" required />
-            <Button fullWidth mt="xl" color="orange">Sign In</Button>
+            <PasswordInput label="Confirm Password" placeholder="Confirm password" mt="md" required />
+            <Checkbox label="I agree with all of your Terms & Conditions" mt="md" required />
+            <Button fullWidth mt="xl" color="orange" component={Link} to="/">Create Account</Button>
           </Paper>
         </Grid.Col>
       </Grid>
