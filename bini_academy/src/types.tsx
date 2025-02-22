@@ -2,6 +2,10 @@ export interface UserIdInput {
     userId?: number | null;
 }
 
+export interface CourseIdInput {
+    course_id? : number | null
+}
+
 export interface CreateUserInput {
     name?: string | null;
     password?: string | null;
@@ -25,6 +29,15 @@ export enum UserRole {
     Admin = 'admin',
     Teacher = 'teacher'
 }
+
+export enum CourseCategory {
+    Science = 'science',
+    NotScience = 'not science'
+}
+
+export const CourseCategoryLabel = [
+    {value: CourseCategory.Science, label: 'science'}
+]
 
 export const UserRoleLabel = [
     {value: UserRole.Student , label: "Student"},

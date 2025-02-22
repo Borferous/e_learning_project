@@ -9,8 +9,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit();
 }
 
-
-
 function getAllUsers()
 {
     getFromTable('users');
@@ -156,6 +154,10 @@ function loginUser()
     }
 }
 
+function enrollUser() {
+
+}
+
 
 $method = $_SERVER['REQUEST_METHOD'];
 $action = $_GET['action'] ?? null;
@@ -173,6 +175,9 @@ switch ($method) {
 
     case 'POST':
         switch ($action) {
+            case 'enroll-user':
+                enrollUser();
+                break;
             case 'get-user-by-id':
                 getUserById();
                 break;
