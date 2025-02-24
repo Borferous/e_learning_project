@@ -14,8 +14,8 @@ export const UserCreatePage = () => {
   const [email, setEmail] = useState<string | null>(null);
   const [password, setPassword] = useState<string | null>(null);
   const [confirmPass, setConfirmPass] = useState<string | null>(null);
-  const [address, setAddress] = useState<string | null>('myaddress123');
-  const [role, setRole] = useState<UserRole>(UserRole.Student)
+  const [address, ] = useState<string | null>('myaddress123');
+  const [role, ] = useState<UserRole>(UserRole.Student)
   const [agree, setAgree] = useState<boolean>(false)
 
   const createAccount = async () => {
