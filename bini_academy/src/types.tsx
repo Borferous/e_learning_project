@@ -31,12 +31,25 @@ export enum UserRole {
 }
 
 export enum CourseCategory {
-    Science = 'science',
-    NotScience = 'not science'
+    Music = 'music',
+    Dance = 'dance',
+    Acting = 'acting',
+    Technical = 'technical',
+    PhilippineArts = 'philippineArt',
+    Workshop = 'workshop',
+    Certification = 'certification',
+    Mentorship = 'mentorship',
 }
 
 export const CourseCategoryLabel = [
-    {value: CourseCategory.Science, label: 'science'}
+    {value: CourseCategory.Music, label: 'Music'},
+    {value: CourseCategory.Dance, label: 'Dance'},
+    {value: CourseCategory.Acting, label: 'Acting and Theater'},
+    {value: CourseCategory.Technical, label: 'Techinical skill and Technology'},
+    {value: CourseCategory.PhilippineArts, label: 'Philippine Arts and Heritage'},
+    {value: CourseCategory.Workshop, label: 'Short-term Workshop and Master classes'},
+    {value: CourseCategory.Certification, label: 'Certification and Diploma programs'},
+    {value: CourseCategory.Mentorship, label: 'Mentorship and Career pathways'},
 ]
 
 export const UserRoleLabel = [
@@ -44,8 +57,3 @@ export const UserRoleLabel = [
     {value: UserRole.Admin , label: "Admin"},
     {value: UserRole.Teacher , label: "Teacher"},
 ]
-
-export enum ResponseStatus {
-    Success = 'success',
-    Error = 'error'
-}

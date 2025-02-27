@@ -9,13 +9,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit();
 }
 
-$method = $_SERVER['REQUEST_METHOD'];
-$action = $_GET['action'] ?? null;
-
 // Todo: finish crud
 
 function createCourse(){
-    
+    createData('course',['teacher_id','course_name','category','price']);
 }
 
 function listCourses(){
@@ -26,40 +23,30 @@ function getCourse(){
     getTableById('course','course_id');
 }
 
-switch ($method) {
-    case 'POST':
+function deleteCourse(){
+    deleteById('course','course_id');
+}
 
-        switch ($action) {
-            case 'create-course':
-                createCourse();
-                break;
-            case 'get-course':
-                getCourse();
-                break;
-            default:
-                sendError(400, 'Invalid Action');
-                break;
-        }
+$method = $_SERVER['REQUEST_METHOD'];
+$action = $_GET['action'] ?? null;
 
-        break;
-    case 'GET':
+// Define allowed actions as a dictionary
+$routes = [
+    'POST' => [
+        'create-course' => 'createCourse',
+        'get-course' => 'getCourse',
+    ],
+    'GET' => [
+        'list-courses' => 'listCourses',
+    ],
+    'DELETE' => [
+        'delete-course' => 'deleteCourse'
+    ], // Empty for now, but ready for future actions
+];
 
-        switch ($action) {
-            case 'list-courses':
-                listCourses();
-                break;
-            default:
-                sendError(400,"Invalid Action");
-                break;
-        }
-
-        break;
-
-    case 'DELETE':
-
-        break;
-
-    default:
-        sendError(400, 'Invalid Action');
-        break;
+// Check if the method exists and contains the action
+if (isset($routes[$method][$action])) {
+    call_user_func($routes[$method][$action]);
+} else {
+    sendError(400, 'Invalid request method or action');
 }

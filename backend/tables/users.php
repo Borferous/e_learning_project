@@ -9,110 +9,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit();
 }
 
-function getAllUsers()
-{
-    getFromTable('users');
-}
+function getAllUsers() { getFromTable('users'); }
+function getUserById() { getTableById('users','user_id'); }
+function createUser() { createData('users', ['name', 'password', 'address', 'user_role', 'email']); }
+function deleteUser() { deleteById('users','user_id'); }
+function updateUser() { updateData('users', 'user_id', ['name', 'password', 'address', 'user_role', 'email']); }
 
-function getUserById()
-{
-    getTableById('users','user_id');
-}
-
-function createUser()
-{
-    global $conn;
-
-    // Decode JSON input if sent as raw JSON
-    $data = json_decode(file_get_contents("php://input"), true) ?? $_POST;
-
-    $name = $data['name'] ?? null;
-    $password = $data['password'] ?? null;
-    $address = $data['address'] ?? null;
-    $user_role = $data['user_role'] ?? null;
-    $email = $data['email'] ?? null;
-
-    if (!$name || !$password || !$address || !$user_role || !$email) {
-        sendError(422, 'Missing required fields');
+function startSessionIfNotActive() {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
     }
-
-    $query = 'INSERT INTO users (name, password, address, user_role, email, profile_picture) VALUES (?, ?, ?, ?, ?, NULL)';
-
-    if ($stmt = $conn->prepare($query)) {
-        $stmt->bind_param("sssss", $name, $password, $address, $user_role, $email);
-        if ($stmt->execute()) {
-            echo json_encode(['message' => 'User created successfully!']);
-        } else {
-            sendError(500, 'Database error: ' . $stmt->error);
-        }
-        $stmt->close();
-    } else {
-        sendError(500, 'Database error: ' . $conn->error);
-    }
-    exit();
-}
-
-function deleteUser()
-{
-    global $conn;
-    $data = json_decode(file_get_contents("php://input"), true) ?? $_POST;
-    $id = $data['user_id'] ?? null;
-
-    if (!$id) {
-        sendError(422, 'Missing user_id');
-    }
-
-    $query = 'DELETE FROM users WHERE user_id = ?';
-    if ($stmt = $conn->prepare($query)) {
-        $stmt->bind_param("i", $id);
-        if ($stmt->execute()) {
-            echo json_encode(['message' => 'User deleted successfully!']);
-        } else {
-            sendError(500, 'Error: ' . $stmt->error);
-        }
-        $stmt->close();
-    } else {
-        sendError(500, 'Error: ' . $conn->error);
-    }
-    exit();
-}
-
-function updateUser()
-{
-    global $conn;
-    $data = json_decode(file_get_contents("php://input"), true);
-
-    $id = $data['user_id'] ?? null;
-    $name = $data['name'] ?? null;
-    $password = $data['password'] ?? null;
-    $address = $data['address'] ?? null;
-    $user_role = $data['user_role'] ?? null;
-    $email = $data['email'] ?? null;
-
-    if (!$id || !$name || !$password || !$address || !$user_role || !$email) {
-        sendError(422, 'Missing required fields');
-    }
-
-    $query = 'UPDATE users SET name = ?, password = ?, address = ?, user_role = ?, email = ? WHERE user_id = ?';
-    if ($stmt = $conn->prepare($query)) {
-        $stmt->bind_param("sssssi", $name, $password, $address, $user_role, $email, $id);
-        if ($stmt->execute()) {
-            echo json_encode(['message' => 'User updated successfully!']);
-        } else {
-            sendError(500, 'Database error: ' . $stmt->error);
-        }
-        $stmt->close();
-    } else {
-        sendError(500, 'Database error: ' . $conn->error);
-    }
-    exit();
 }
 
 function loginUser()
 {
-    global $conn;
+    startSessionIfNotActive(); // Ensure session is started
 
-    // Decode JSON input
+    global $conn;
     $data = json_decode(file_get_contents("php://input"), true) ?? $_POST;
 
     $email = $data['email'] ?? null;
@@ -130,16 +43,13 @@ function loginUser()
         $user = $result->fetch_assoc();
         $stmt->close();
 
-        if (!$user) {
+        if (!$user || $password !== $user['password']) {
             sendError(401, 'Invalid email or password');
         }
 
-        // Verify password (assuming you use password_hash during registration)
-        if ($password !== $user['password']) {
-            sendError(401, 'Invalid email or password');
-        }
+        // Store user ID in session
+        $_SESSION['user_id'] = $user['user_id'];
 
-        // Successful login response
         echo json_encode([
             'message' => 'Login successful',
             'user' => [
@@ -154,57 +64,72 @@ function loginUser()
     }
 }
 
-function enrollUser() {
+function getCurrentUser()
+{
+    startSessionIfNotActive(); // Ensure session is started
+    global $conn;
 
+    if (!isset($_SESSION['user_id'])) {
+        sendError(401, 'User not logged in');
+    }
+
+    $query = 'SELECT user_id, name, user_role FROM users WHERE user_id = ?';
+    if ($stmt = $conn->prepare($query)) {
+        $stmt->bind_param("i", $_SESSION['user_id']);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+        $stmt->close();
+
+        if (!$user) {
+            sendError(404, 'User not found');
+        }
+
+        echo json_encode(['user' => $user]);
+        exit();
+    } else {
+        sendError(500, 'Database error: ' . $conn->error);
+    }
 }
 
+function logoutUser()
+{
+    startSessionIfNotActive(); // Ensure session is started
+
+    // Unset all session variables
+    $_SESSION = [];
+
+    // Destroy the session
+    session_destroy();
+
+    echo json_encode(['message' => 'Logout successful']);
+    exit();
+}
 
 $method = $_SERVER['REQUEST_METHOD'];
 $action = $_GET['action'] ?? null;
 
-switch ($method) {
-    case 'GET':
-        switch ($action) {
-            case 'get-all-users':
-                getAllUsers();
-                break;
-            default:
-                sendError(400, 'Invalid action');
-        }
-        break;
+// Define allowed actions as a dictionary
+$routes = [
+    'GET' => [
+        'get-all-users' => 'getAllUsers',
+        'get-current-user' => 'getCurrentUser',
+    ],
+    'POST' => [
+        'get-user-by-id' => 'getUserById',
+        'create-user' => 'createUser',
+        'update-user' => 'updateUser',
+        'login-user' => 'loginUser',
+        'logout-user' => 'logoutUser'
+    ],
+    'DELETE' => [
+        'delete-user' => 'deleteUser',
+    ],
+];
 
-    case 'POST':
-        switch ($action) {
-            case 'enroll-user':
-                enrollUser();
-                break;
-            case 'get-user-by-id':
-                getUserById();
-                break;
-            case 'create-user':
-                createUser();
-                break;
-            case 'update-user':
-                updateUser();
-                break;
-            case 'login-user':
-                loginUser();
-                break;
-            default:
-                sendError(400, 'Invalid action');
-        }
-        break;
-
-    case 'DELETE':
-        switch ($action) {
-            case 'delete-user':
-                deleteUser();
-                break;
-            default:
-                sendError(400, 'Invalid action');
-        }
-        break;
-
-    default:
-        sendError(400, 'Invalid request method');
+// Check if the method exists and contains the action
+if (isset($routes[$method][$action])) {
+    call_user_func($routes[$method][$action]);
+} else {
+    sendError(400, 'Invalid request method or action');
 }
