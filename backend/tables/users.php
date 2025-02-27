@@ -15,11 +15,17 @@ function createUser() { createData('users', ['name', 'password', 'address', 'use
 function deleteUser() { deleteById('users','user_id'); }
 function updateUser() { updateData('users', 'user_id', ['name', 'password', 'address', 'user_role', 'email']); }
 
+function startSessionIfNotActive() {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+}
+
 function loginUser()
 {
-    global $conn;
+    startSessionIfNotActive(); // Ensure session is started
 
-    // Decode JSON input
+    global $conn;
     $data = json_decode(file_get_contents("php://input"), true) ?? $_POST;
 
     $email = $data['email'] ?? null;
@@ -37,16 +43,13 @@ function loginUser()
         $user = $result->fetch_assoc();
         $stmt->close();
 
-        if (!$user) {
+        if (!$user || $password !== $user['password']) {
             sendError(401, 'Invalid email or password');
         }
 
-        // Verify password (assuming you use password_hash during registration)
-        if ($password !== $user['password']) {
-            sendError(401, 'Invalid email or password');
-        }
+        // Store user ID in session
+        $_SESSION['user_id'] = $user['user_id'];
 
-        // Successful login response
         echo json_encode([
             'message' => 'Login successful',
             'user' => [
@@ -61,8 +64,46 @@ function loginUser()
     }
 }
 
-function enrollUser() {
+function getCurrentUser()
+{
+    startSessionIfNotActive(); // Ensure session is started
+    global $conn;
 
+    if (!isset($_SESSION['user_id'])) {
+        sendError(401, 'User not logged in');
+    }
+
+    $query = 'SELECT user_id, name, user_role FROM users WHERE user_id = ?';
+    if ($stmt = $conn->prepare($query)) {
+        $stmt->bind_param("i", $_SESSION['user_id']);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+        $stmt->close();
+
+        if (!$user) {
+            sendError(404, 'User not found');
+        }
+
+        echo json_encode(['user' => $user]);
+        exit();
+    } else {
+        sendError(500, 'Database error: ' . $conn->error);
+    }
+}
+
+function logoutUser()
+{
+    startSessionIfNotActive(); // Ensure session is started
+
+    // Unset all session variables
+    $_SESSION = [];
+
+    // Destroy the session
+    session_destroy();
+
+    echo json_encode(['message' => 'Logout successful']);
+    exit();
 }
 
 $method = $_SERVER['REQUEST_METHOD'];
@@ -72,13 +113,14 @@ $action = $_GET['action'] ?? null;
 $routes = [
     'GET' => [
         'get-all-users' => 'getAllUsers',
+        'get-current-user' => 'getCurrentUser',
     ],
     'POST' => [
-        'enroll-user' => 'enrollUser',
         'get-user-by-id' => 'getUserById',
         'create-user' => 'createUser',
         'update-user' => 'updateUser',
         'login-user' => 'loginUser',
+        'logout-user' => 'logoutUser'
     ],
     'DELETE' => [
         'delete-user' => 'deleteUser',
