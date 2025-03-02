@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 11, 2025 at 05:17 PM
+-- Generation Time: Mar 02, 2025 at 01:16 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -32,7 +32,29 @@ CREATE TABLE `course` (
   `teacher_id` int(11) NOT NULL,
   `course_name` varchar(255) NOT NULL,
   `category` varchar(255) NOT NULL,
-  `price` int(11) NOT NULL
+  `price` int(11) NOT NULL,
+  `description` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `course`
+--
+
+INSERT INTO `course` (`course_id`, `teacher_id`, `course_name`, `category`, `price`, `description`) VALUES
+(1, 1, 'sample name', 'sample category name', 100, '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `event`
+--
+
+CREATE TABLE `event` (
+  `event_id` int(11) NOT NULL,
+  `event_host` int(11) NOT NULL,
+  `event_name` varchar(255) NOT NULL,
+  `event_type` varchar(255) NOT NULL,
+  `event_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- --------------------------------------------------------
@@ -56,12 +78,10 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `name`, `password`, `address`, `user_role`, `email`, `profile_picture`) VALUES
-(18, 'Ellis', 'password123', 'university of the immaculate conception', 'admin', 'ellis@gmail.com', NULL),
-(19, 'Chloe', 'password123', 'university of the immaculate conception', 'teacher', 'chloy@gmail.com', NULL),
-(20, 'Cister', 'password123', 'university of the immaculate conception', 'teacher', 'juswa@gmail.com', NULL),
-(21, 'Lemuel', 'password123', 'university of the immaculate conception', 'student', 'lem@gmail.com', NULL),
-(22, 'Yuichi', 'asd', 'university of the immaculate conception', 'student', 'yoich@gmail.com', NULL),
-(23, 'test', 'test', 'test', 'student', 'test', NULL);
+(1, 'myusername', 'mypaassword', '', '', '', ''),
+(2, 'hello', 'world', '', '', '', ''),
+(3, 'Yuichi Cane', 'wtfman', 'asdasdasd', 'admin', 'asdasdasd@gmail.com', NULL),
+(4, 'Another use', 'password123', 'address123', 'student', 'ycanete_220000000743@gmail.com', NULL);
 
 -- --------------------------------------------------------
 
@@ -77,6 +97,26 @@ CREATE TABLE `user_course` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
+-- Dumping data for table `user_course`
+--
+
+INSERT INTO `user_course` (`user_course_id`, `user_id`, `course_id`, `certificate_status`) VALUES
+(1, 2, 1, 'Not Completed');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_event`
+--
+
+CREATE TABLE `user_event` (
+  `user_event_id` int(11) NOT NULL,
+  `event_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `role` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
 -- Indexes for dumped tables
 --
 
@@ -86,6 +126,13 @@ CREATE TABLE `user_course` (
 ALTER TABLE `course`
   ADD PRIMARY KEY (`course_id`),
   ADD KEY `teacher_user` (`teacher_id`);
+
+--
+-- Indexes for table `event`
+--
+ALTER TABLE `event`
+  ADD PRIMARY KEY (`event_id`),
+  ADD KEY `event_host` (`event_host`);
 
 --
 -- Indexes for table `users`
@@ -102,6 +149,14 @@ ALTER TABLE `user_course`
   ADD KEY `course_user_fk` (`course_id`);
 
 --
+-- Indexes for table `user_event`
+--
+ALTER TABLE `user_event`
+  ADD PRIMARY KEY (`user_event_id`),
+  ADD KEY `event_id` (`event_id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -109,19 +164,31 @@ ALTER TABLE `user_course`
 -- AUTO_INCREMENT for table `course`
 --
 ALTER TABLE `course`
-  MODIFY `course_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `course_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `event`
+--
+ALTER TABLE `event`
+  MODIFY `event_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `user_course`
 --
 ALTER TABLE `user_course`
-  MODIFY `user_course_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `user_course_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `user_event`
+--
+ALTER TABLE `user_event`
+  MODIFY `user_event_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
@@ -134,11 +201,24 @@ ALTER TABLE `course`
   ADD CONSTRAINT `teacher_user` FOREIGN KEY (`teacher_id`) REFERENCES `users` (`user_id`);
 
 --
+-- Constraints for table `event`
+--
+ALTER TABLE `event`
+  ADD CONSTRAINT `event_host` FOREIGN KEY (`event_host`) REFERENCES `users` (`user_id`);
+
+--
 -- Constraints for table `user_course`
 --
 ALTER TABLE `user_course`
   ADD CONSTRAINT `course_user_fk` FOREIGN KEY (`course_id`) REFERENCES `course` (`course_id`),
   ADD CONSTRAINT `user_course_fk` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
+
+--
+-- Constraints for table `user_event`
+--
+ALTER TABLE `user_event`
+  ADD CONSTRAINT `event_id` FOREIGN KEY (`event_id`) REFERENCES `event` (`event_id`),
+  ADD CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

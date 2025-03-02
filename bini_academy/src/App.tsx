@@ -9,7 +9,6 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
-import { MainTest } from './test/main';
 import '@mantine/notifications/styles.css';
 
 export const queryClient = new QueryClient();
@@ -24,7 +23,6 @@ function App() {
             <Routes>
               {/* <Route path="/" element={<HomePage/>} /> */}
               <Route path="/" element={<LoginPage />} />
-              <Route path='/test' element={<MainTest />}></Route>
               <Route path='/usercreate' element={<UserCreatePage />}></Route>
             </Routes>
           </Router>

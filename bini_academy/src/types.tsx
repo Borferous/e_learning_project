@@ -1,19 +1,3 @@
-export interface UserIdInput {
-    userId?: number | null;
-}
-
-export interface CourseIdInput {
-    course_id? : number | null
-}
-
-export interface CreateUserInput {
-    name?: string | null;
-    password?: string | null;
-    address?: string | null;
-    user_role?: string | null;
-    email?: string | null;
-}
-
 export interface User {
     user_id: string,
     name: string,
@@ -29,6 +13,12 @@ export enum UserRole {
     Admin = 'admin',
     Teacher = 'teacher'
 }
+
+export const UserRoleLabel = [
+    {value: UserRole.Student , label: "Student"},
+    {value: UserRole.Admin , label: "Admin"},
+    {value: UserRole.Teacher , label: "Teacher"},
+]
 
 export enum CourseCategory {
     Music = 'music',
@@ -52,8 +42,4 @@ export const CourseCategoryLabel = [
     {value: CourseCategory.Mentorship, label: 'Mentorship and Career pathways'},
 ]
 
-export const UserRoleLabel = [
-    {value: UserRole.Student , label: "Student"},
-    {value: UserRole.Admin , label: "Admin"},
-    {value: UserRole.Teacher , label: "Teacher"},
-]
+
