@@ -57,6 +57,10 @@ function deleteById($table,$pk_name){
     exit();
 }
 
+function getInput(){
+    return json_decode(file_get_contents("php://input"), true);
+}
+
 function updateData($table, $pk_name, $columns) {
     global $conn;
     $data = json_decode(file_get_contents("php://input"), true);
@@ -99,8 +103,6 @@ function updateData($table, $pk_name, $columns) {
     }
     exit();
 }
-
-
 
 function createData($table, $columns) {
     global $conn;
@@ -148,3 +150,57 @@ function createData($table, $columns) {
     exit();
 }
 
+function getFromTableWhere($table, $whereCondition) {
+    global $conn;
+    
+    // Ensure $whereCondition is an array
+    if (!is_array($whereCondition) || empty($whereCondition)) {
+        sendError(400, "Invalid or missing whereCondition.");
+    }
+
+    $conditions = [];
+    $values = [];
+    $types = '';
+
+    // Construct WHERE clause
+    foreach ($whereCondition as $column => $value) {
+        $conditions[] = "$column = ?";
+        $values[] = $value;
+        $types .= 's'; // Assuming all values are strings; adjust as needed
+    }
+
+    $query = "SELECT * FROM $table WHERE " . implode(' AND ', $conditions);
+    
+    if ($stmt = $conn->prepare($query)) {
+        $stmt->bind_param($types, ...$values);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $data = [];
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+
+        echo json_encode($data);
+        exit();
+    } else {
+        sendError(500, 'Database error: ' . $conn->error);
+    }
+}
+
+function deleteAllFromTable($table) {
+    global $conn;
+    
+    $query = "DELETE FROM $table";
+    if ($stmt = $conn->prepare($query)) {
+        if ($stmt->execute()) {
+            echo json_encode(['message' => 'All records deleted successfully!']);
+        } else {
+            sendError(500, 'Database error: ' . $stmt->error);
+        }
+        $stmt->close();
+    } else {
+        sendError(500, 'Database error: ' . $conn->error);
+    }
+    
+}
