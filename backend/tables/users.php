@@ -9,16 +9,55 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit();
 }
 
-function getAllUsers() { getFromTable('users'); }
-function getUserById() { getTableById('users','user_id'); }
-function createUser() { createData('users', ['name', 'password', 'address', 'user_role', 'email']); }
-function deleteUser() { deleteById('users','user_id'); }
-function updateUser() { updateData('users', 'user_id', ['name', 'password', 'address', 'user_role', 'email']); }
+function getAllUsers()
+{
+    getFromTable('users');
+}
+function getUserById()
+{
+    getTableById('users', 'user_id');
+}
+function createUser()
+{
+    createData('users', ['name', 'password', 'address', 'user_role', 'email']);
+}
+function deleteUser()
+{
+    deleteById('users', 'user_id');
+}
+function updateUser()
+{
+    updateData('users', 'user_id', ['name', 'password', 'address', 'user_role', 'email']);
+}
 
-function startSessionIfNotActive() {
+function startSessionIfNotActive()
+{
     if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }
+}
+
+function getUserRole()
+{
+    startSessionIfNotActive(); // Ensure session is started
+    global $conn;
+
+    if (!isset($_SESSION['user_id'])) {
+        return null; // User not logged in
+    }
+
+    $query = 'SELECT user_role FROM users WHERE user_id = ?';
+    if ($stmt = $conn->prepare($query)) {
+        $stmt->bind_param("i", $_SESSION['user_id']);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+        $stmt->close();
+
+        return $user['user_role'] ?? null; // Return role if found, otherwise null
+    }
+
+    return null; // Return null on database error
 }
 
 function loginUser()

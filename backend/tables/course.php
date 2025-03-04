@@ -9,8 +9,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit();
 }
 
-// Todo: finish crud
-
 function createCourse(){
     createData('course',['teacher_id','course_name','category','price']);
 }
@@ -21,6 +19,12 @@ function listCourses(){
 
 function getCourse(){
     getTableById('course','course_id');
+}
+
+function getCourseCategory(){
+    $data = getInput();
+    $whereCon = ['category' => $data['category']];
+    getFromTableWhere('course',$whereCon);
 }
 
 function deleteCourse(){
@@ -38,6 +42,7 @@ $routes = [
     ],
     'GET' => [
         'list-courses' => 'listCourses',
+        'get-course-category' => 'getCourseCategory'
     ],
     'DELETE' => [
         'delete-course' => 'deleteCourse'
