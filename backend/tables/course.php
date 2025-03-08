@@ -31,6 +31,25 @@ function deleteCourse(){
     deleteById('course','course_id');
 }
 
+function getCourseCount() {
+    global $conn;
+
+    $query = "SELECT category, COUNT(*) AS course_count FROM course GROUP BY category";
+    $result = mysqli_query($conn, $query);
+
+    if ($result) {
+        $data = [];
+        while ($row = mysqli_fetch_assoc($result)) {
+            $data[] = $row;
+        }
+        echo json_encode($data);
+    } else {
+        sendError(500, 'Database error: ' . mysqli_error($conn));
+    }
+    exit();
+}
+
+
 $method = $_SERVER['REQUEST_METHOD'];
 $action = $_GET['action'] ?? null;
 
@@ -42,7 +61,8 @@ $routes = [
     ],
     'GET' => [
         'list-courses' => 'listCourses',
-        'get-course-category' => 'getCourseCategory'
+        'get-course-category' => 'getCourseCategory',
+        'get-course-count' => 'getCourseCount'
     ],
     'DELETE' => [
         'delete-course' => 'deleteCourse'
