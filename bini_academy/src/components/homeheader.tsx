@@ -42,7 +42,7 @@ export const HomeHeader = () => {
         <div className="hidden lg:flex items-center gap-4">
           <IconBell size={24} className="text-gray-500 cursor-pointer" />
           <IconUser size={24} className="text-gray-500 cursor-pointer" />
-          <Button component={Link} to="/register" variant="light" color="orange" radius="md">
+          <Button component={Link} to="/usercreate" variant="light" color="orange" radius="md">
             Create Account
           </Button>
           <Button component={Link} to="/" color="orange" radius="md">
@@ -62,7 +62,7 @@ export const HomeHeader = () => {
 
           <Divider my="sm" />
 
-          <Button component={Link} to="/register" variant="light" color="orange" radius="md" fullWidth>
+          <Button component={Link} to="/usercreate" variant="light" color="orange" radius="md" fullWidth>
             Create Account
           </Button>
 
