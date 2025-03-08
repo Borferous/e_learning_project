@@ -1,7 +1,7 @@
 import { Card, Image, Text, Badge, Group } from "@mantine/core";
 
 interface CourseCardProps {
-  image: string;
+  image?: string;
   title: string;
   category: string;
   price: string;
@@ -11,7 +11,7 @@ interface CourseCardProps {
 export const CourseCard = ({ image, title, category, price, students }: CourseCardProps) => {
   return (
     <Card shadow="sm" padding="lg" radius="md" className="border">
-      <Image src={image} alt={title} height={140} radius="md" />
+      {image && <Image src={image} alt={title} height={140} radius="md" />}
       <Badge color="orange" variant="light" className="mt-2">
         {category}
       </Badge>

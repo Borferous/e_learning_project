@@ -20,6 +20,8 @@ export const UserRoleLabel = [
     {value: UserRole.Teacher , label: "Teacher"},
 ]
 
+
+
 export enum CourseCategory {
     Music = 'music',
     Dance = 'dance',
@@ -31,15 +33,26 @@ export enum CourseCategory {
     Mentorship = 'mentorship',
 }
 
+import { 
+    IconMusic, 
+    IconOld, 
+    IconBook, 
+    IconMedal, 
+    IconMasksTheater, 
+    IconPhone,
+    IconMessage,
+} from '@tabler/icons-react';
+  
+
 export const CourseCategoryLabel = [
-    {value: CourseCategory.Music, label: 'Music'},
-    {value: CourseCategory.Dance, label: 'Dance'},
-    {value: CourseCategory.Acting, label: 'Acting and Theater'},
-    {value: CourseCategory.Technical, label: 'Techinical skill and Technology'},
-    {value: CourseCategory.PhilippineArts, label: 'Philippine Arts and Heritage'},
-    {value: CourseCategory.Workshop, label: 'Short-term Workshop and Master classes'},
-    {value: CourseCategory.Certification, label: 'Certification and Diploma programs'},
-    {value: CourseCategory.Mentorship, label: 'Mentorship and Career pathways'},
+    {value: CourseCategory.Music, label: 'Music', icon: IconMusic},
+    {value: CourseCategory.Dance, label: 'Dance', icon: IconOld},
+    {value: CourseCategory.Acting, label: 'Acting and Theater', icon: IconMasksTheater},
+    {value: CourseCategory.Technical, label: 'Techinical skill and Technology', icon: IconPhone},
+    {value: CourseCategory.PhilippineArts, label: 'Philippine Arts and Heritage', icon: IconBook},
+    {value: CourseCategory.Workshop, label: 'Short-term Workshop and Master classes', icon: IconBook},
+    {value: CourseCategory.Certification, label: 'Certification and Diploma programs', icon: IconMedal},
+    {value: CourseCategory.Mentorship, label: 'Mentorship and Career pathways', icon: IconMessage},
 ]
 
 

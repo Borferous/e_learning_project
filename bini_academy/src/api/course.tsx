@@ -1,8 +1,7 @@
 import axios from "axios"
-import { CourseIdInput } from "../types"
 import { throwErr } from "./helper"
 
-const baseUrl = 'localhost:8000/tables/course.php'
+const baseUrl = 'http://localhost:8000/tables/course.php';
 
 export const listCourse = async() => {
     try {
@@ -13,7 +12,7 @@ export const listCourse = async() => {
     }
 }
 
-export  const getCourse = async({course_id}:CourseIdInput) => {
+export const getCourse = async({course_id}:{course_id : number}) => {
     try {
         const response = await axios.post(`${baseUrl}?action=get-course`,{
             data: {course_id}
@@ -24,4 +23,11 @@ export  const getCourse = async({course_id}:CourseIdInput) => {
     }
 }
 
-
+export const getCourseCount = async() => {
+    try {
+        const response = await axios.get(`${baseUrl}?action=get-course-count`)
+        return response.data
+    } catch (error){
+        throw throwErr(error as Error,"Failed to get course count")
+    }
+}
