@@ -15,7 +15,6 @@ import '@mantine/notifications/styles.css';
 function App() {
   return (
     <>
-      
         <MantineProvider>
         <Notifications position='top-right' autoClose={1500} limit={3}/>
           <Router>
@@ -26,8 +25,7 @@ function App() {
               <Route path='/homepage' element={<HomePage />}></Route>
             </Routes>
           </Router>
-        </MantineProvider>
-      
+        </MantineProvider>      
     </>
   );
 }
