@@ -6,18 +6,16 @@ import { UserCreatePage } from './pages/create';
 import { HomePage } from './pages/homepage';
 
 import '@mantine/core/styles.css'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import '@mantine/notifications/styles.css';
 
-export const queryClient = new QueryClient();
 
 function App() {
   return (
     <>
-      <QueryClientProvider client={queryClient}>
+      
         <MantineProvider>
         <Notifications position='top-right' autoClose={1500} limit={3}/>
           <Router>
@@ -25,10 +23,11 @@ function App() {
               <Route path="/" element={<HomePage/>} /> 
               <Route path="/login" element={<LoginPage />} />
               <Route path='/usercreate' element={<UserCreatePage />}></Route>
+              <Route path='/homepage' element={<HomePage />}></Route>
             </Routes>
           </Router>
         </MantineProvider>
-      </QueryClientProvider>
+      
     </>
   );
 }
