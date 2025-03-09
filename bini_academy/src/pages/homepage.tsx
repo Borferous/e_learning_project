@@ -8,6 +8,7 @@ import { getCourseCount } from "../api/course";
 import { useEffect, useState } from "react";
 import { Loading } from "../components/loading";
 import { IconBook } from "@tabler/icons-react";
+import { Footer } from "../components/footer";
 
 
 export const HomePage = () => {
@@ -69,7 +70,7 @@ export const HomePage = () => {
 
                 {/* Browse Top Categories */}
                 <Title order={2} className="text-xl font-semibold text-center mt-10">
-                    Browse Top Category
+                    Programs Category
                 </Title>
 
                 {isLoading ? (
@@ -139,6 +140,7 @@ export const HomePage = () => {
                     />
                 </SimpleGrid>
             </Container>
+            <Footer />
         </>
     );
 };
