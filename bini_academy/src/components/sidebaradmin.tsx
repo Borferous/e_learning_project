@@ -4,11 +4,12 @@ import { IconPlus, IconLayersOff, IconLogout, IconMenu2, IconX } from "@tabler/i
 import bapaLogoWhite from "../assets/bapalogowhite.svg"; // Adjust path if necessary
 
 const menuItems = [
-  { label: "Create New Course", icon: <IconPlus size={18} />, path: "/instructorcreatecourse" },
-  { label: "My Courses", icon: <IconLayersOff size={18} />, path: "/my-courses" },
+  { label: "User Management", icon: <IconPlus size={18} />, path: "/usermanage" },
+  { label: "My Courses", icon: <IconLayersOff size={18} />, path: "/admin-mycourses" },
+  { label: "Host Events", icon: <IconLayersOff size={18} />, path: "/hostevents" },
 ];
 
-export const Sidebar = () => {
+export const SidebarAdmin = () => {
   const [isOpen, setIsOpen] = useState(false); // Sidebar open/close state
 
   return (
