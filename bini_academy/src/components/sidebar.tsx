@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom"; // Import NavLink for routing
+import { NavLink } from "react-router-dom";
 import { IconPlus, IconLayersOff, IconLogout, IconMenu2, IconX } from "@tabler/icons-react";
 import bapaLogoWhite from "../assets/bapalogowhite.svg"; // Adjust path if necessary
 
@@ -12,10 +12,10 @@ export const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false); // Sidebar open/close state
 
   return (
-    <div>
-      {/* Burger Menu for Mobile */}
+    <>
+      {/* Burger Menu Button */}
       <button
-        className="md:hidden p-2 text-white bg-gray-900 fixed top-4 left-4 z-50 rounded-md"
+        className="md:hidden fixed top-4 left-4 z-[100] p-2 bg-gray-900 text-white rounded-md shadow-lg"
         onClick={() => setIsOpen(!isOpen)}
       >
         {isOpen ? <IconX size={24} /> : <IconMenu2 size={24} />}
@@ -23,8 +23,8 @@ export const Sidebar = () => {
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-screen w-[260px] bg-gray-900 text-white p-4 flex flex-col transition-transform
-        ${isOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 md:relative`}
+        className={`fixed top-0 left-0 h-screen w-[260px] bg-gray-900 text-white p-4 flex flex-col transition-transform duration-300
+        ${isOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 md:relative z-[50]`}
       >
         {/* Logo Section */}
         <div className="flex justify-center items-center mb-6">
@@ -36,7 +36,7 @@ export const Sidebar = () => {
           {menuItems.map((item) => (
             <NavLink
               key={item.label}
-              to={item.path} // Navigate to the corresponding path
+              to={item.path}
               className={({ isActive }) =>
                 `flex items-center gap-3 w-full px-4 py-3 rounded-md transition ${
                   isActive ? "bg-orange-500 text-white" : "text-gray-400 hover:bg-orange-500 hover:text-white"
@@ -61,7 +61,7 @@ export const Sidebar = () => {
       </div>
 
       {/* Overlay for mobile when menu is open */}
-      {isOpen && <div className="fixed inset-0 bg-black bg-opacity-50 md:hidden" onClick={() => setIsOpen(false)} />}
-    </div>
+      {isOpen && <div className="fixed inset-0 bg-black bg-opacity-50 md:hidden z-[40]" onClick={() => setIsOpen(false)} />}
+    </>
   );
 };
