@@ -45,7 +45,7 @@ export const HomeHeader = () => {
           <Button component={Link} to="/usercreate" variant="light" color="orange" radius="md">
             Create Account
           </Button>
-          <Button component={Link} to="/" color="orange" radius="md">
+          <Button component={Link} to="/login" color="orange" radius="md">
             Sign In
           </Button>
         </div>
@@ -66,7 +66,7 @@ export const HomeHeader = () => {
             Create Account
           </Button>
 
-          <Button component={Link} to="/" color="orange" radius="md" fullWidth>
+          <Button component={Link} to="/login" color="orange" radius="md" fullWidth>
             Sign In
           </Button>
         </Stack>
