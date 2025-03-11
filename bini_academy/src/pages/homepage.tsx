@@ -3,37 +3,53 @@ import { CategoryCard } from '../components/categorycard';
 import { CourseCard } from '../components/coursecard';
 import bapaLogo from "../assets/bapalogo.svg";
 import { HomeHeader } from "../components/homeheader";
-import { CourseCategory, CourseCategoryLabel } from "../types";
-import { getCourseCount } from "../api/course";
+import { Course, CourseCategory, CourseCategoryLabel } from "../types";
+import { getCourseCount, listCourse } from "../api/course";
 import { useEffect, useState } from "react";
 import { Loading } from "../components/loading";
 import { IconBook } from "@tabler/icons-react";
 import { Footer } from "../components/footer";
+import placeholderImg from '../assets/placeholder-image.svg'
 
 
 export const HomePage = () => {
+    const [isCourseCountLoading, setCourseCountLoading] = useState<boolean>(false);
+    const [courseCount, setCourseCount] = useState<{ program_category: CourseCategory, course_count: number }[] | null>(null);
 
-    const [isLoading, setLoading] = useState<boolean>(false);
-    const [courses, setCourses] = useState<{ category: CourseCategory, course_count: number }[] | null>(null);
+    const [isCoursesLoading, setCoursesLoading] = useState<boolean>(false);
+    const [courses, setCourses] = useState<Course[] | null>(null)
+
+    const fetchCourseCount = async () => {
+        setCourseCountLoading(true);
+        try {
+            // Wait 5 seconds before making the API call
+            await new Promise(resolve => setTimeout(resolve, 5000));
+            const response = await getCourseCount()
+            setCourseCount(response);
+        } catch (error) {
+            console.error("Failed to fetch course count", error);
+        } finally {
+            setCourseCountLoading(false); // Ensure loading stops even if an error occurs
+        }
+    };
+
+    const fetchCourses = async () => {
+        setCoursesLoading(true)
+        try {
+            await new Promise(resolve => setTimeout(resolve, 5000));
+            const response = await listCourse()
+            console.table(response)
+            setCourses(response)
+        } catch (error) {
+            console.error("Failed to fetch courses", error);
+        } finally {
+            setCoursesLoading(false)
+        }
+    }
 
     useEffect(() => {
-        setLoading(true);
-
-        const fetchCourseCount = async () => {
-            try {
-                // Wait 5 seconds before making the API call
-                await new Promise(resolve => setTimeout(resolve, 5000));
-                const response = await getCourseCount()
-                console.table(response)
-                setCourses(response);
-            } catch (error) {
-                console.error("Failed to fetch course count", error);
-            } finally {
-                setLoading(false); // Ensure loading stops even if an error occurs
-            }
-        };
-
         fetchCourseCount();
+        fetchCourses();
     }, []);
 
     return (
@@ -69,76 +85,61 @@ export const HomePage = () => {
                 </div>
 
                 {/* Browse Top Categories */}
-                <Title order={2} className="text-xl font-semibold text-center mt-10">
+                {courseCount && courseCount.length > 0 && <Title order={2} className="text-xl font-semibold text-center mt-10">
                     Programs Category
-                </Title>
+                </Title>}
 
-                {isLoading ? (
+                {isCourseCountLoading ? (
                     <Loading width={64} height={64} />
                 ) : (
                     <SimpleGrid cols={3} spacing="lg" className="mt-5">
-                        {courses &&
-                            courses.map((course) => {
+                        {courseCount && courseCount.length > 0 &&
+                            courseCount.map((course) => {
                                 const categoryData = CourseCategoryLabel.find(
-                                    (c) => c.value === course.category
+                                    (c) => c.value === course.program_category
                                 );
 
                                 if (categoryData) {
                                     return <CategoryCard
-                                        key={course.category}
+                                        key={course.program_category}
                                         title={categoryData.label}
                                         courses={course.course_count}
                                         icon={<categoryData.icon size={30} />}
                                     />
                                 } else {
                                     return <CategoryCard
-                                        key={course.category}
-                                        title={course.category}
+                                        key={course.program_category}
+                                        title={course.program_category}
                                         courses={course.course_count}
                                         icon={<IconBook size={30} />}
                                     />
                                 }
-                            })}
+                            })
+                        }
                     </SimpleGrid>
                 )}
 
-
-
-
                 {/* Best Selling Courses */}
-                <Title order={2} className="text-xl font-semibold text-center mt-10">
+                {courses && courses.length > 0 && <Title order={2} className="text-xl font-semibold text-center mt-10">
                     Best Selling Courses
-                </Title>
-                <SimpleGrid cols={4} spacing="lg" className="mt-5">
-                    <CourseCard
-                        image="https://cdn.prod.website-files.com/62d84e447b4f9e7263d31e94/637627ca9eebde45ae5f394c_Underwater-Nun.jpeg"
-                        title="Mastering Vocal Techniques"
-                        category="Music"
-                        price="₱5,000"
-                        students="3.7k"
-                    />
-                    <CourseCard
-                        image="https://cdn.prod.website-files.com/62d84e447b4f9e7263d31e94/637627ca9eebde45ae5f394c_Underwater-Nun.jpeg"
-                        title="Hip-Hop Moves for Beginners"
-                        category="Dance"
-                        price="₱5,000"
-                        students="5.7k"
-                    />
-                    <CourseCard
-                        image="https://cdn.prod.website-files.com/62d84e447b4f9e7263d31e94/637627ca9eebde45ae5f394c_Underwater-Nun.jpeg"
-                        title="Audition Like a Star"
-                        category="Acting"
-                        price="₱5,000"
-                        students="3.7k"
-                    />
-                    <CourseCard
-                        image="https://cdn.prod.website-files.com/62d84e447b4f9e7263d31e94/637627ca9eebde45ae5f394c_Underwater-Nun.jpeg"
-                        title="Violin Essentials"
-                        category="Music"
-                        price="₱5,000"
-                        students="5.7k"
-                    />
-                </SimpleGrid>
+                </Title>}
+
+                {isCoursesLoading ? (
+                    <Loading width={64} height={64} />
+                ) : (
+                    <SimpleGrid cols={3} spacing="lg" className="mt-5">
+                        {courses && courses.length > 0 && courses.map((course, key) => (
+                            <CourseCard
+                                key={key}
+                                image={placeholderImg}
+                                title={course.course_title}
+                                category={course.course_topic}
+                                price={`₱${new Intl.NumberFormat("en-PH").format(Number(course.price))}`}
+                                students={"100"}
+                            />
+                        ))}
+                    </SimpleGrid>
+                )}
             </Container>
             <Footer />
         </>

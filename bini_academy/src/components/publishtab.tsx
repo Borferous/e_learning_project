@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Textarea, TextInput, Button } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 
 interface PublishTabProps {
   setActiveTab: (tab: string) => void;
@@ -7,6 +8,15 @@ interface PublishTabProps {
 }
 
 export const PublishTab = ({ setActiveTab, updateProgress }: PublishTabProps) => {
+
+  const publishCourse = () => {
+    notifications.show({
+      title: 'Success',
+      color: 'green',
+      message: 'Course Published!'
+    })
+  }
+
   const [formValues, setFormValues] = useState({
     welcomeMessage: "",
     congratulationsMessage: "",
@@ -99,7 +109,7 @@ export const PublishTab = ({ setActiveTab, updateProgress }: PublishTabProps) =>
         <Button variant="outline" onClick={() => setActiveTab("curriculum")}>
           Prev Step
         </Button>
-        <Button color="orange">Submit for Review</Button>
+        <Button color="orange" onClick={() => publishCourse()}>Submit for Review</Button>
       </div>
     </>
   );

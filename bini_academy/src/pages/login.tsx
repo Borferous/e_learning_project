@@ -5,16 +5,31 @@ import { Header } from '../components/header.tsx';
 import { useState } from 'react';
 import { notifications } from '@mantine/notifications';
 import { loginUser } from '../api/user.tsx';
+import { UserRole } from '../types.tsx';
+import { useNavigate } from 'react-router-dom';
 
 export const LoginPage = () => {
 
+  const navigate = useNavigate()
   const [email, setEmail] = useState<string | null>(null);
   const [password, setPassword] = useState<string | null>(null);
 
   const attemptLogin = async() => {
     if (email?.trim() && password?.trim()) {
       try {
-        await loginUser({email, password})
+        const loggedUser = await loginUser({email, password})
+        localStorage.setItem('user_id',loggedUser.user_id)
+        switch (loggedUser.user_role){
+            case UserRole.Admin:
+              navigate("/usermanage")
+            break;
+            case UserRole.Teacher:
+              navigate("/instructorcreatecourse")
+            break;
+            default:
+              navigate("/homepage")
+            break;
+        }
         notifications.show({
           title: 'Success',
           color: 'green',
@@ -32,6 +47,7 @@ export const LoginPage = () => {
 
   return (
     
+
     <Container fluid style={{ height: '100vh', padding: 0 }}>
         <Header />
       <Grid gutter={0} style={{ height: '100vh' }}>

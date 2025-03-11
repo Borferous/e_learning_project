@@ -1,27 +1,25 @@
 import axios from "axios"
 import { User } from "../types";
-import { throwErr } from "./helper";
 
 const baseUrl = 'http://localhost:8000/tables/users.php';
 
 export const getAllUser = async () => {
-    try {
-        const response = await axios.get(`${baseUrl}?action=get-all-users`)
-        return response.data as User[];    
-    } catch (error) {
-        throw throwErr(error as Error, "Failed to Get Users")
-    }    
+    const response = await axios.get(`${baseUrl}?action=get-all-users`)
+    return response.data as User[];    
 };
 
-export const deleteUser = async (user_id: number) => {
-    try {
-        const response = await axios.delete(`${baseUrl}?action=delete-user`, {
-            data: { user_id }
-        })
-        return response
-    } catch (error) {
-        throw throwErr(error as Error, "Failed to Delete Users")
-    }
+export const deleteUser = async (user_id: string) => {
+    const response = await axios.delete(`${baseUrl}?action=delete-user`, {
+        data: { user_id }
+    })
+    return response
+}
+
+export const getCurrentUser = async() => {
+    const response = await axios.get(`${baseUrl}?action=get-current-user`,{
+        withCredentials: true
+    })
+    return response.data as User
 }
 
 export const createUser = async ({
@@ -37,14 +35,10 @@ export const createUser = async ({
     email: string,
     user_role: string
 }) => {
-    try {
-        const response = await axios.post(`${baseUrl}?action=create-user`, {
-            name, password, address, email, user_role
-        })
-        return response
-    } catch (error) {
-        throw throwErr(error as Error, "Failed to Create User")
-    }
+    const response = await axios.post(`${baseUrl}?action=create-user`, {
+        name, password, address, email, user_role
+    })
+    return response
 }
 
 export const updateUser = async ({
@@ -53,23 +47,21 @@ export const updateUser = async ({
     password,
     address,
     email,
-    user_role
+    user_role,
+    status
 }:{ 
     user_id: string,
     name: string,
     password: string,
     address: string,
     email: string,
-    user_role: string
+    user_role: string,
+    status: string,
 }) => {
-    try {
-        const response = await axios.post(`${baseUrl}?action=update-user`, {
-            user_id, name, password, address, email, user_role
-        })
-        return response
-    } catch (error) {
-        throw throwErr(error as Error, "Failed to Update User")
-    }
+    const response = await axios.post(`${baseUrl}?action=update-user`, {
+        user_id, name, password, address, email, user_role, status
+    })
+    return response
 }
 
 export const loginUser = async ({
@@ -79,10 +71,6 @@ export const loginUser = async ({
     email: string,
     password: string
 }) => {
-    try {
-        const response = await axios.post(`${baseUrl}?action=login-user`,{ email, password})
-        return response
-    } catch (error) {
-        throw throwErr(error as Error, "Login Fail")
-    }
+    const response = await axios.post(`${baseUrl}?action=login-user`,{ email, password})
+    return response.data.user
 }

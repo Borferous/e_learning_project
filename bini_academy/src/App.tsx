@@ -13,24 +13,23 @@ import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import '@mantine/notifications/styles.css';
 
-
 function App() {
   return (
     <>
-        <MantineProvider >
-        <Notifications position='top-right' autoClose={1500} limit={3}/>
-          <Router>
-            <Routes>
-              <Route path="/" element={<HomePage/>} /> 
-              <Route path="/login" element={<LoginPage />} />
-              <Route path='/usercreate' element={<UserCreatePage />}></Route>
-              <Route path='/homepage' element={<HomePage />}></Route>
-              <Route path='/instructorcreatecourse' element={<InstructorCreateCourse />}></Route>
-              <Route path='/usermanage' element={<ManageUsers />}></Route>
-              <Route path='/hostevents' element={<HostEvents />}></Route>
-            </Routes>
-          </Router>
-        </MantineProvider>      
+      <MantineProvider >
+        <Notifications position='top-right' autoClose={1500} limit={3} />
+        <Router>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path='/usercreate' element={<UserCreatePage />}></Route>
+            <Route path='/homepage' element={<HomePage />}></Route>
+            <Route path='/instructorcreatecourse' element={<InstructorCreateCourse />}> </Route>
+            <Route path='/usermanage' element={<ManageUsers />}></Route>
+            <Route path='/hostevents' element={<HostEvents />}></Route>
+          </Routes>
+        </Router>
+      </MantineProvider>
     </>
   );
 }
