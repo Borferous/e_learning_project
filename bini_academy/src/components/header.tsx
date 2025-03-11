@@ -7,7 +7,7 @@ export const Header = () => {
     <Container fluid py="md" px="lg" style={{ borderBottom: '1px solid #EAEAEA' }}>
       <Flex justify="space-between" align="center">
         {/* Logo */}
-        <img src={bapaLogo} alt="BAPA Logo" style={{ height: 40 }} />
+        <Link to={'/'}><img src={bapaLogo} alt="BAPA Logo" style={{ height: 40 }}/></Link>
 
         {/* Right-side: "Don't have an account?" & Button */}
         <Flex align="center" gap="md">

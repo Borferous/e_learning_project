@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { Button, Select, TextInput, FileButton, Avatar, Modal, Image } from "@mantine/core";
+import { createUser } from "../api/user";
+import { notifications } from "@mantine/notifications";
+import { UserRoleLabel } from "../types";
 
 export const CreateUserTab = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +13,32 @@ export const CreateUserTab = () => {
     address: "",
     status: "",
   });
+
+  const createNewUser = async() => {
+    
+    try {
+        await createUser({
+          name: formData.name,
+          password: formData.password,
+          address: formData.address,
+          email: formData.email,
+          user_role: formData.role
+        })
+        notifications.show({
+          title: 'Success',
+          message: 'User Created Successfully',
+          color: 'green'
+        })
+    } catch (error) {
+        notifications.show({
+          title: 'Error',
+          message: 'Cannot Create user an error has occured',
+          color: 'red'
+        })
+    } finally {
+      setConfirmOpened(false)
+    }
+  }
 
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [errors, setErrors] = useState<Record<string, boolean>>({});
@@ -67,7 +96,7 @@ export const CreateUserTab = () => {
           <Select
             label="User Role"
             placeholder="Select user role"
-            data={["Admin", "Instructor", "Student"]}
+            data={UserRoleLabel}
             value={formData.role}
             onChange={(value) => setFormData({ ...formData, role: value || "" })}
             error={errors.role ? "This field is required" : false}
@@ -137,7 +166,7 @@ export const CreateUserTab = () => {
           <Button variant="outline" color="gray" onClick={() => setConfirmOpened(false)}>
             Cancel
           </Button>
-          <Button color="orange" onClick={() => alert("User Created!")}>
+          <Button color="orange" onClick={createNewUser}>
             Confirm
           </Button>
         </div>

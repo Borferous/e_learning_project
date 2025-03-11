@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Container, Flex, Button, TextInput, Group, Burger, Drawer, Stack, Divider } from "@mantine/core";
+import { Container, Flex, Button, TextInput, Burger, Drawer, Stack, Divider } from "@mantine/core";
 import { Link } from "react-router-dom";
 import { IconSearch, IconBell, IconUser } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
