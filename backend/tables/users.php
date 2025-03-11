@@ -27,7 +27,7 @@ function deleteUser()
 }
 function updateUser()
 {
-    updateData('users', 'user_id', ['name', 'password', 'address', 'user_role', 'email']);
+    updateData('users', 'user_id', ['name', 'password', 'address', 'user_role', 'email','status']);
 }
 
 function startSessionIfNotActive()
@@ -144,6 +144,8 @@ function logoutUser()
     echo json_encode(['message' => 'Logout successful']);
     exit();
 }
+
+
 
 $method = $_SERVER['REQUEST_METHOD'];
 $action = $_GET['action'] ?? null;

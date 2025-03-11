@@ -10,8 +10,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 }
 
 function createCourse(){
-    createData('course',['teacher_id','course_name','category','price']);
+    createData('course',['teacher_id','course_title','program_category','price','description','course_level','course_topic']);
 }
+
+// function assignTeacher(){
+//     updateData('course','course_id',['teacher_id']);
+// }
 
 function listCourses(){
     getFromTable('course');
@@ -34,7 +38,7 @@ function deleteCourse(){
 function getCourseCount() {
     global $conn;
 
-    $query = "SELECT category, COUNT(*) AS course_count FROM course GROUP BY category";
+    $query = "SELECT program_category, COUNT(*) AS course_count FROM course GROUP BY program_category";
     $result = mysqli_query($conn, $query);
 
     if ($result) {
