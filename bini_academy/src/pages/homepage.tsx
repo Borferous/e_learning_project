@@ -1,4 +1,4 @@
-import { Container, SimpleGrid, Button, Text, Title, Grid, Image } from "@mantine/core";
+import { Container, SimpleGrid, Button, Text, Title, Grid, Image, Card } from "@mantine/core";
 import { CategoryCard } from '../components/categorycard';
 import { CourseCard } from '../components/coursecard';
 import bapaLogo from "../assets/bapalogo.svg";
@@ -10,6 +10,8 @@ import { Loading } from "../components/loading";
 import { IconBook } from "@tabler/icons-react";
 import { Footer } from "../components/footer";
 import placeholderImg from '../assets/placeholder-image.svg'
+import { listEvents } from "../api/event";
+import { ProgramEvent } from "../types";
 
 
 export const HomePage = () => {
@@ -18,6 +20,8 @@ export const HomePage = () => {
 
     const [isCoursesLoading, setCoursesLoading] = useState<boolean>(false);
     const [courses, setCourses] = useState<Course[] | null>(null)
+
+    const [events, setEvents] = useState<ProgramEvent[] | null>(null);
 
     const fetchCourseCount = async () => {
         setCourseCountLoading(true);
@@ -47,9 +51,21 @@ export const HomePage = () => {
         }
     }
 
+    const fetchEvents = async () => {
+        try {
+            await new Promise(resolve => setTimeout(resolve, 5000));
+            const response = await listEvents();
+            console.table(response)
+            setEvents(response)
+        } catch (error) {
+            console.log('Error BUllshit')
+        }
+    }
+
     useEffect(() => {
         fetchCourseCount();
         fetchCourses();
+        fetchEvents();
     }, []);
 
     return (
@@ -140,6 +156,26 @@ export const HomePage = () => {
                         ))}
                     </SimpleGrid>
                 )}
+
+                <Title order={2} className="text-xl font-semibold text-center mt-10">
+                    Events
+                </Title>
+
+                <SimpleGrid cols={3} spacing="lg" className="mt-5">
+                    {events && events.map((ee, key) => {
+                        return (
+                            <CourseCard
+                                key={key}
+                                image={placeholderImg}
+                                title={ee.event_title}
+                                category={ee.event_category}
+                            />
+                        );
+                    })}
+                </SimpleGrid>
+
+
+
             </Container>
             <Footer />
         </>

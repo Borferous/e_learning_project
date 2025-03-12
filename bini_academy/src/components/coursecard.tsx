@@ -4,8 +4,8 @@ interface CourseCardProps {
   image?: string;
   title: string;
   category: string;
-  price: string;
-  students: string;
+  price?: string;
+  students?: string;
 }
 
 export const CourseCard = ({ image, title, category, price, students }: CourseCardProps) => {
@@ -17,8 +17,8 @@ export const CourseCard = ({ image, title, category, price, students }: CourseCa
       </Badge>
       <Text className="font-semibold mt-2">{title}</Text>
       <Group justify="space-between" className="mt-2"> {/* 🔥 Fixed this line */}
-        <Text className="text-orange-500 font-bold">{price}</Text>
-        <Text className="text-gray-500 text-sm">{students} students</Text>
+        {price && <Text className="text-orange-500 font-bold">{price}</Text>}
+        {students && <Text className="text-gray-500 text-sm">{students} students</Text>}
       </Group>
     </Card>
   );
