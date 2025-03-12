@@ -14,6 +14,7 @@ import { Notifications } from '@mantine/notifications';
 import '@mantine/notifications/styles.css';
 
 function App() {
+
   return (
     <>
       <MantineProvider >

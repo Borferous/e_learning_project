@@ -6,7 +6,6 @@ import { BasicInfoEventTab } from "../../components/basicinfoeventtab";
 import { AdvancedInfoEventTab } from "../../components/advanceinfoeventtab";
 import { StartEventTab } from "../../components/starteventtab";
 
-
 export const HostEvents = () => {
   const [activeTab, setActiveTab] = useState<string>("basic");
 

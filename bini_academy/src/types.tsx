@@ -73,3 +73,14 @@ export const CourseLevelLabel = [
     {value: CourseLevel.Intermediate, label: "Intermediate"},
     {value: CourseLevel.Advanced, label: "Advanced"},
 ]
+
+
+export interface ProgramEvent{
+    event_host: string,
+    event_title: string,
+    event_category: string,
+    event_description: string,
+    event_end_date: string,
+    event_start_date: string,
+    event_subtitle: string,
+}

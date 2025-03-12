@@ -43,6 +43,12 @@ if (!$conn->query($courseQuery)) {
     sendError(500, 'Database error: ' . $conn->error);
 }
 
+$eventsQuery = "INSERT INTO `event` (`event_id`, `event_host`, `event_title`, `event_category`, `event_start_date`, `event_description`, `event_end_date`, `event_subtitle`) VALUES (NULL, '3', 'Art Competition', 'visual arts', '2025-03-01', 'its a competition but art', '', 'A competition where you draw things'), (NULL, '2', 'Tiktok Dance competition', 'dance', '2025-03-30', 'a competition but dance and also tiktok', '2025-03-31', 'tiktokening');";
+
+if (!$conn->query($eventsQuery)){
+    sendError(500, 'Database error: ' . $conn->error);
+}
+
 exit(json_encode([
     'message' => 'Database reset successful',
 ]));
