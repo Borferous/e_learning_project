@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Button, TextInput, Select, NumberInput, Textarea } from "@mantine/core";
 import { createCourse } from "../api/course";
 import { CourseCategoryLabel, CourseLevelLabel } from "../types";
+import { useForm } from "../hooks/use_form";
 
 interface BasicInfoTabProps {
   setActiveTab: (tab: string) => void;
@@ -10,7 +11,7 @@ interface BasicInfoTabProps {
 
 export const BasicInfoTab = ({ setActiveTab, updateProgress }: BasicInfoTabProps) => {
 
-  const [formValues, setFormValues] = useState({
+  const {formValues, setValue} = useForm({
     title: "",
     subtitle: "",
     programCategory: "",
@@ -18,7 +19,7 @@ export const BasicInfoTab = ({ setActiveTab, updateProgress }: BasicInfoTabProps
     courseLevel: "",
     price: "" as string | number,
     description: "",
-  });
+  })
 
   // Function to count completed fields
   const countCompletedFields = () =>
@@ -54,7 +55,7 @@ export const BasicInfoTab = ({ setActiveTab, updateProgress }: BasicInfoTabProps
           placeholder="Your course title"
           maxLength={80}
           value={formValues.title}
-          onChange={(event) => setFormValues({ ...formValues, title: event.target.value })}
+          onChange={(event) => setValue('title',event.target.value) }
         />
 
         <TextInput
@@ -62,7 +63,7 @@ export const BasicInfoTab = ({ setActiveTab, updateProgress }: BasicInfoTabProps
           placeholder="Your course subtitle"
           maxLength={120}
           value={formValues.subtitle}
-          onChange={(event) => setFormValues({ ...formValues, subtitle: event.target.value })}
+          onChange={(event) => setValue('subtitle',event.target.value)}
         />
 
         <Select
@@ -70,30 +71,29 @@ export const BasicInfoTab = ({ setActiveTab, updateProgress }: BasicInfoTabProps
           placeholder="Select..."
           data={CourseCategoryLabel}
           value={formValues.programCategory}
-          onChange={(value) => setFormValues({ ...formValues, programCategory: value || "" })}
+          onChange={(value) => setValue('programCategory',value || "" )}
         />
 
         <TextInput
           label="Course Topic"
           placeholder="What is primarily taught in your course?"
           value={formValues.courseTopic}
-          onChange={(event) => setFormValues({ ...formValues, courseTopic: event.target.value })}
+          onChange={(event) => setValue('courseTopic', event.target.value )}
         />
 
         <NumberInput
           label="Course Price"
           placeholder="Course Price"
           value={formValues.price}
-          onChange={(value) => setFormValues({ ...formValues, price: value })}
+          onChange={(value) => setValue('price', value )}
         />
-
 
         <Select
           label="Course Level"
           placeholder="Select..."
           data={CourseLevelLabel}
           value={formValues.courseLevel}
-          onChange={(value) => setFormValues({ ...formValues, courseLevel: value || "" })}
+          onChange={(value) => setValue('courseLevel', value || "" )}
         />
 
         <Textarea
@@ -101,7 +101,7 @@ export const BasicInfoTab = ({ setActiveTab, updateProgress }: BasicInfoTabProps
           placeholder="Enter your course description"
           value={formValues.description}
           onChange={(event) =>
-            setFormValues({ ...formValues, description: event.target.value })
+            setValue('description', event.target.value)
           }
           className="mt-4"
         />
