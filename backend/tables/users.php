@@ -145,8 +145,6 @@ function logoutUser()
     exit();
 }
 
-
-
 $method = $_SERVER['REQUEST_METHOD'];
 $action = $_GET['action'] ?? null;
 
