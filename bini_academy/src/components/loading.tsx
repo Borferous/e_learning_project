@@ -1,16 +1,14 @@
+import { Loader } from "@mantine/core";
+
 interface LoadingProps {
-    width?: number;
-    height?: number;
+    size? : string,
     padding?: number;
 }
 
-export const Loading = ({ width = 32, height = 32, padding = 8 }: LoadingProps) => {
+export const Loading = ({ size = 'xl', padding = 8 }: LoadingProps) => {
     return (
         <div className="flex justify-center items-center" style={{ padding }}>
-            <div
-                className="border-4 border-blue-500 border-t-transparent rounded-full animate-spin"
-                style={{ width, height, borderWidth: 4 }}
-            ></div>
+            <Loader color="orange" size={size} type="dots"/>
         </div>
     );
 };
