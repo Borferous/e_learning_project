@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Button, TextInput, Select, NumberInput, Textarea } from "@mantine/core";
 import { createCourse } from "../api/course";
 import { CourseCategoryLabel, CourseLevelLabel } from "../types";
-import { useForm } from "../hooks/use_form";
+import { useForm } from "@mantine/form";
 
 interface BasicInfoTabProps {
   setActiveTab: (tab: string) => void;
@@ -10,39 +10,40 @@ interface BasicInfoTabProps {
 }
 
 export const BasicInfoTab = ({ setActiveTab, updateProgress }: BasicInfoTabProps) => {
-
-  const {formValues, setValue} = useForm({
-    title: "",
-    subtitle: "",
-    programCategory: "",
-    courseTopic: "",
-    courseLevel: "",
-    price: "" as string | number,
-    description: "",
-  })
+  const form = useForm({
+    initialValues: {
+      title: "",
+      subtitle: "",
+      programCategory: "",
+      courseTopic: "",
+      courseLevel: "",
+      price: "" as string | number,
+      description: "",
+    },
+  });
 
   // Function to count completed fields
   const countCompletedFields = () =>
-    Object.values(formValues).filter((value) => String(value).trim() !== "").length;
+    Object.values(form.values).filter((value) => String(value).trim() !== "").length;
 
   // Update progress when form changes
   useEffect(() => {
     updateProgress("basic", countCompletedFields(), 6);
-  }, [formValues]);
+  }, [form.values]);
 
   const save = async () => {
-    const userId = localStorage.getItem('user_id') as string
+    const userId = localStorage.getItem("user_id") as string;
     await createCourse({
       teacher_id: userId,
-      course_title: formValues.title,
-      program_category: formValues.programCategory,
-      price: formValues.price,
-      description: formValues.description,
-      course_level: formValues.courseLevel,
-      course_topic: formValues.courseTopic,
-    })
-    setActiveTab("advance")
-  }
+      course_title: form.values.title,
+      program_category: form.values.programCategory,
+      price: form.values.price,
+      description: form.values.description,
+      course_level: form.values.courseLevel,
+      course_topic: form.values.courseTopic,
+    });
+    setActiveTab("advance");
+  };
 
   return (
     <>
@@ -54,63 +55,54 @@ export const BasicInfoTab = ({ setActiveTab, updateProgress }: BasicInfoTabProps
           label="Title"
           placeholder="Your course title"
           maxLength={80}
-          value={formValues.title}
-          onChange={(event) => setValue('title',event.target.value) }
+          {...form.getInputProps("title")}
         />
 
         <TextInput
           label="Subtitle"
           placeholder="Your course subtitle"
           maxLength={120}
-          value={formValues.subtitle}
-          onChange={(event) => setValue('subtitle',event.target.value)}
+          {...form.getInputProps("subtitle")}
         />
 
         <Select
           label="Program Category"
           placeholder="Select..."
           data={CourseCategoryLabel}
-          value={formValues.programCategory}
-          onChange={(value) => setValue('programCategory',value || "" )}
+          {...form.getInputProps("programCategory")}
         />
 
         <TextInput
           label="Course Topic"
           placeholder="What is primarily taught in your course?"
-          value={formValues.courseTopic}
-          onChange={(event) => setValue('courseTopic', event.target.value )}
+          {...form.getInputProps("courseTopic")}
         />
 
         <NumberInput
           label="Course Price"
           placeholder="Course Price"
-          value={formValues.price}
-          onChange={(value) => setValue('price', value )}
+          {...form.getInputProps("price")}
+          onChange={(value) => form.setFieldValue("price", value ?? "")} // Ensure it doesn't become null
         />
 
         <Select
           label="Course Level"
           placeholder="Select..."
           data={CourseLevelLabel}
-          value={formValues.courseLevel}
-          onChange={(value) => setValue('courseLevel', value || "" )}
+          {...form.getInputProps("courseLevel")}
         />
 
         <Textarea
           label="Course Description"
           placeholder="Enter your course description"
-          value={formValues.description}
-          onChange={(event) =>
-            setValue('description', event.target.value)
-          }
+          {...form.getInputProps("description")}
           className="mt-4"
         />
-
       </div>
 
       <div className="flex justify-between mt-6">
         <Button variant="outline">Cancel</Button>
-        <Button color="orange" onClick={() => save()}>
+        <Button color="orange" onClick={save}>
           Save & Next
         </Button>
       </div>

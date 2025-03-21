@@ -6,49 +6,51 @@ import { useState } from 'react';
 import { createUser } from '../api/user.tsx';
 import { UserRole } from '../types.tsx';
 import { notifications } from '@mantine/notifications';
+import { useMutation } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 
 
 export const UserCreatePage = () => {
 
+  const navigate = useNavigate()
   const [name, setName] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
   const [password, setPassword] = useState<string | null>(null);
   const [confirmPass, setConfirmPass] = useState<string | null>(null);
-  const [address, ] = useState<string | null>('myaddress123');
-  const [role, ] = useState<UserRole>(UserRole.Student)
+  const [address,] = useState<string | null>('myaddress123');
+  const [role,] = useState<UserRole>(UserRole.Student)
   const [agree, setAgree] = useState<boolean>(false)
 
-  const createAccount = async () => {
-    if (name?.trim() && email?.trim() && password?.trim() && address?.trim()) {
-      if (password === confirmPass) {
-        try {
-          await createUser({ name, password, address, email, user_role: role });
-          notifications.show({
-            title: 'Success',
-            message: 'User Created Successfully',
-            color: 'green'
-          })
-        } catch (error) {
-          notifications.show({
-            title: 'Error',
-            message: 'Cannot Create user an error has occured',
-            color: 'red'
-          })
-        }
-      } else {
-        notifications.show({
-          title: 'Error',
-          message: 'Error Confirming password',
-          color: 'red'
-        })
+  const createUserMutation = useMutation({
+    mutationFn: async () => {
+      if (!name?.trim() || !email?.trim() || !password?.trim() || !address?.trim()) {
+        throw new Error("Please fill out all required fields");
       }
-    } else {
+      if (password !== confirmPass) {
+        throw new Error("Error Confirming password");
+      }
+
+      return createUser({ name, password, address, email, user_role: role });
+    },
+    onSuccess: () => {
       notifications.show({
-        title: 'Error',
-        message: 'Please fill out all required fields',
-        color: 'red'
-      })
-    }
+        title: "Success",
+        message: "User Created Successfully",
+        color: "green",
+      });
+      navigate('/')
+    },
+    onError: (error) => {
+      notifications.show({
+        title: "Error",
+        message: error.message || "Cannot create user, an error has occurred",
+        color: "red",
+      });
+    },
+  });
+
+  const createAccount = () => {
+    createUserMutation.mutate();
   };
 
   return (
@@ -106,7 +108,7 @@ export const UserCreatePage = () => {
             <TextInput label="Email" placeholder="Email address..." type="email" mt="md" required onChange={e => setEmail(e.target.value)} />
             <PasswordInput label="Password" placeholder="Create password" mt="md" required onChange={e => setPassword(e.target.value)} />
             <PasswordInput label="Confirm Password" placeholder="Confirm password" mt="md" required onChange={e => { setConfirmPass(e.target.value) }} />
-            <Checkbox label="I agree with all of your Terms & Conditions" mt="md" required onChange={e => setAgree(e.target.checked)}/>
+            <Checkbox label="I agree with all of your Terms & Conditions" mt="md" required onChange={e => setAgree(e.target.checked)} />
             <Button fullWidth mt="xl" color="orange" onClick={() => createAccount()} disabled={!agree}>Create Account</Button>
           </Paper>
         </Grid.Col>
