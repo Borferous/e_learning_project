@@ -3,74 +3,45 @@ import { CategoryCard } from '../components/categorycard';
 import { CourseCard } from '../components/coursecard';
 import bapaLogo from "../assets/bapalogo.svg";
 import { HomeHeader } from "../components/homeheader";
-import { Course, CourseCategory, CourseCategoryLabel } from "../types";
+import { CourseCategory, CourseCategoryLabel } from "../types";
 import { getCourseCount, listCourse } from "../api/course";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode } from "react";
 import { Loading } from "../components/loading";
 import { IconBook } from "@tabler/icons-react";
 import { Footer } from "../components/footer";
 import placeholderImg from '../assets/placeholder-image.svg'
 import { listEvents } from "../api/event";
-import { ProgramEvent } from "../types";
+import { useQuery } from "@tanstack/react-query";
+
+interface CountCourse {
+    program_category: CourseCategory, course_count: number 
+}
 
 export const HomePage = () => {
 
-    const [isCourseCountLoading, setCourseCountLoading] = useState<boolean>(false);
-    const [courseCount, setCourseCount] = useState<{ program_category: CourseCategory, course_count: number }[] | null>(null);
-
-    const [isCoursesLoading, setCoursesLoading] = useState<boolean>(false);
-    const [courses, setCourses] = useState<Course[] | null>(null)
-
-    const [isEventsLoading, setEventsLoading] = useState<boolean>(false)
-    const [events, setEvents] = useState<ProgramEvent[] | null>(null);
-
-    const fetchCourseCount = async () => {
-        setCourseCountLoading(true);
-        try {
-            // Wait 5 seconds before making the API call
-            await new Promise(resolve => setTimeout(resolve, 5000));
-            const response = await getCourseCount()
-            setCourseCount(response);
-        } catch (error) {
-            console.error("Failed to fetch course count", error);
-        } finally {
-            setCourseCountLoading(false); // Ensure loading stops even if an error occurs
+    const { data: courseCount, isLoading: isCourseCountLoading, error: courseCountError } = useQuery({
+        queryKey: ["courseCount"],
+        queryFn: async () => {
+            await new Promise(resolve => setTimeout(resolve, 5000)); // Simulate delay
+            return getCourseCount() as Promise<CountCourse[]>;
         }
-    };
+    });
 
-    const fetchCourses = async () => {
-        setCoursesLoading(true)
-        try {
-            await new Promise(resolve => setTimeout(resolve, 5000));
-            const response = await listCourse()
-            console.table(response)
-            setCourses(response)
-        } catch (error) {
-            console.error("Failed to fetch courses", error);
-        } finally {
-            setCoursesLoading(false)
+    const { data: courses , isLoading: isCoursesLoading, error: coursesError } = useQuery({
+        queryKey: ["courses"],
+        queryFn: async () => {
+            await new Promise(resolve => setTimeout(resolve, 5000)); // Simulate delay
+            return listCourse();
         }
-    }
+    });
 
-    const fetchEvents = async () => {
-        try {
-            setEventsLoading(true)
-            await new Promise(resolve => setTimeout(resolve, 5000));
-            const response = await listEvents();
-            console.table(response)
-            setEvents(response)
-        } catch (error) {
-            console.log('Error BUllshit')
-        } finally {
-            setEventsLoading(false)
-        }
-    }
-
-    useEffect(() => {
-        fetchCourseCount();
-        fetchCourses();
-        fetchEvents();
-    }, []);
+    const { data: events, isLoading: isEventsLoading, error: eventsError } = useQuery({
+        queryKey: ["events"],
+        queryFn: async () => {
+            await new Promise(resolve => setTimeout(resolve, 5000)); // Simulate delay
+            return listEvents();
+        },
+    });
 
     return (
         <>
@@ -104,7 +75,7 @@ export const HomePage = () => {
                     </Grid>
                 </div>
 
-                <GridComponent title={"Programs Category"} loadingState={isCourseCountLoading}>
+                <GridComponent title={"Programs Category"} loadingState={isCourseCountLoading} error={coursesError}>
                     {courseCount && courseCount.length > 0 &&
                         courseCount.map((course) => {
                             const categoryData = CourseCategoryLabel.find(
@@ -130,7 +101,7 @@ export const HomePage = () => {
                     }
                 </GridComponent>
 
-                <GridComponent loadingState={isCoursesLoading} title="Best Selling Courses">
+                <GridComponent loadingState={isCoursesLoading} title="Best Selling Courses" error={courseCountError}>
                     {courses && courses.length > 0 && courses.map((course, key) => (
                         <CourseCard
                             key={key}
@@ -143,7 +114,7 @@ export const HomePage = () => {
                     ))}
                 </GridComponent>
 
-                <GridComponent title={"Events"} loadingState={isEventsLoading}>
+                <GridComponent title={"Events"} loadingState={isEventsLoading} error={eventsError}>
                     {events && events.map((ee, key) => {
                         return (
                             <CourseCard
@@ -165,17 +136,26 @@ export const HomePage = () => {
 interface GridProps {
     title: string;
     loadingState: boolean;
+    error?: unknown;
     children: ReactNode;
 }
 
-// Custom Component for grouping title, loading and fetched data
-export const GridComponent = ({ loadingState, children, title }: GridProps) => {
+export const GridComponent = ({ loadingState, error, children, title }: GridProps) => {
     return (
         <div>
             <Title order={2} className="text-xl font-semibold text-center mt-10">
                 {title}
             </Title>
-            {loadingState ? <Loading /> : <SimpleGrid cols={3} spacing="lg" className="mt-5">{children}</SimpleGrid>}
+
+            {loadingState ? (
+                <Loading />
+            ) : error ? (
+                <p className="text-red-500 text-center mt-5">Failed to load {title}. Please try again.</p>
+            ) : (
+                <SimpleGrid cols={3} spacing="lg" className="mt-5">
+                    {children}
+                </SimpleGrid>
+            )}
         </div>
     );
 };
