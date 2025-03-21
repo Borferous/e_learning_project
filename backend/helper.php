@@ -121,11 +121,13 @@ function createData($table, $columns) {
 
     // Validate all required fields
     $values = [];
+    $filteredData = [];
     foreach ($columns as $column) {
         if (!isset($data[$column]) || trim($data[$column]) === "") {
             sendError(422, "Missing or empty required field: $column");
         }
-        $values[] = trim($data[$column]); // Trim spaces to prevent empty input
+        $filteredData[$column] = trim($data[$column]); // Store validated data
+        $values[] = $filteredData[$column];
     }
 
     // Build placeholders (?, ?, ?)
@@ -139,7 +141,11 @@ function createData($table, $columns) {
         $stmt->bind_param(str_repeat('s', count($values)), ...$values);
 
         if ($stmt->execute()) {
-            echo json_encode(['message' => 'Record created successfully!', 'id' => $stmt->insert_id]);
+            $filteredData['id'] = $stmt->insert_id; // Add the inserted ID to the response
+            echo json_encode([
+                'message' => 'Record created successfully!',
+                'data' => $filteredData
+            ]);
         } else {
             sendError(500, 'Database error: ' . $stmt->error);
         }
@@ -149,6 +155,7 @@ function createData($table, $columns) {
     }
     exit();
 }
+
 
 function getFromTableWhere($table, $whereCondition) {
     global $conn;
