@@ -2,14 +2,28 @@ import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { IconPlus, IconLayersOff, IconLogout, IconMenu2, IconX } from "@tabler/icons-react";
 import bapaLogoWhite from "../assets/bapalogowhite.svg"; // Adjust path if necessary
+import { UserRole } from "../types";
 
-const menuItems = [
-  { label: "Create New Course", icon: <IconPlus size={18} />, path: "/instructorcreatecourse" },
-  { label: "My Courses", icon: <IconLayersOff size={18} />, path: "/my-courses" },
-];
+export const Sidebar = ({role}: {role: UserRole}) => {
+  const [isOpen, setIsOpen] = useState(false);
 
-export const Sidebar = () => {
-  const [isOpen, setIsOpen] = useState(false); // Sidebar open/close state
+  const menuItems = function() {
+    switch (role) {
+      case UserRole.Admin:
+        return [
+          { label: "User Management", icon: IconPlus, path: "/usermanage" },
+          { label: "My Courses", icon: IconLayersOff, path: "/admin-mycourses" },
+          { label: "Host Events", icon: IconLayersOff, path: "/hostevents" },
+        ]
+      case UserRole.Teacher:
+        return [
+          { label: "Create New Course", icon: IconPlus, path: "/instructorcreatecourse" },
+          { label: "My Courses", icon: IconLayersOff, path: "/my-courses" },
+        ]
+      default:
+        return []
+    }
+  }();
 
   return (
     <>
@@ -38,13 +52,12 @@ export const Sidebar = () => {
               key={item.label}
               to={item.path}
               className={({ isActive }) =>
-                `flex items-center gap-3 w-full px-4 py-3 rounded-md transition ${
-                  isActive ? "bg-orange-500 text-white" : "text-gray-400 hover:bg-orange-500 hover:text-white"
+                `flex items-center gap-3 w-full px-4 py-3 rounded-md transition ${isActive ? "bg-orange-500 text-white" : "text-gray-400 hover:bg-orange-500 hover:text-white"
                 }`
               }
               onClick={() => setIsOpen(false)} // Close menu on mobile
             >
-              {item.icon}
+              <item.icon size={18}/>
               {item.label}
             </NavLink>
           ))}

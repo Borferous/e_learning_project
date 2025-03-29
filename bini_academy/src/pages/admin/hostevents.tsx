@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { SidebarAdmin } from "../../components/sidebaradmin";
 import { HeaderAdmin } from "../../components/headeradmin";
 import { HostEventsTabs } from "../../components/hosteventstab";
 import { BasicInfoEventTab } from "../../components/basicinfoeventtab";
 import { AdvancedInfoEventTab } from "../../components/advanceinfoeventtab";
 import { StartEventTab } from "../../components/starteventtab";
+import { UserRole } from "../../types";
+import { Sidebar } from "../../components/sidebar";
 
 export const HostEvents = () => {
   const [activeTab, setActiveTab] = useState<string>("basic");
@@ -12,7 +13,7 @@ export const HostEvents = () => {
   return (
     <div className="flex">
       {/* Sidebar */}
-      <SidebarAdmin />
+      <Sidebar role={UserRole.Admin} />
 
       <div className="flex flex-col flex-1">
         {/* Header with dynamic title */}
