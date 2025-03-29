@@ -1,5 +1,5 @@
 import axios from "axios"
-import { User } from "../types";
+import { User, UserRole } from "../types";
 
 const baseUrl = 'http://localhost:8000/tables/users.php';
 
@@ -20,6 +20,13 @@ export const getCurrentUser = async() => {
         withCredentials: true
     })
     return response.data as User
+}
+
+export const getUserRole = async() => {
+    const response = await axios.get(`${baseUrl}?action=get-current-user`,{
+        withCredentials: true
+    })
+    return response.data.user_role as UserRole
 }
 
 export const createUser = async ({
