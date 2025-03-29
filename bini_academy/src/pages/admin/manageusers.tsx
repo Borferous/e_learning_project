@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { SidebarAdmin } from "../../components/sidebaradmin";
 import { HeaderAdmin } from "../../components/headeradmin";
 import { ManageUsersTabs } from "../../components/manageuserstab";
 import { CreateUserTab } from "../../components/createusertab";
 import { EditUsersTab } from "../../components/editusertab";
+import { UserRole } from "../../types";
+import { Sidebar } from "../../components/sidebar";
 
 export const ManageUsers = () => {
   const [activeTab, setActiveTab] = useState<string>("create");
@@ -11,7 +12,7 @@ export const ManageUsers = () => {
   return (
     <div className="flex">
       {/* Sidebar */}
-      <SidebarAdmin />
+      <Sidebar role={UserRole.Admin} />
 
       <div className="flex flex-col flex-1">
         {/* Header with dynamic title */}

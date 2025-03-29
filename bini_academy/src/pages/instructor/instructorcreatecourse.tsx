@@ -7,6 +7,7 @@ import { BasicInfoTab } from "../../components/basicinfotab";
 import { AdvanceInfoTab } from "../../components/advanceinfotab";
 import { CourseCurriculum } from "../../components/coursecurriculum";
 import { PublishTab } from "../../components/publishtab";
+import { UserRole } from "../../types";
 
 export const InstructorCreateCourse = () => {
   const [activeTab, setActiveTab] = useState("basic");
@@ -32,8 +33,8 @@ export const InstructorCreateCourse = () => {
   return (
     <div className="flex min-h-screen">
       {/* Sidebar */}
-      <Sidebar />
 
+      <Sidebar role={UserRole.Teacher}/>
       <div className="flex-1 bg-gray-50">
         {/* Header */}
         <HeaderAdmin title="Create a New Course" />
