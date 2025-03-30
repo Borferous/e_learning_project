@@ -5,6 +5,8 @@ import { UserCreatePage } from './pages/create';
 
 // import { HomePage} from './pages/homepage';
 import { HomePage } from './pages/homepage';
+import { CourseListPage } from './pages/course_list_page';
+import { CourseOverview } from './pages/course_overview';
 import { InstructorCreateCourse } from './pages/instructor/instructorcreatecourse';
 import { ManageUsers } from './pages/admin/manageusers';
 import { HostEvents } from './pages/admin/hostevents';
@@ -33,6 +35,8 @@ function App() {
               <Route path='/instructorcreatecourse' element={<InstructorCreateCourse />}/>
               <Route path='/usermanage' element={<ManageUsers />}/>
               <Route path='/hostevents' element={<HostEvents />}/>
+              <Route path='/courselist' element={<CourseListPage />}/>
+              <Route path='/courseoverview' element={<CourseOverview />}/>
             </Routes>
           </Router>
         </QueryClientProvider>
