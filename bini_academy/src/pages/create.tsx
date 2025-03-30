@@ -1,64 +1,98 @@
-import { Grid, Container, Paper, TextInput, PasswordInput, Checkbox, Button, Title, Center } from '@mantine/core';
-import bapaLogo from '../assets/bapalogo.svg'; // Import logo
-import campusImage from '../assets/campus.jpg'; // Import background image
-import { Header } from '../components/header.tsx';
-import { useState } from 'react';
-import { createUser } from '../api/user.tsx';
-import { UserRole } from '../types.tsx';
+import {
+  Grid,
+  Container,
+  Paper,
+  TextInput,
+  PasswordInput,
+  Checkbox,
+  Button,
+  Title,
+  Center,
+  Select,
+  Group,
+} from '@mantine/core';
+import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
+import { IconArrowRight } from '@tabler/icons-react';
 
+import bapaLogo from '../assets/bapalogo.svg';
+import campusImage from '../assets/campus.jpg';
+import { Header } from '../components/header';
+import { createUser } from '../api/user';
+import { UserRole } from '../types';
 
 export const UserCreatePage = () => {
+  const navigate = useNavigate();
 
-  const navigate = useNavigate()
-  const [name, setName] = useState<string | null>(null);
-  const [email, setEmail] = useState<string | null>(null);
-  const [password, setPassword] = useState<string | null>(null);
-  const [confirmPass, setConfirmPass] = useState<string | null>(null);
-  const [address,] = useState<string | null>('myaddress123');
-  const [role,] = useState<UserRole>(UserRole.Student)
-  const [agree, setAgree] = useState<boolean>(false)
+  const form = useForm({  
+    initialValues: {       
+      firstName: '',
+      lastName: '',
+      dob: null as Date | null,
+      gender: '',
+      phone: '',
+      address: '',
+      email: '',
+      password: '',
+      confirmPass: '',
+      agree: false,
+    },
+
+    validate: {
+      firstName: (value) => (value.trim().length > 0 ? null : 'First name is required'),
+      lastName: (value) => (value.trim().length > 0 ? null : 'Last name is required'),
+      dob: (value) => (value ? null : 'Date of birth is required'),
+      gender: (value) => (value ? null : 'Gender is required'),
+      phone: (value) => (value ? null : 'Phone number is required'),
+      address: (value) => (value.trim().length > 0 ? null : 'Address is required'),
+      email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
+      password: (value) => (value.length >= 6 ? null : 'Password must be at least 6 characters'),
+      confirmPass: (value, values) => (value === values.password ? null : 'Passwords do not match'),
+      agree: (value) => (value ? null : 'You must agree to the terms'),
+    },
+  });
 
   const createUserMutation = useMutation({
     mutationFn: async () => {
-      if (!name?.trim() || !email?.trim() || !password?.trim() || !address?.trim()) {
-        throw new Error("Please fill out all required fields");
-      }
-      if (password !== confirmPass) {
-        throw new Error("Error Confirming password");
-      }
-
-      return createUser({ name, password, address, email, user_role: role });
+      return createUser({
+        name: `${form.values.firstName} ${form.values.lastName}`,
+        password: form.values.password,
+        address: form.values.address,
+        email: form.values.email,
+        user_role: UserRole.Student,
+      });
     },
     onSuccess: () => {
       notifications.show({
-        title: "Success",
-        message: "User Created Successfully",
-        color: "green",
+        title: 'Success',
+        message: 'User Created Successfully',
+        color: 'green',
       });
-      navigate('/')
+      navigate('/');
     },
-    onError: (error) => {
+    onError: (error: any) => {
       notifications.show({
-        title: "Error",
-        message: error.message || "Cannot create user, an error has occurred",
-        color: "red",
+        title: 'Error',
+        message: error.message || 'Cannot create user, an error has occurred',
+        color: 'red',
       });
     },
   });
 
   const createAccount = () => {
-    createUserMutation.mutate();
+    form.validate();
+    if (form.isValid()) {
+      createUserMutation.mutate();
+    }
   };
 
   return (
-
     <Container fluid style={{ height: '100vh', padding: 0 }}>
       <Header />
       <Grid gutter={0} style={{ height: '100vh' }}>
-        {/* Left side - Background with Logo */}
+        {/* Left Side with Logo */}
         <Grid.Col
           span={{ base: 12, md: 6 }}
           style={{
@@ -72,7 +106,6 @@ export const UserCreatePage = () => {
             backgroundPosition: 'center',
           }}
         >
-          {/* White overlay */}
           <div
             style={{
               position: 'absolute',
@@ -80,36 +113,137 @@ export const UserCreatePage = () => {
               left: 0,
               width: '100%',
               height: '100%',
-              backgroundColor: 'rgba(255, 255, 255, 0.86)', // White overlay
+              backgroundColor: 'rgba(255, 255, 255, 0.86)',
             }}
           />
-
-          {/* Logo (Ensuring it's above the overlay) */}
           <div style={{ textAlign: 'center', zIndex: 1 }}>
             <img src={bapaLogo} alt="BAPA Logo" width="400" />
           </div>
         </Grid.Col>
 
-        {/* Right side - Signup Form */}
+        {/* Right Side Form */}
         <Grid.Col
           span={{ base: 12, md: 6 }}
           style={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            height: '100vh'
+            height: '100vh',
           }}
         >
-          <Paper p={20} radius="md" style={{ width: '100%', maxWidth: 400 }}>
+          <Paper p={20} radius="md" style={{ width: '100%', maxWidth: 450 }}>
             <Center>
-              <Title order={2} mb="md">Create your account</Title>
+              <Title order={2} mb="md">
+                Create your account
+              </Title>
             </Center>
-            <TextInput label="Full Name" placeholder="Full name..." required onChange={e => setName(e.target.value)} />
-            <TextInput label="Email" placeholder="Email address..." type="email" mt="md" required onChange={e => setEmail(e.target.value)} />
-            <PasswordInput label="Password" placeholder="Create password" mt="md" required onChange={e => setPassword(e.target.value)} />
-            <PasswordInput label="Confirm Password" placeholder="Confirm password" mt="md" required onChange={e => { setConfirmPass(e.target.value) }} />
-            <Checkbox label="I agree with all of your Terms & Conditions" mt="md" required onChange={e => setAgree(e.target.checked)} />
-            <Button fullWidth mt="xl" color="orange" onClick={() => createAccount()} disabled={!agree}>Create Account</Button>
+
+            <Group grow>
+              <TextInput
+                label="Full Name"
+                placeholder="First name"
+                {...form.getInputProps('firstName')}
+              />
+              <TextInput
+                label=" "
+                placeholder="Last name"
+                {...form.getInputProps('lastName')}
+              />
+            </Group>
+
+            <Group grow mt="md">
+              {/* Native React Date Input */}
+              <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+                <label style={{ marginBottom: 4, fontSize: '14px', fontWeight: 500 }}>
+                  Date of Birth
+                </label>
+                <input
+                  type="date"
+                  max={new Date().toISOString().split('T')[0]}
+                  value={form.values.dob ? new Date(form.values.dob).toISOString().split('T')[0] : ''}
+                  onChange={(e) =>
+                    form.setFieldValue('dob', e.target.value ? new Date(e.target.value) : null)
+                  }
+                  style={{
+                    padding: '8px',
+                    borderRadius: '4px',
+                    border: form.errors.dob ? '1px solid red' : '1px solid #ced4da',
+                  }}
+                  required
+                />
+                {form.errors.dob && (
+                  <span style={{ color: 'red', fontSize: '12px' }}>{form.errors.dob}</span>
+                )}
+              </div>
+
+              <Select
+                label="Gender"
+                placeholder="Select Gender"
+                data={['Male', 'Female', 'Other']}
+                {...form.getInputProps('gender')}
+                required
+              />
+            </Group>
+
+            <Group grow mt="md">
+              <TextInput
+                label="Phone Number"
+                placeholder="+63"
+                {...form.getInputProps('phone')}
+              />
+              <TextInput
+                label="Address"
+                placeholder="Current Address"
+                {...form.getInputProps('address')}
+              />
+            </Group>
+
+            <TextInput
+              label="Email"
+              placeholder="Email address"
+              type="email"
+              mt="md"
+              {...form.getInputProps('email')}
+              required
+            />
+            <Group grow mt="md">
+              <PasswordInput
+                label="Password"
+                placeholder="Create password"
+                {...form.getInputProps('password')}
+                required
+              />
+              <PasswordInput
+                label="Confirm Password"
+                placeholder="Confirm password"
+                {...form.getInputProps('confirmPass')}
+                required
+              />
+            </Group>
+
+            <Checkbox
+              mt="md"
+              label={
+                <>
+                  I agree with all of your{' '}
+                  <a href="#" style={{ color: 'blue' }}>
+                    Terms & Conditions
+                  </a>
+                </>
+              }
+              {...form.getInputProps('agree', { type: 'checkbox' })}
+              required
+            />
+            <Button
+              fullWidth
+              mt="xl"
+              color="orange"
+              rightSection={<IconArrowRight size={18} />}
+              onClick={createAccount}
+              loading={createUserMutation.status === 'pending'}
+            >
+              Create Account
+            </Button>
           </Paper>
         </Grid.Col>
       </Grid>
