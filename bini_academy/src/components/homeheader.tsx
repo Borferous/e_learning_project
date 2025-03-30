@@ -21,7 +21,7 @@ export const HomeHeader = () => {
         {/* Desktop Navigation */}
         <div className="hidden lg:flex items-center gap-6">
           <Link to="/" className="text-gray-700 hover:text-orange-500 font-medium">Home</Link>
-          <Link to="/courses" className="text-gray-700 hover:text-orange-500 font-medium">Courses</Link>
+          <Link to="/courselist" className="text-gray-700 hover:text-orange-500 font-medium">Courses</Link>
           <Link to="/events" className="text-gray-700 hover:text-orange-500 font-medium">Events</Link>
           <Link to="/about" className="text-gray-700 hover:text-orange-500 font-medium">About</Link>
           <Link to="/contact" className="text-gray-700 hover:text-orange-500 font-medium">Contact</Link>
@@ -55,7 +55,7 @@ export const HomeHeader = () => {
       <Drawer opened={opened} onClose={close} padding="md" title="Menu" position="left" size="xs">
         <Stack gap="sm">
           <Link to="/" className="text-orange-500 font-medium py-2" onClick={close}>Home</Link>
-          <Link to="/courses" className="text-gray-500 font-medium py-2" onClick={close}>Courses</Link>
+          <Link to="/courselist" className="text-gray-500 font-medium py-2" onClick={close}>Courses</Link>
           <Link to="/events" className="text-gray-500 font-medium py-2" onClick={close}>Events</Link>
           <Link to="/about" className="text-gray-500 font-medium py-2" onClick={close}>About</Link>
           <Link to="/contact" className="text-gray-500 font-medium py-2" onClick={close}>Contact</Link>
