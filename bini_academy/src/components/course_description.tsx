@@ -13,19 +13,19 @@ const CourseDescription = ({ description, keyPoints }: CourseDescriptionProps) =
         Description
       </Text>
       
-      <Text className="mb-6">
+      <Text className="mb-6 leading-relaxed">
         {description}
       </Text>
       
-      <Text className="mb-4">
+      <Text className="mb-6 leading-relaxed">
         In this comprehensive course, you'll master the essential techniques to project your voice, control your breathing, and move with purpose. Learn the same techniques used by professional performers, Broadway actors, and vocal coaches to captivate any audience.
       </Text>
       
-      <Text className="font-bold mb-2">You'll explore:</Text>
+      <Text className="font-bold mb-2 leading-relaxed">You'll explore:</Text>
       <List
         spacing="xs"
         size="sm"
-        className="mb-6"
+        className="mb-6 leading-relaxed"
         icon={<ThemeIcon><IconCircleCheck size={16} /></ThemeIcon>}
       >
         {keyPoints.map((point: string, index: number) => (
@@ -33,7 +33,7 @@ const CourseDescription = ({ description, keyPoints }: CourseDescriptionProps) =
         ))}
       </List>
       
-      <Text>
+      <Text className="leading-relaxed">
         By the end of this course, you'll step onto any stage with the confidence and presence of a true performer!
       </Text>
     </div>
