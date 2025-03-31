@@ -240,9 +240,7 @@ export const CourseListPage = () => {
                 image={course.image}
                 title={course.title}
                 category={course.category}
-                price={course.price}
-                students={course.students}
-              />
+                students={course.students} link={''}              />
             ))}
           </div>
         )}
