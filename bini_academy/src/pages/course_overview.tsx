@@ -6,8 +6,10 @@ import CourseDescription from "../components/course_description";
 import CourseCurriculum from "../components/course_curriculum";
 import StudentFeedback from "../components/student_feedback";
 import RelatedCourses from "../components/related_courses";
+import { useNavigate } from "react-router-dom";
 
 export const CourseOverview = () => {
+  const navigate = useNavigate()
   const courseData = {
     title: "Bachelor of Music in Vocal Performance",
     subtitle:
@@ -68,7 +70,7 @@ export const CourseOverview = () => {
                 </Text>
               </Group>
 
-              <Button color="orange" fullWidth className="mb-4">
+              <Button color="orange" fullWidth className="mb-4" onClick={() => navigate('/payment-information')}>
                 Enroll Now
               </Button>
               <Text size="xs" c="dimmed" className="mb-4 text-center">
