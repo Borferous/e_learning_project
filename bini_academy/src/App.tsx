@@ -10,6 +10,8 @@ import { CourseOverview } from './pages/course_overview';
 import { InstructorCreateCourse } from './pages/instructor/instructorcreatecourse';
 import { ManageUsers } from './pages/admin/manageusers';
 import { HostEvents } from './pages/admin/hostevents';
+import { PaymentInformation } from './pages/payment_information';
+import { TermsAndCondition } from './pages/terms_and_conditions';
 import '@mantine/core/styles.css'
 import '@mantine/notifications/styles.css';
 
@@ -37,6 +39,8 @@ function App() {
               <Route path='/hostevents' element={<HostEvents />}/>
               <Route path='/courselist' element={<CourseListPage />}/>
               <Route path='/courseoverview' element={<CourseOverview />}/>
+              <Route path='/payment-information' element={<PaymentInformation />}/>
+              <Route path='/terms-and-conditions' element={<TermsAndCondition />}/>
             </Routes>
           </Router>
         </QueryClientProvider>
