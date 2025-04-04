@@ -15,8 +15,8 @@ export enum ActiveStatus {
 }
 
 export const ActiveStatusLabel = [
-    {value: ActiveStatus.Inactive, label: 'Inactive'},
-    {value: ActiveStatus.Active, label: 'Active'},
+    { value: ActiveStatus.Inactive, label: 'Inactive' },
+    { value: ActiveStatus.Active, label: 'Active' },
 ]
 
 export enum UserRole {
@@ -26,9 +26,9 @@ export enum UserRole {
 }
 
 export const UserRoleLabel = [
-    {value: UserRole.Student , label: "Student"},
-    {value: UserRole.Admin , label: "Admin"},
-    {value: UserRole.Teacher , label: "Teacher"},
+    { value: UserRole.Student, label: "Student" },
+    { value: UserRole.Admin, label: "Admin" },
+    { value: UserRole.Teacher, label: "Teacher" },
 ]
 
 export interface Course {
@@ -48,18 +48,18 @@ export enum CourseCategory {
     Others = 'others'
 }
 
-import { 
+import {
     IconCertificate,
     IconPencil,
     IconBook
 } from '@tabler/icons-react';
-  
+
 
 export const CourseCategoryLabel = [
-    {value: CourseCategory.Bachelor, label: 'Bachelor Degrees', icon: IconBook},
-    {value: CourseCategory.Diploma, label: 'Diploma & Certificate Programs', icon: IconCertificate},
-    {value: CourseCategory.Workshop, label: 'Workshop & Masterclasses', icon: IconPencil},
-    {value: CourseCategory.Others, label: 'Others', icon: IconBook},
+    { value: CourseCategory.Bachelor, label: 'Bachelor Degrees', icon: IconBook },
+    { value: CourseCategory.Diploma, label: 'Diploma & Certificate Programs', icon: IconCertificate },
+    { value: CourseCategory.Workshop, label: 'Workshop & Masterclasses', icon: IconPencil },
+    { value: CourseCategory.Others, label: 'Others', icon: IconBook },
 ]
 
 export enum CourseLevel {
@@ -69,13 +69,13 @@ export enum CourseLevel {
 }
 
 export const CourseLevelLabel = [
-    {value: CourseLevel.Beginner, label: "Beginner"},
-    {value: CourseLevel.Intermediate, label: "Intermediate"},
-    {value: CourseLevel.Advanced, label: "Advanced"},
+    { value: CourseLevel.Beginner, label: "Beginner" },
+    { value: CourseLevel.Intermediate, label: "Intermediate" },
+    { value: CourseLevel.Advanced, label: "Advanced" },
 ]
 
 
-export interface ProgramEvent{
+export interface ProgramEvent {
     event_host: string,
     event_title: string,
     event_category: string,
@@ -83,4 +83,10 @@ export interface ProgramEvent{
     event_end_date: string,
     event_start_date: string,
     event_subtitle: string,
+}
+
+export interface FileData {
+    file_id: number;
+    file_path: string;
+    file_name: string;
 }
