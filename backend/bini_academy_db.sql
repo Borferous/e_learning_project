@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 12, 2025 at 02:58 AM
+-- Generation Time: Apr 04, 2025 at 03:00 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -45,7 +45,8 @@ CREATE TABLE `course` (
 INSERT INTO `course` (`course_id`, `teacher_id`, `course_title`, `program_category`, `price`, `description`, `course_level`, `course_topic`) VALUES
 (1, 2, 'Bachelor\'s Degree in Fine Arts', 'bachelor', 10000, 'A Bachelor of Fine Arts (BFA) in Visual Arts is a four-year degree that focuses on developing artistic skills and creativity across various mediums, including painting, sculpture, digital art, and mixed media.', 'beginner', 'visual arts'),
 (2, 2, 'Songwriting & Music Composition', 'workshop', 20000, 'A workshop exploring melody, harmony, and lyric writing. Participants will create original compositions and learn industry tips for songwriting success.', 'intermediate', 'music'),
-(3, 3, 'Diploma in Dance Performance & Choreography', 'diploma', 30000, 'A program that trains dancers in technique, performance, and choreography. Prepares students for careers in dance companies, teaching, or choreography.\r\n\r\n', 'advanced', 'dancing');
+(3, 3, 'Diploma in Dance Performance & Choreography', 'diploma', 30000, 'A program that trains dancers in technique, performance, and choreography. Prepares students for careers in dance companies, teaching, or choreography.\r\n\r\n', 'advanced', 'dancing'),
+(17, 2, 'asdasd', 'bachelor', 999, 'zxczxc', 'beginner', 'aasdasd');
 
 -- --------------------------------------------------------
 
@@ -69,8 +70,20 @@ CREATE TABLE `event` (
 --
 
 INSERT INTO `event` (`event_id`, `event_host`, `event_title`, `event_category`, `event_start_date`, `event_description`, `event_end_date`, `event_subtitle`) VALUES
-(25, 3, 'Art Competition', 'visual arts', '2025-03-01', 'its a competition but art', '', 'A competition where you draw things'),
-(26, 2, 'Tiktok Dance competition', 'dance', '2025-03-30', 'a competition but dance and also tiktok', '2025-03-31', 'tiktokening');
+(29, 3, 'Art Competition', 'visual arts', '2025-03-01', 'its a competition but art', '', 'A competition where you draw things'),
+(30, 2, 'Tiktok Dance competition', 'dance', '2025-03-30', 'a competition but dance and also tiktok', '2025-03-31', 'tiktokening');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `files`
+--
+
+CREATE TABLE `files` (
+  `file_id` int(11) NOT NULL,
+  `file_name` varchar(255) NOT NULL,
+  `file_path` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -96,7 +109,10 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`user_id`, `name`, `password`, `address`, `user_role`, `email`, `profile_picture`, `status`) VALUES
 (1, 'Yuichi Student', 'password123', 'address123', 'student', 'student@gmail.com', NULL, 'active'),
 (2, 'Ellis Teacher', 'password123', 'address123', 'teacher', 'teacher@gmail.com', NULL, 'active'),
-(3, 'Cister Admin', 'password123', 'address123', 'admin', 'admin@gmail.com', NULL, 'active');
+(3, 'Cister Admin', 'password123', 'address123', 'admin', 'admin@gmail.com', NULL, 'active'),
+(37, 'Another user', 'password123', 'address123', 'student', 'ycanete_220000000743@gmail.com', NULL, 'active'),
+(38, 'Another user', 'password123', 'address123', 'student', 'ycanete_220000000743@gmail.com', NULL, 'active'),
+(39, 'wtf', 'wtf', 'myaddress123', 'student', 'wtf', NULL, 'active');
 
 -- --------------------------------------------------------
 
@@ -143,6 +159,12 @@ ALTER TABLE `event`
   ADD KEY `event_host` (`event_host`);
 
 --
+-- Indexes for table `files`
+--
+ALTER TABLE `files`
+  ADD PRIMARY KEY (`file_id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -172,19 +194,25 @@ ALTER TABLE `user_event`
 -- AUTO_INCREMENT for table `course`
 --
 ALTER TABLE `course`
-  MODIFY `course_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `course_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `event`
 --
 ALTER TABLE `event`
-  MODIFY `event_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `event_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+
+--
+-- AUTO_INCREMENT for table `files`
+--
+ALTER TABLE `files`
+  MODIFY `file_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `user_course`

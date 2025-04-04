@@ -12,6 +12,7 @@ import { ManageUsers } from './pages/admin/manageusers';
 import { HostEvents } from './pages/admin/hostevents';
 import { PaymentInformation } from './pages/payment_information';
 import { TermsAndCondition } from './pages/terms_and_conditions';
+import { Test } from './pages/test';
 import '@mantine/core/styles.css'
 import '@mantine/notifications/styles.css';
 
@@ -41,6 +42,7 @@ function App() {
               <Route path='/courseoverview' element={<CourseOverview />}/>
               <Route path='/payment-information' element={<PaymentInformation />}/>
               <Route path='/terms-and-conditions' element={<TermsAndCondition />}/>
+              <Route path='/test' element={<Test />}/>
             </Routes>
           </Router>
         </QueryClientProvider>
