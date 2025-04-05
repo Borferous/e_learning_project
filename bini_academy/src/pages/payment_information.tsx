@@ -61,7 +61,7 @@ export const PaymentInformation = () => {
 
                     <Center>
                         <Button
-                            color="orange"
+                            color="orange" onClick={() => navigate('/subjectlist')}
                         >
                             Submit
                         </Button>
