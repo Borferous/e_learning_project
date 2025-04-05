@@ -34,16 +34,22 @@ export const createUser = async ({
     password,
     address,
     email,
-    user_role
+    user_role,
+    gender,
+    birthDate,
+    phone_number,
 }: {
     name: string,
     password: string,
     address: string,
     email: string,
-    user_role: string
+    user_role: string,
+    gender: string,
+    birthDate: Date,
+    phone_number: string
 }) => {
     const response = await axios.post(`${baseUrl}?action=create-user`, {
-        name, password, address, email, user_role
+        name, password, address, email, user_role, gender, birth_date: birthDate.toISOString(), phone_number
     })
     return response
 }
@@ -55,7 +61,10 @@ export const updateUser = async ({
     address,
     email,
     user_role,
-    status
+    status,
+    gender,
+    birthDate,
+    phone_number
 }:{ 
     user_id: string,
     name: string,
@@ -64,9 +73,12 @@ export const updateUser = async ({
     email: string,
     user_role: string,
     status: string,
+    gender: string,
+    birthDate: Date,
+    phone_number: string
 }) => {
     const response = await axios.post(`${baseUrl}?action=update-user`, {
-        user_id, name, password, address, email, user_role, status
+        user_id, name, password, address, email, user_role, status, gender, birth_date: birthDate.toISOString(), phone_number
     })
     return response
 }

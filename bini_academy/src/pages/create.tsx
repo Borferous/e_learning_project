@@ -30,7 +30,7 @@ export const UserCreatePage = () => {
     initialValues: {       
       firstName: '',
       lastName: '',
-      dob: null as Date | null,
+      dob: '',
       gender: '',
       phone: '',
       address: '',
@@ -62,6 +62,9 @@ export const UserCreatePage = () => {
         address: form.values.address,
         email: form.values.email,
         user_role: UserRole.Student,
+        gender: form.values.gender,
+        birthDate: new Date(form.values.dob),
+        phone_number: form.values.phone,
       });
     },
     onSuccess: () => {
@@ -162,7 +165,7 @@ export const UserCreatePage = () => {
                   max={new Date().toISOString().split('T')[0]}
                   value={form.values.dob ? new Date(form.values.dob).toISOString().split('T')[0] : ''}
                   onChange={(e) =>
-                    form.setFieldValue('dob', e.target.value ? new Date(e.target.value) : null)
+                    form.setFieldValue('dob', e.target.value)
                   }
                   style={{
                     padding: '8px',

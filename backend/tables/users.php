@@ -19,7 +19,7 @@ function getUserById()
 }
 function createUser()
 {
-    createData('users', ['name', 'password', 'address', 'user_role', 'email']);
+    createData('users', ['name', 'password', 'address', 'user_role', 'email','birth_date', 'gender','phone_number']);
 }
 function deleteUser()
 {
@@ -27,7 +27,7 @@ function deleteUser()
 }
 function updateUser()
 {
-    updateData('users', 'user_id', ['name', 'password', 'address', 'user_role', 'email','status']);
+    updateData('users', 'user_id', ['name', 'password', 'address', 'user_role', 'email','status','birth_date','gender','phone_number']);
 }
 
 function startSessionIfNotActive()

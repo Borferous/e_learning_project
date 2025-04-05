@@ -1,40 +1,58 @@
 import { useState } from "react";
-import { Button, Select, TextInput, FileButton, Avatar, Modal, Image } from "@mantine/core";
+import { Button, Select, TextInput, FileButton, Avatar, Modal, Image, Group } from "@mantine/core";
 import { createUser } from "../api/user";
 import { notifications } from "@mantine/notifications";
-import { UserRoleLabel } from "../types";
+import { GenderLabel, UserRoleLabel } from "../types";
+import { useForm } from "@mantine/form";
+
 
 export const CreateUserTab = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    role: "",
-    address: "",
-    status: "",
+  const form = useForm({
+    initialValues: {
+      name: "",
+      email: "",
+      password: "",
+      role: "",
+      address: "",
+      status: "",
+      gender: "",
+      birthDate: ""
+    },
+    validate: {
+      name: (value) => (value ? null : "This field is required"),
+      email: (value) => (value ? null : "This field is required"),
+      password: (value) => (value ? null : "This field is required"),
+      role: (value) => (value ? null : "This field is required"),
+      address: (value) => (value ? null : "This field is required"),
+      status: (value) => (value ? null : "This field is required"),
+      gender: (value) => (value ? null : "This field is required"),
+      birthDate: (value) => (value ? null : "This field is required"),
+    },
   });
 
-  const createNewUser = async() => {
-    
+  const createNewUser = async () => {
+
     try {
-        await createUser({
-          name: formData.name,
-          password: formData.password,
-          address: formData.address,
-          email: formData.email,
-          user_role: formData.role
-        })
-        notifications.show({
-          title: 'Success',
-          message: 'User Created Successfully',
-          color: 'green'
-        })
+      await createUser({
+        name: form.values.name,
+        password: form.values.password,
+        address: form.values.address,
+        email: form.values.email,
+        user_role: form.values.role,
+        gender: form.values.gender,
+        birthDate: new Date(form.values.birthDate)
+      })
+      notifications.show({
+        title: 'Success',
+        message: 'User Created Successfully',
+        color: 'green'
+      })
     } catch (error) {
-        notifications.show({
-          title: 'Error',
-          message: 'Cannot Create user an error has occured',
-          color: 'red'
-        })
+      notifications.show({
+        title: 'Error',
+        message: 'Cannot Create user an error has occured',
+        color: 'red'
+      })
     } finally {
       setConfirmOpened(false)
     }
@@ -47,8 +65,8 @@ export const CreateUserTab = () => {
 
   const validateForm = () => {
     const newErrors: Record<string, boolean> = {};
-    Object.keys(formData).forEach((key) => {
-      if (!formData[key as keyof typeof formData]) {
+    Object.keys(form.values).forEach((key) => {
+      if (!form.values[key as keyof typeof form.values]) {
         newErrors[key] = true;
       }
     });
@@ -72,16 +90,16 @@ export const CreateUserTab = () => {
             label="Name"
             placeholder="Enter full name"
             maxLength={32}
-            value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            value={form.values.name}
+            onChange={(event) => form.setFieldValue('name', event.currentTarget.value)}
             error={errors.name ? "This field is required" : false}
           />
           <TextInput
             label="Email"
             placeholder="Enter email address"
             maxLength={32}
-            value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            value={form.values.email}
+            onChange={(event) => form.setFieldValue('email', event.currentTarget.value)}
             error={errors.email ? "This field is required" : false}
           />
           <TextInput
@@ -89,34 +107,68 @@ export const CreateUserTab = () => {
             placeholder="Enter password"
             type="password"
             maxLength={32}
-            value={formData.password}
-            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+            value={form.values.password}
+            onChange={(event) => form.setFieldValue('password', event.currentTarget.value)}
             error={errors.password ? "This field is required" : false}
           />
           <Select
             label="User Role"
             placeholder="Select user role"
             data={UserRoleLabel}
-            value={formData.role}
-            onChange={(value) => setFormData({ ...formData, role: value || "" })}
+            value={form.values.role}
+            onChange={(value) => form.setFieldValue('role', value || "")}
             error={errors.role ? "This field is required" : false}
           />
           <TextInput
             label="Address"
             placeholder="Enter address"
-            value={formData.address}
-            onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+            value={form.values.address}
+            onChange={(event) => form.setFieldValue('address', event.currentTarget.value)}
             error={errors.address ? "This field is required" : false}
           />
           <Select
             label="Status"
             placeholder="Select status"
             data={["Active", "Inactive"]}
-            value={formData.status}
-            onChange={(value) => setFormData({ ...formData, status: value || "" })}
+            value={form.values.status}
+            onChange={(value) => form.setFieldValue('status', value || "")}
             error={errors.status ? "This field is required" : false}
           />
+          <Select
+            label='Gender'
+            placeholder="Select Gender"
+            data={GenderLabel}
+            value={form.values.gender}
+            onChange={(value) => form.setFieldValue('gender', value || "")}
+            error={errors.status ? "This field is required" : false}
+          ></Select>
+          <Group grow mt="md">
+            {/* Native React Date Input */}
+            <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+              <label style={{ marginBottom: 4, fontSize: '14px', fontWeight: 500 }}>
+                Date of Birth
+              </label>
+              <input
+                type="date"
+                max={new Date().toISOString().split('T')[0]}
+                value={form.values.birthDate ? new Date(form.values.birthDate).toISOString().split('T')[0] : ''}
+                onChange={(e) =>
+                  form.setFieldValue('dob', e.target.value ? new Date(e.target.value) : null)
+                }
+                style={{
+                  padding: '8px',
+                  borderRadius: '4px',
+                  border: form.errors.dob ? '1px solid red' : '1px solid #ced4da',
+                }}
+                required
+              />
+              {form.errors.dob && (
+                <span style={{ color: 'red', fontSize: '12px' }}>{form.errors.dob}</span>
+              )}
+            </div>
+          </Group>
         </div>
+
 
         {/* Buttons */}
         <div className="mt-6 flex gap-4">
@@ -135,9 +187,8 @@ export const CreateUserTab = () => {
           src={profileImage ? URL.createObjectURL(profileImage) : null}
           size={100}
           radius="xl"
-          className={`border mb-3 cursor-pointer ${
-            errors.profileImage ? "border-red-500" : ""
-          }`}
+          className={`border mb-3 cursor-pointer ${errors.profileImage ? "border-red-500" : ""
+            }`}
           onClick={() => profileImage && setPreviewOpened(true)}
         />
         <FileButton onChange={setProfileImage} accept="image/png,image/jpeg">
