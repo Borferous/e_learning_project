@@ -96,7 +96,7 @@ export const CourseOverview = () => {
             keyPoints={courseData.keyPoints}
           />
 
-          <CourseCurriculum />
+<CourseCurriculum/>
           <StudentFeedback />
           <RelatedCourses />
         </Container>

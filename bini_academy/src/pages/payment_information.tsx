@@ -57,11 +57,12 @@ export const PaymentInformation = () => {
                             </div>
                         </Grid.Col>
                     </Grid>
-
-                    <Center>
+                      
+                      <Center>
                         <Button
                             color="orange"
                             disabled={!paymentForm.values.agreedToTerms}
+                            onClick={() => navigate('/subjectlist')}
                         >
                             Submit
                         </Button>
