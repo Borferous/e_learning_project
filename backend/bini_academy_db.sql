@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 04, 2025 at 03:00 PM
+-- Generation Time: Apr 05, 2025 at 06:08 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -99,20 +99,29 @@ CREATE TABLE `users` (
   `user_role` varchar(11) NOT NULL,
   `email` varchar(255) NOT NULL,
   `profile_picture` blob DEFAULT NULL,
-  `status` varchar(10) NOT NULL DEFAULT 'active'
+  `status` varchar(10) NOT NULL DEFAULT 'active',
+  `birth_date` date DEFAULT NULL,
+  `gender` varchar(25) DEFAULT NULL,
+  `phone_number` varchar(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `name`, `password`, `address`, `user_role`, `email`, `profile_picture`, `status`) VALUES
-(1, 'Yuichi Student', 'password123', 'address123', 'student', 'student@gmail.com', NULL, 'active'),
-(2, 'Ellis Teacher', 'password123', 'address123', 'teacher', 'teacher@gmail.com', NULL, 'active'),
-(3, 'Cister Admin', 'password123', 'address123', 'admin', 'admin@gmail.com', NULL, 'active'),
-(37, 'Another user', 'password123', 'address123', 'student', 'ycanete_220000000743@gmail.com', NULL, 'active'),
-(38, 'Another user', 'password123', 'address123', 'student', 'ycanete_220000000743@gmail.com', NULL, 'active'),
-(39, 'wtf', 'wtf', 'myaddress123', 'student', 'wtf', NULL, 'active');
+INSERT INTO `users` (`user_id`, `name`, `password`, `address`, `user_role`, `email`, `profile_picture`, `status`, `birth_date`, `gender`, `phone_number`) VALUES
+(1, 'Yuichi Student', 'password123', 'address123', 'student', 'student@gmail.com', NULL, 'active', NULL, NULL, ''),
+(2, 'Ellis Teacher', 'password123', 'address123', 'teacher', 'teacher@gmail.com', NULL, 'active', NULL, NULL, ''),
+(3, 'Cister Admin', 'password123', 'address123', 'admin', 'admin@gmail.com', NULL, 'active', NULL, NULL, ''),
+(37, 'Another user', 'password123', 'address123', 'student', 'ycanete_220000000743@gmail.com', NULL, 'active', NULL, NULL, ''),
+(38, 'Another user', 'password123', 'address123', 'student', 'ycanete_220000000743@gmail.com', NULL, 'active', NULL, NULL, ''),
+(39, 'wtf', 'wtf', 'myaddress123', 'student', 'wtf', NULL, 'active', NULL, NULL, ''),
+(40, 'test', '123123', 'asdaskldasldj', 'student', 'wtf@gmail.com', NULL, 'active', NULL, NULL, ''),
+(41, 'yuichi canets', '123123', 'skjdhask', 'student', 'yoich@gmail.com', NULL, 'active', '0000-00-00', 'Male', ''),
+(42, 'another user', 'asdasd', 'asdasdjalskdjl', 'student', 'hello@gmail.com', NULL, 'active', '0000-00-00', 'Male', ''),
+(43, 'phone num test', 'asdasd', 'wtf street', 'student', 'hello@gmail.com', NULL, 'active', '0000-00-00', 'Female', '09362201467'),
+(44, 'aaa aaa', 'asdasd', 'asdasd', 'student', 'asdasd@gmail.com', NULL, 'active', '0000-00-00', 'Other', '09359257656'),
+(45, 'date test', 'asdasdasd', 'hello street', 'student', 'hello@gmail.com', NULL, 'active', '2025-04-03', 'Male', '09359257656');
 
 -- --------------------------------------------------------
 
@@ -206,13 +215,13 @@ ALTER TABLE `event`
 -- AUTO_INCREMENT for table `files`
 --
 ALTER TABLE `files`
-  MODIFY `file_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `file_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT for table `user_course`

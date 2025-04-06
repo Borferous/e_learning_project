@@ -10,14 +10,14 @@ export const TermsAndCondition = () => {
     const navigate = useNavigate()
 
     const terms = [
-        {title: 'Accuracy of Information', info: 'Hello world'},
-        {title: 'Admission Requirements', info: 'Hello world'},
-        {title: 'Payment and Fees', info: 'Hello world'},
-        {title: 'Refund Policy', info: 'Hello world'},
-        {title: 'Class Attendance', info: 'Hello world'},
-        {title: 'Use of Personal Data', info: 'Hello world'},
-        {title: 'Program Changes', info: 'Hello world'},
-        {title: 'Withdrawal and Dismissal', info: 'Hello world'},
+        {title: 'Accuracy of Information', info: 'All information provided must be accurate and complete. Any false details may result in application rejection or enrollment cancellation.'},
+        {title: 'Admission Requirements', info: 'Enrollment is subject to meeting the school’s admission criteria and document submission.'},
+        {title: 'Payment and Fees', info: 'Tuition and other fees must be paid according to the selected payment plan. Failure to pay may result in enrollment suspension.'},
+        {title: 'Refund Policy', info: 'Fees are non-refundable unless stated otherwise in the school’s refund policy.'},
+        {title: 'Class Attendance', info: 'Students must attend classes regularly and follow the school’s code of conduct.'},
+        {title: 'Use of Personal Data', info: 'Your personal information will be used solely for enrollment and academic purposes, following data protection policies.'},
+        {title: 'Program Changes', info: 'The school reserves the right to modify course schedules, instructors, or program content as needed.'},
+        {title: 'Withdrawal and Dismissal', info: 'Students may withdraw by submitting a formal request. The school reserves the right to dismiss students for academic misconduct or policy violations.'},
     ]
 
     return (

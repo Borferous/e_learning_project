@@ -85,6 +85,18 @@ export interface ProgramEvent {
     event_subtitle: string,
 }
 
+export enum Gender {
+    Male = 'male',
+    Female = 'female',
+    Others = 'others'
+}
+
+export const GenderLabel = [
+    { value: Gender.Male, label: "Male" },
+    { value: Gender.Female, label: "Female" },
+    { value: Gender.Others, label: "Others" },
+]
+
 export interface FileData {
     file_id: number;
     file_path: string;

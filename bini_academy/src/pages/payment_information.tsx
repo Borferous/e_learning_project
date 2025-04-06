@@ -1,6 +1,6 @@
 import { Header } from "../components/header"
 import { Footer } from "../components/footer"
-import { Card, Grid, NumberInput, Select, Text, Center } from "@mantine/core"
+import { Card, Grid, NumberInput, Select, Text, Center, Checkbox } from "@mantine/core"
 import { Button } from "@mantine/core"
 import { IconArrowLeft } from "@tabler/icons-react"
 import { IconCloudDownload } from "@tabler/icons-react"
@@ -56,18 +56,28 @@ export const PaymentInformation = () => {
                                 </Button>
                             </div>
                         </Grid.Col>
-
                     </Grid>
-
-                    <Center>
+                      
+                      <Center>
                         <Button
-                            color="orange" onClick={() => navigate('/subjectlist')}
+                            color="orange"
+                            disabled={!paymentForm.values.agreedToTerms}
+                            onClick={() => navigate('/subjectlist')}
                         >
                             Submit
                         </Button>
                     </Center>
-                    <p>By Checking the box, you acknowledge that you have read, understood, and agreed to the <span className="text-orange-500" onClick={() => navigate('/terms-and-conditions')}>terms and conditions</span></p>
 
+                    <Checkbox
+                        defaultChecked={false}
+                        onChange={(event) => paymentForm.setFieldValue('agreedToTerms', event.currentTarget.checked)}
+                        label={
+                            <>
+                                By Checking the box, you acknowledge that you have read, understood, and agreed to the 
+                                <span className="text-orange-500" onClick={() => navigate('/terms-and-conditions')}> terms and conditions</span>
+                            </>
+                        }
+                    />
                 </Card>
             </Center>
             <Footer />

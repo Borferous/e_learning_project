@@ -11,18 +11,11 @@ export const ManageUsers = () => {
 
   return (
     <div className="flex">
-      {/* Sidebar */}
       <Sidebar role={UserRole.Admin} />
-
       <div className="flex flex-col flex-1">
-        {/* Header with dynamic title */}
         <HeaderAdmin title="Manage Users" />
-
-        {/* Tabs for switching between Create & Edit Users */}
         <div className="p-6">
           <ManageUsersTabs activeTab={activeTab} setActiveTab={setActiveTab} />
-          
-          {/* Render the correct tab content */}
           <div className="mt-4">
             {activeTab === "create" && <CreateUserTab />}
             {activeTab === "edit" && <EditUsersTab />}
