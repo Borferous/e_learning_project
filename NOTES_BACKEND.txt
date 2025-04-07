@@ -1,4 +1,0 @@
-- Use the functions in the helper.php instead of recreating CRUD functions
-- Only create one if the function's purpose is unique and is not included in the helper
-
-- After implementing backend logic, test the function in postman
