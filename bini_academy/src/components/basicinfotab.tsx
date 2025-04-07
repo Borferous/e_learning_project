@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { Button, TextInput, Select, NumberInput, Textarea } from "@mantine/core";
-import { createCourse } from "../api/course";
 import { CourseCategoryLabel, CourseLevelLabel } from "../types";
 import { useForm } from "@mantine/form";
 
@@ -32,16 +31,7 @@ export const BasicInfoTab = ({ setActiveTab, updateProgress }: BasicInfoTabProps
   }, [form.values]);
 
   const save = async () => {
-    const userId = localStorage.getItem("user_id") as string;
-    await createCourse({
-      teacher_id: userId,
-      course_title: form.values.title,
-      program_category: form.values.programCategory,
-      price: form.values.price,
-      description: form.values.description,
-      course_level: form.values.courseLevel,
-      course_topic: form.values.courseTopic,
-    });
+    
     setActiveTab("advance");
   };
 

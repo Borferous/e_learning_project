@@ -1,12 +1,15 @@
 export interface User {
-    user_id: string,
+    user_id? :string,
     name: string,
     password: string,
     address: string,
     user_role: string,
+    gender: string,
     email: string,
+    birth_date: Date
     profile_picture?: string,
-    status: string
+    phone_number: string,
+    status?: string
 }
 
 export enum ActiveStatus {

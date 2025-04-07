@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Button, Select, TextInput, FileButton, Avatar, Modal, Image, Group } from "@mantine/core";
-import { createUser } from "../api/user";
 import { notifications } from "@mantine/notifications";
 import { GenderLabel, UserRoleLabel } from "../types";
 import { useForm } from "@mantine/form";
@@ -33,15 +32,6 @@ export const CreateUserTab = () => {
   const createNewUser = async () => {
 
     try {
-      await createUser({
-        name: form.values.name,
-        password: form.values.password,
-        address: form.values.address,
-        email: form.values.email,
-        user_role: form.values.role,
-        gender: form.values.gender,
-        birthDate: new Date(form.values.birthDate)
-      })
       notifications.show({
         title: 'Success',
         message: 'User Created Successfully',

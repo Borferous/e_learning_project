@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Table, Button, Select, TextInput, Modal, Avatar, FileInput, PasswordInput } from "@mantine/core";
 import { ActiveStatusLabel, User, UserRoleLabel } from "../types";
-import { deleteUser, getAllUser, updateUser } from "../api/user";
-import { notifications } from "@mantine/notifications";
 
 export const EditUsersTab = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -14,69 +12,9 @@ export const EditUsersTab = () => {
     setModalOpen(true);
   };
 
-  const fetchUsers = async () => {
-    try {
-      const response = await getAllUser()
-      setUsers(response)
-    } catch (error) {
-      notifications.show({
-        title: 'Error',
-        message: 'Error Loading Users',
-        color: 'red'
-      })
-    }
-  }
-
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
-  const handleSave = async() => {
-    if (selectedUser) {
-      try {
-        await updateUser(selectedUser)
-        await fetchUsers()  
-        notifications.show({
-          title: 'Success',
-          message: 'Updated user successfully',
-          color: 'green'
-        })
-      } catch (error) {
-        notifications.show({
-          title: 'Error',
-          message: 'Error updating user',
-          color: 'red'
-        })
-      }
-      setModalOpen(false);
-    }
-  };
-
-  const handleDelete = async() => {
-    if (selectedUser) {
-      try {
-        await deleteUser(selectedUser.user_id)
-        await fetchUsers()  
-        notifications.show({
-          title: 'Success',
-          message: 'Successfully deleted user',
-          color: 'green'
-        })
-      } catch (error) {
-        notifications.show({
-          title: 'Error',
-          message: 'Error deleting user',
-          color: 'red'
-        })
-      }
-      setModalOpen(false);
-    }
-  };
-
   return (
     <div className="bg-white p-6 rounded-md shadow">
       <h3 className="text-xl font-semibold mb-4">Edit Users</h3>
-
       <div className="overflow-x-auto">
         <Table striped highlightOnHover>
           <thead>
@@ -161,8 +99,8 @@ export const EditUsersTab = () => {
 
             {/* Buttons: Delete & Save */}
             <div className="col-span-3 flex justify-between mt-4">
-              <Button color="red" onClick={handleDelete}>Delete</Button>
-              <Button color="orange" onClick={handleSave}>Save</Button>
+              <Button color="red">Delete</Button>
+              <Button color="orange">Save</Button>
             </div>
           </div>
         )}

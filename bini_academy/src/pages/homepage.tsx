@@ -4,8 +4,6 @@ import bapaLogo from "../assets/bapalogo.svg";
 import { HomeHeader } from "../components/homeheader";
 import { Loading } from "../components/loading";
 import { Footer } from "../components/footer";
-import { useQuery } from "@tanstack/react-query";
-import { listEvents } from "../api/event";
 import placeholderImg from "../assets/placeholder-image.svg";
 
 const courses = [
@@ -29,14 +27,7 @@ const courses = [
 ];
 
 export const HomePage = () => {
-  const { data: events, isLoading: isEventsLoading, error: eventsError } = useQuery({
-    queryKey: ["events"],
-    queryFn: async () => {
-      await new Promise((resolve) => setTimeout(resolve, 5000)); // Simulate delay
-      return listEvents();
-    },
-  });
-
+  
   return (
     <>
       <HomeHeader />
@@ -80,19 +71,6 @@ export const HomePage = () => {
           </GridComponent>
         ))}
 
-        {/* Events Section */}
-        <GridComponent title={"Events"} loadingState={isEventsLoading} error={eventsError}>
-          {events &&
-            events.map((event, key) => (
-              <CourseCard 
-                key={key} 
-                image={placeholderImg} 
-                title={event.event_title} 
-                category={event.event_category} 
-                link={`/events/${event.event_title.replace(/\s+/g, "-").toLowerCase()}`} // Navigate to event page
-              />
-            ))}
-        </GridComponent>
       </Container>
       <Footer />
     </>
