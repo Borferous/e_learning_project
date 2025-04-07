@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { LoginPage } from './pages/login';
 import { UserCreatePage } from './pages/create';
 
-// import { HomePage} from './pages/homepage';
 import { HomePage } from './pages/homepage';
 import { CourseListPage } from './pages/course_list_page';
 import { CourseOverview } from './pages/course_overview';
@@ -13,9 +12,9 @@ import { HostEvents } from './pages/admin/hostevents';
 import { PaymentInformation } from './pages/payment_information';
 import { TermsAndCondition } from './pages/terms_and_conditions';
 import { SubjectListPage } from './pages/subject_list_page';
+
 import SubjectPage from './pages/subject_page';
-// import SubjectPage from './pages/subjectpage';
-import { Test } from './pages/test';
+
 import '@mantine/core/styles.css'
 import '@mantine/notifications/styles.css';
 
@@ -47,10 +46,6 @@ function App() {
               <Route path='/terms-and-conditions' element={<TermsAndCondition />}/>
               <Route path='/subjectlist' element={<SubjectListPage />}/>
               <Route path='/subjectpage' element={<SubjectPage />}/>
-              {/* Add more routes as needed
-              {/* <Route path='/test' element={<Test />}/> */}
-              {/* Add more routes as needed */}
-              <Route path='/test' element={<Test />}/>
             </Routes>
           </Router>
         </QueryClientProvider>

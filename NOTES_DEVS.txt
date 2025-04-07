@@ -1,3 +1,0 @@
-- use snake case for files
-
-- very_long_filename.tsx

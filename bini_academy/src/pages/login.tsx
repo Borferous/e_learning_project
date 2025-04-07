@@ -4,10 +4,9 @@ import campusImage from '../assets/campus.jpg'; // Import background image
 import { Header } from '../components/header.tsx';
 import { useState } from 'react';
 import { notifications } from '@mantine/notifications';
-import { loginUser } from '../api/user.tsx';
-import { UserRole } from '../types.tsx';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
+
 
 export const LoginPage = () => {
 
@@ -20,28 +19,14 @@ export const LoginPage = () => {
       if (!email?.trim() || !password?.trim()) {
         throw new Error("Email and password are required");
       }
-      return loginUser({ email, password }); // API call
     },
-    onSuccess: (loggedUser) => {
-      localStorage.setItem("user_id", loggedUser.user_id);
-
-      switch (loggedUser.user_role) {
-        case UserRole.Admin:
-          navigate("/usermanage");
-          break;
-        case UserRole.Teacher:
-          navigate("/instructorcreatecourse");
-          break;
-        default:
-          navigate("/homepage");
-          break;
-      }
-
+    onSuccess: () => {
       notifications.show({
         title: "Success",
         color: "green",
         message: "Login Successful",
       });
+      navigate('/')
     },
     onError: () => {
       notifications.show({
@@ -61,6 +46,7 @@ export const LoginPage = () => {
 
     <Container fluid style={{ height: '100vh', padding: 0 }}>
       <Header />
+      
       <Grid gutter={0} style={{ height: '100vh' }}>
         {/* Left side - Background with Logo */}
         <Grid.Col
