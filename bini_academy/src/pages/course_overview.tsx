@@ -5,7 +5,6 @@ import { Footer } from "../components/footer";
 import CourseDescription from "../components/course_description";
 import CourseCurriculum from "../components/course_curriculum";
 import StudentFeedback from "../components/student_feedback";
-import RelatedCourses from "../components/related_courses";
 import { useNavigate } from "react-router-dom";
 
 export const CourseOverview = () => {
@@ -98,7 +97,6 @@ export const CourseOverview = () => {
 
 <CourseCurriculum/>
           <StudentFeedback />
-          <RelatedCourses />
         </Container>
       </main>
       <Footer />

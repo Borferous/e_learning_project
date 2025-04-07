@@ -7,6 +7,7 @@ import { Footer } from "../components/footer";
 import { useQuery } from "@tanstack/react-query";
 import { listEvents } from "../api/event";
 import placeholderImg from "../assets/placeholder-image.svg";
+import schoolBg from "../assets/school-bg.png";
 
 const courses = [
   {
@@ -42,19 +43,26 @@ export const HomePage = () => {
       <HomeHeader />
       <Container className="py-10">
         {/* Hero Section */}
-        <div className="bg-gray-100 p-10 rounded-lg">
+        <div 
+          className="p-10 rounded-lg relative overflow-hidden"
+          style={{
+            backgroundImage: ` url(${schoolBg})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        >
           <Grid gutter="xl" align="center">
             <Grid.Col span={{ base: 12, md: 7 }}>
-              <Title order={1} className="text-4xl font-extrabold leading-tight">
+              <Title order={1} className="text-4xl font-extrabold leading-tight text-black-200">
                 Unleash Your Inner Performer
               </Title>
-              <Text className="text-2xl italic text-gray-600 mt-2">Anywhere, Anytime!</Text>
-              <Text className="mt-4 text-lg text-gray-600">
+              <Text className="text-2xl italic text-gray-300 mt-2">Anywhere, Anytime!</Text>
+              <Text className="mt-4 text-lg text-gray-200">
                 Step into the spotlight with the <b>Bini Academy of Performing Arts'</b>
                 cutting-edge online platform. Learn from industry legends, refine your craft,
                 and connect with a vibrant community of artists – all from the comfort of your home.
               </Text>
-              <Button color="orange" radius="md" size="lg" className="mt-6">
+              <Button color="orange" radius="md" size="lg" className="mt-6" component="a" href="/login">
                 Enroll Now
               </Button>
             </Grid.Col>
