@@ -6,10 +6,10 @@ import { useState } from 'react';
 import { notifications } from '@mantine/notifications';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
+import { loginUser } from '../supabase/api/user.ts';
 
 
 export const LoginPage = () => {
-
   const navigate = useNavigate()
   const [email, setEmail] = useState<string | null>(null);
   const [password, setPassword] = useState<string | null>(null);
@@ -19,21 +19,14 @@ export const LoginPage = () => {
       if (!email?.trim() || !password?.trim()) {
         throw new Error("Email and password are required");
       }
+      await loginUser(email, password);
     },
     onSuccess: () => {
-      notifications.show({
-        title: "Success",
-        color: "green",
-        message: "Login Successful",
-      });
+      notifications.show({ title: "Success", color: "green", message: "Login Successful"});
       navigate('/')
     },
     onError: () => {
-      notifications.show({
-        title: "Error",
-        color: "red",
-        message: "Login Failed",
-      });
+      notifications.show({ title: "Error", color: "red", message: "Login Failed"});
     },
   });
 
@@ -42,11 +35,8 @@ export const LoginPage = () => {
   }
 
   return (
-
-
     <Container fluid style={{ height: '100vh', padding: 0 }}>
       <Header />
-      
       <Grid gutter={0} style={{ height: '100vh' }}>
         {/* Left side - Background with Logo */}
         <Grid.Col
