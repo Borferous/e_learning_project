@@ -22,6 +22,11 @@ export const loginUser = async (email: string, password: string) => {
     if (error) {
         throw new Error(`Error logging in user: ${error.message}`);
     }
+    localStorage.setItem('user', data.id);
     return data;
 };
+
+export const logoutUser = async () => {
+    localStorage.removeItem('user');
+}
 

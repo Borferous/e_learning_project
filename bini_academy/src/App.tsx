@@ -29,7 +29,7 @@ function App() {
   return (
     <>
       <MantineProvider >
-        <Notifications position='top-right' autoClose={1500} limit={3} />
+        <Notifications position='top-right' autoClose={3000} limit={3} />
         <QueryClientProvider client={queryClient}>
           <Router>
             <Routes>
