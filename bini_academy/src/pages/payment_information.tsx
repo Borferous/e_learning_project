@@ -1,86 +1,183 @@
-import { Header } from "../components/header"
+import { HomeHeader } from "../components/homeheader"
 import { Footer } from "../components/footer"
-import { Card, Grid, NumberInput, Select, Text, Center, Checkbox } from "@mantine/core"
+import { Card, Grid, NumberInput, Select, Text, Center, Checkbox, FileInput, Modal, Image } from "@mantine/core"
 import { Button } from "@mantine/core"
 import { IconArrowLeft } from "@tabler/icons-react"
 import { IconCloudDownload } from "@tabler/icons-react"
 import { useNavigate } from "react-router-dom"
 import { useForm } from "@mantine/form"
+import { useState } from 'react';
 
 export const PaymentInformation = () => {
-
     const paymentForm = useForm({
+        initialValues: {
+            paymentMethod: '',
+            amount: '',
+            referenceNumber: '',
+            proofOfPayment: null as File | null,
+            agreedToTerms: false
+        },
+        validate: {
+            proofOfPayment: (value) => (!value ? 'Proof of payment is required' : null),
+        }
+    });
 
-    })
+    const navigate = useNavigate();
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    const [showPreview, setShowPreview] = useState(false);
 
-    console.log(paymentForm)
+    const handleFileUpload = (file: File | null) => {
+        paymentForm.setFieldValue('proofOfPayment', file);
+        if (file) {
+            const fileUrl = URL.createObjectURL(file);
+            setPreviewUrl(fileUrl);
+        } else {
+            setPreviewUrl(null);
+        }
+    };
 
-    const navigate = useNavigate()
+    const renderPreview = () => {
+        const file = paymentForm.values.proofOfPayment;
+        if (!file || !previewUrl) return null;
+
+        if (file.type.startsWith('image/')) {
+            return (
+                <Image
+                    src={previewUrl}
+                    alt="Proof of Payment"
+                    fit="contain"
+                    className="max-h-[80vh]"
+                />
+            );
+        } else if (file.type === 'application/pdf') {
+            return (
+                <iframe
+                    src={previewUrl}
+                    className="w-full h-[80vh]"
+                    title="PDF Preview"
+                />
+            );
+        }
+    };
+
     return (
-        <>
-            <Header />
-            <Center className="m-4 p-4">
-                <Card shadow={"sm"} padding={"lg"} radius={"md"} withBorder>
+        <div className="min-h-screen flex flex-col">
+            <HomeHeader />
+            <div className="flex-grow p-4">
+                <Card shadow="sm" padding="lg" radius="md" withBorder className="max-w-3xl mx-auto">
                     <Card.Section className="p-4">
-                        <Button color="orange" size="md" variant="light" className="w-auto inline-flex" onClick={() => navigate('/courseoverview')}><IconArrowLeft /></Button>
+                        <Button 
+                            color="orange" 
+                            size="md" 
+                            variant="light" 
+                            className="w-auto inline-flex" 
+                            onClick={() => navigate('/courseoverview')}
+                        >
+                            <IconArrowLeft />
+                        </Button>
                     </Card.Section>
-                    <p className="text-orange-500 font-bold text-2xl flex justify-center">Payment Information</p>
+                    
+                    <p className="text-orange-500 font-bold text-2xl text-center mb-6">
+                        Payment Information
+                    </p>
+                    
                     <Grid>
                         <Grid.Col span={6}>
                             <Select
                                 label='Payment Method'
-                                placeholder='Bayad2 sad no'
+                                placeholder='Select payment method'
                                 data={['gCash Christ', 'Metroman Bank']}
-                                className="m-5"
+                                className="mb-4"
+                                {...paymentForm.getInputProps('paymentMethod')}
                             />
                             <NumberInput
                                 label="Enter Amount"
-                                placeholder="enter total amount"
-                                className="m-5"
+                                placeholder="₱0.00"
+                                className="mb-4"
+                                hideControls
+                                prefix="₱ "
+                                thousandSeparator=","
+                                {...paymentForm.getInputProps('amount')}
                             />
                         </Grid.Col>
                         <Grid.Col span={6}>
                             <NumberInput
                                 label="Reference Number"
-                                placeholder="reference number"
-                                className="m-5"
+                                placeholder="Enter reference number"
+                                className="mb-4"
+                                hideControls
+                                {...paymentForm.getInputProps('referenceNumber')}
                             />
-                            <div className="m-5">
-                                <Text size="sm" m={2} fw={500}>Proof of Payment</Text>
-                                <Button
-                                    variant="light"
-                                    leftSection={<IconCloudDownload />}
-                                    color="orange"
-                                >
-                                    Attach File
-                                </Button>
+                            <div className="space-y-2">
+                                <Text size="sm" fw={500}>Proof of Payment</Text>
+                                <div className="space-y-2">
+                                    <FileInput
+                                        placeholder="Upload proof of payment"
+                                        accept="image/png,image/jpeg,image/jpg,application/pdf"
+                                        rightSection={<IconCloudDownload />}
+                                        {...paymentForm.getInputProps('proofOfPayment')}
+                                        onChange={handleFileUpload}
+                                        error={paymentForm.errors.proofOfPayment}
+                                        className="mb-2"
+                                    />
+                                    {paymentForm.values.proofOfPayment && (
+                                        <Button
+                                            variant="light"
+                                            color="orange"
+                                            size="sm"
+                                            fullWidth
+                                            onClick={() => setShowPreview(true)}
+                                        >
+                                            Preview Attachment
+                                        </Button>
+                                    )}
+                                </div>
                             </div>
                         </Grid.Col>
                     </Grid>
-                      
-                      <Center>
-                        <Button
-                            color="orange"
-                            disabled={!paymentForm.values.agreedToTerms}
-                            onClick={() => navigate('/subjectlist')}
-                        >
-                            Submit
-                        </Button>
-                    </Center>
-
-                    <Checkbox
-                        defaultChecked={false}
-                        onChange={(event) => paymentForm.setFieldValue('agreedToTerms', event.currentTarget.checked)}
-                        label={
-                            <>
-                                By Checking the box, you acknowledge that you have read, understood, and agreed to the 
-                                <span className="text-orange-500" onClick={() => navigate('/terms-and-conditions')}> terms and conditions</span>
-                            </>
-                        }
-                    />
+                    
+                    <div className="mt-6 space-y-4">
+                        <Checkbox
+                            {...paymentForm.getInputProps('agreedToTerms', { type: 'checkbox' })}
+                            label={
+                                <span className="flex items-center gap-1">
+                                    By checking the box, you acknowledge that you have read, understood, and agreed to the
+                                    <span 
+                                        className="text-orange-500 cursor-pointer hover:underline ml-1" 
+                                        onClick={() => navigate('/terms-and-conditions')}
+                                    >
+                                        terms and conditions
+                                    </span>
+                                </span>
+                            }
+                        />
+                        
+                        <Center>
+                            <Button
+                                color="orange"
+                                disabled={!paymentForm.values.agreedToTerms || !paymentForm.values.proofOfPayment}
+                                onClick={() => navigate('/subjectlist')}
+                                size="md"
+                            >
+                                Submit
+                            </Button>
+                        </Center>
+                    </div>
                 </Card>
-            </Center>
+            </div>
+
+            {/* Preview Modal */}
+            <Modal
+                opened={showPreview}
+                onClose={() => setShowPreview(false)}
+                title="Proof of Payment Preview"
+                size="xl"
+                centered
+            >
+                {renderPreview()}
+            </Modal>
+
             <Footer />
-        </>
-    )
-}
+        </div>
+    );
+};

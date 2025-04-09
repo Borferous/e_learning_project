@@ -1,4 +1,4 @@
-import { Header } from "../components/header"
+import { HomeHeader } from "../components/homeheader"
 import { Footer } from "../components/footer"
 import { Card, Center } from "@mantine/core"
 import { Button } from "@mantine/core"
@@ -21,24 +21,47 @@ export const TermsAndCondition = () => {
     ]
 
     return (
-        <>
-            <Header />
-            <Center className="m-4 p-4">
-                <Card shadow={"sm"} padding={"lg"} radius={"md"} withBorder>
+        <div className="min-h-screen flex flex-col">
+            <HomeHeader />
+            <div className="flex-grow p-4">
+                <Card shadow="sm" padding="lg" radius="md" withBorder className="max-w-3xl mx-auto">
                     <Card.Section className="p-4">
-                        <Button color="orange" size="md" variant="light" className="w-auto inline-flex" onClick={() => navigate('/payment-information')}><IconArrowLeft /></Button>
+                        <Button 
+                            color="orange" 
+                            size="md" 
+                            variant="light" 
+                            className="w-auto inline-flex" 
+                            onClick={() => navigate('/payment-information')}
+                        >
+                            <IconArrowLeft />
+                        </Button>
                     </Card.Section>
-                    <p className="text-orange-500 font-bold text-2xl flex justify-center">Terms and Conditions</p>
-                    <p className="text-gray-950 font-bold text-mm flex justify-center">By Submitting this application, you agree to the following terms and conditions:</p>
+                    
+                    <div className="space-y-6">
+                        <div className="text-center space-y-2">
+                            <h1 className="text-orange-500 font-bold text-2xl">
+                                Terms and Conditions
+                            </h1>
+                            <p className="text-gray-950 font-bold">
+                                By Submitting this application, you agree to the following terms and conditions:
+                            </p>
+                        </div>
 
-                    {terms.map((condition, key)=>(
-                        <p className="text-sm text-gray-950"><span className="font-bold">{key + 1}. {condition.title}</span> - {condition.info}</p>
-                    ))}
-
-                
+                        <div className="space-y-4">
+                            {terms.map((condition, key) => (
+                                <div key={key} className="text-sm text-gray-950">
+                                    <span className="font-bold">
+                                        {key + 1}. {condition.title}
+                                    </span>
+                                    {' - '}
+                                    {condition.info}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </Card>
-            </Center>
+            </div>
             <Footer />
-        </>
+        </div>
     )
 }
