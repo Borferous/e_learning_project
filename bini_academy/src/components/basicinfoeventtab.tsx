@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { TextInput, Select, Button } from "@mantine/core";
-import { createEvent } from "../api/event";
 
 export const BasicInfoEventTab = () => {
   const [eventTitle, setEventTitle] = useState("");
@@ -9,21 +8,11 @@ export const BasicInfoEventTab = () => {
   const [endDate, setEndDate] = useState("");
   const [eventCategory, setEventCategory] = useState("");
 
-  const currentUser = localStorage.getItem('user_id') as string
-
   const hostEvent = async () => {
 
     try {
-      const response = await createEvent({
-        event_host: currentUser,
-        event_title: eventTitle,
-        event_category: eventCategory ,
-        event_description: "this is a description",
-        event_end_date: "aaa",
-        event_start_date: "aaa",
-        event_subtitle: eventTitle,
-      })
-      console.table(response)
+      
+      
     } catch (error) {
 
     }

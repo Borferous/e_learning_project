@@ -16,16 +16,14 @@ import { notifications } from '@mantine/notifications';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { IconArrowRight } from '@tabler/icons-react';
-
 import bapaLogo from '../assets/bapalogo.svg';
 import campusImage from '../assets/campus.jpg';
 import { Header } from '../components/header';
-import { createUser } from '../api/user';
-import { UserRole } from '../types';
+import { User, UserRole } from '../types';
+import { signupUser } from '../supabase/api/user';
 
 export const UserCreatePage = () => {
   const navigate = useNavigate();
-
   const form = useForm({  
     initialValues: {       
       firstName: '',
@@ -39,7 +37,6 @@ export const UserCreatePage = () => {
       confirmPass: '',
       agree: false,
     },
-
     validate: {
       firstName: (value) => (value.trim().length > 0 ? null : 'First name is required'),
       lastName: (value) => (value.trim().length > 0 ? null : 'Last name is required'),
@@ -56,16 +53,17 @@ export const UserCreatePage = () => {
 
   const createUserMutation = useMutation({
     mutationFn: async () => {
-      return createUser({
+      return signupUser({
         name: `${form.values.firstName} ${form.values.lastName}`,
         password: form.values.password,
         address: form.values.address,
         email: form.values.email,
         user_role: UserRole.Student,
         gender: form.values.gender,
-        birthDate: new Date(form.values.dob),
+        birth_date: new Date(form.values.dob),
         phone_number: form.values.phone,
-      });
+        profile_picture: ''
+      } as User);
     },
     onSuccess: () => {
       notifications.show({
