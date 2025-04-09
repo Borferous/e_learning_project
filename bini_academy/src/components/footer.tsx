@@ -4,56 +4,94 @@ import bapaLogoWhite from "../assets/bapalogowhite.svg";
 
 export const Footer = () => {
     return (
-        <div className="bg-[#181a1e] text-white py-10 w-full">
+        <footer className="bg-[#181a1e] text-white py-6 sm:py-10 w-full">
             <Container>
                 <Grid className="justify-center">
                     {/* Left Section - Logo and Socials */}
                     <Grid.Col span={{ base: 12, md: 4 }} className="flex flex-col items-center md:items-start">
-                        <Image src={bapaLogoWhite} alt="BAPA Logo" width={150} />
+                        <Image 
+                            src={bapaLogoWhite} 
+                            alt="BAPA Logo" 
+                            width={100} // Smaller on mobile
+                            className="sm:w-[150px]" // Original size on desktop
+                        />
                         
-                        <div className="flex flex-wrap space-x-3 mt-4 justify-center md:justify-start">
-                            <a href="#" className="p-2 bg-gray-800 rounded-md transition duration-300 hover:bg-orange-600">
-                                <IconBrandFacebook size={20} />
-                            </a>
-                            <a href="#" className="p-2 bg-gray-800 rounded-md transition duration-300 hover:bg-orange-600">
-                                <IconBrandInstagram size={20} />
-                            </a>
-                            <a href="#" className="p-2 bg-gray-800 rounded-md transition duration-300 hover:bg-orange-600">
-                                <IconBrandLinkedin size={20} />
-                            </a>
-                            <a href="#" className="p-2 bg-gray-800 rounded-md transition duration-300 hover:bg-orange-600">
-                                <IconBrandTwitter size={20} />
-                            </a>
-                            <a href="#" className="p-2 bg-gray-800 rounded-md transition duration-300 hover:bg-orange-600">
-                                <IconBrandYoutube size={20} />
-                            </a>
+                        <div className="flex flex-wrap gap-3 mt-4 justify-center md:justify-start">
+                            {[
+                                { icon: IconBrandFacebook, label: 'Facebook' },
+                                { icon: IconBrandInstagram, label: 'Instagram' },
+                                { icon: IconBrandLinkedin, label: 'LinkedIn' },
+                                { icon: IconBrandTwitter, label: 'Twitter' },
+                                { icon: IconBrandYoutube, label: 'YouTube' }
+                            ].map(({ icon: Icon, label }) => (
+                                <a 
+                                    key={label}
+                                    href="#" 
+                                    aria-label={label}
+                                    className="p-2 bg-gray-800 rounded-md transition duration-300 hover:bg-orange-600"
+                                >
+                                    <Icon size={18} className="sm:w-5 sm:h-5" />
+                                </a>
+                            ))}
                         </div>
                     </Grid.Col>
 
                     {/* Middle Section - Quick Links */}
-                    <Grid.Col span={{ base: 12, md: 4 }} className="text-center">
-                        <Text className="text-lg font-semibold">QUICK LINKS</Text>
+                    <Grid.Col span={{ base: 12, md: 4 }} className="text-center mt-6 md:mt-0">
+                        <Text className="text-base sm:text-lg font-semibold">QUICK LINKS</Text>
                         <ul className="space-y-2 mt-2">
-                            <li><a href="#" className="hover:underline">About</a></li>
-                            <li><a href="#" className="hover:underline">Courses →</a></li>
-                            <li><a href="#" className="hover:underline">Contact</a></li>
-                            <li><a href="#" className="hover:underline">Events</a></li>
+                            <li>
+                                <a href="#" className="text-sm sm:text-base hover:text-orange-500 transition-colors">
+                                    About
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" className="text-sm sm:text-base hover:text-orange-500 transition-colors">
+                                    Courses →
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" className="text-sm sm:text-base hover:text-orange-500 transition-colors">
+                                    Contact
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" className="text-sm sm:text-base hover:text-orange-500 transition-colors">
+                                    Events
+                                </a>
+                            </li>
                         </ul>
                     </Grid.Col>
 
                     {/* Right Section - Support */}
-                    <Grid.Col span={{ base: 12, md: 4 }} className="text-center md:text-right">
-                        <Text className="text-lg font-semibold">SUPPORT</Text>
+                    <Grid.Col span={{ base: 12, md: 4 }} className="text-center md:text-right mt-6 md:mt-0">
+                        <Text className="text-base sm:text-lg font-semibold">SUPPORT</Text>
                         <ul className="space-y-2 mt-2">
-                            <li><a href="#" className="hover:underline">Help Center</a></li>
-                            <li><a href="#" className="hover:underline">FAQs</a></li>
-                            <li><a href="#" className="hover:underline">Terms & Conditions</a></li>
-                            <li><a href="#" className="hover:underline">Privacy Policy</a></li>
+                            <li>
+                                <a href="#" className="text-sm sm:text-base hover:text-orange-500 transition-colors">
+                                    Help Center
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" className="text-sm sm:text-base hover:text-orange-500 transition-colors">
+                                    FAQs
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" className="text-sm sm:text-base hover:text-orange-500 transition-colors">
+                                    Terms & Conditions
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" className="text-sm sm:text-base hover:text-orange-500 transition-colors">
+                                    Privacy Policy
+                                </a>
+                            </li>
                         </ul>
                     </Grid.Col>
                 </Grid>
             </Container>
-        </div>
+        </footer>
     );
 };
 
