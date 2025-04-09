@@ -12,6 +12,8 @@ import { HostEvents } from './pages/admin/hostevents';
 import { PaymentInformation } from './pages/payment_information';
 import { TermsAndCondition } from './pages/terms_and_conditions';
 import { SubjectListPage } from './pages/subject_list_page';
+import { EventsPage } from './pages/events_page';
+import { EventLivePage } from './pages/event_live';
 
 import SubjectPage from './pages/subject_page';
 
@@ -46,6 +48,8 @@ function App() {
               <Route path='/terms-and-conditions' element={<TermsAndCondition />}/>
               <Route path='/subjectlist' element={<SubjectListPage />}/>
               <Route path='/subjectpage' element={<SubjectPage />}/>
+              <Route path='/events' element={<EventsPage />}/>
+              <Route path='/event/:eventId' element={<EventLivePage />}/>
             </Routes>
           </Router>
         </QueryClientProvider>
