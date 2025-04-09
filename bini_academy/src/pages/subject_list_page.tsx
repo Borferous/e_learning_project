@@ -5,16 +5,40 @@ import { Footer } from "../components/footer";
 import { Container, Burger } from "@mantine/core";
 import SubjectCard from "../components/subject_card";
 
-const semesterData: Record<string, { title: string; units: number; instructor: string; color: string }[]> = {
+const semesterData: Record<string, { 
+  title: string; 
+  units: number; 
+  instructor: string; 
+  color: string;
+  progress: number; // Add progress field
+}[]> = {
   "1st Semester": [
-    { title: "Music Theory I", units: 3, instructor: "Prof. John Doe", color: "bg-blue-500" },
-    { title: "Ear Training & Sight Singing I", units: 2, instructor: "Prof. Jane Smith", color: "bg-red-500" },
-    { title: "Vocal Techniques I", units: 2, instructor: "Prof. Michael Lee", color: "bg-green-600" },
-    { title: "Diction for Singers I (English & Italian)", units: 2, instructor: "Prof. Rachel Kim", color: "bg-orange-400" },
-    { title: "Piano for Non-Pianists I", units: 2, instructor: "Prof. David Park", color: "bg-yellow-500" },
-    { title: "Introduction to Music History", units: 3, instructor: "Prof. Laura Chen", color: "bg-purple-500" },
-    { title: "Performance Lab I", units: 1, instructor: "Prof. Samuel Tan", color: "bg-pink-500" },
-    { title: "General Education Elective", units: 3, instructor: "Prof. Emily Young", color: "bg-gray-400" },
+    { 
+      title: "Music Theory I", 
+      units: 3, 
+      instructor: "Prof. John Doe", 
+      color: "bg-blue-500",
+      progress: 25 // Add progress value
+    },
+    { 
+      title: "Ear Training & Sight Singing I", 
+      units: 2, 
+      instructor: "Prof. Jane Smith", 
+      color: "bg-red-500",
+      progress: 50
+    },
+    { 
+      title: "Vocal Techniques I", 
+      units: 2, 
+      instructor: "Prof. Michael Lee", 
+      color: "bg-green-600",
+      progress: 75
+    },
+    { title: "Diction for Singers I (English & Italian)", units: 2, instructor: "Prof. Rachel Kim", color: "bg-orange-400", progress: 0 },
+    { title: "Piano for Non-Pianists I", units: 2, instructor: "Prof. David Park", color: "bg-yellow-500", progress: 0 },
+    { title: "Introduction to Music History", units: 3, instructor: "Prof. Laura Chen", color: "bg-purple-500", progress: 0 },
+    { title: "Performance Lab I", units: 1, instructor: "Prof. Samuel Tan", color: "bg-pink-500", progress: 0 },
+    { title: "General Education Elective", units: 3, instructor: "Prof. Emily Young", color: "bg-gray-400", progress: 0 },
   ],
   "2nd Semester": [],
   "3rd Semester": [],
@@ -93,6 +117,7 @@ export const SubjectListPage = () => {
                       units={subject.units}
                       instructor={subject.instructor}
                       bgColor={subject.color}
+                      progress={subject.progress} // Pass progress prop
                     />
                   </div>
                 ))}

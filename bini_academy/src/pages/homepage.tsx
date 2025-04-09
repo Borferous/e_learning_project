@@ -32,33 +32,46 @@ export const HomePage = () => {
   return (
     <>
       <HomeHeader />
-      <Container className="py-10">
+      <Container className="py-6 sm:py-10">
         {/* Hero Section */}
         <div 
-          className="p-10 rounded-lg relative overflow-hidden"
+          className="p-4 sm:p-10 rounded-lg relative overflow-hidden"
           style={{
-            backgroundImage: ` url(${schoolBg})`,
+            backgroundImage: `url(${schoolBg})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}
         >
-          <Grid gutter="xl" align="center">
+          <Grid gutter={{ base: "md", sm: "xl" }} align="center">
             <Grid.Col span={{ base: 12, md: 7 }}>
-              <Title order={1} className="text-4xl font-extrabold leading-tight text-black-200">
+              <Title order={1} className="text-2xl sm:text-4xl font-extrabold leading-tight text-black">
                 Unleash Your Inner Performer
               </Title>
-              <Text className="text-2xl italic text-gray-300 mt-2">Anywhere, Anytime!</Text>
-              <Text className="mt-4 text-lg text-gray-200">
+              <Text className="text-xl sm:text-2xl italic text-gray-300 mt-2">
+                Anywhere, Anytime!
+              </Text>
+              <Text className="mt-4 text-base sm:text-lg text-gray-200">
                 Step into the spotlight with the <b>Bini Academy of Performing Arts'</b>
                 cutting-edge online platform. Learn from industry legends, refine your craft,
                 and connect with a vibrant community of artists – all from the comfort of your home.
               </Text>
-              <Button color="orange" radius="md" size="lg" className="mt-6" component="a" href="/login">
+              <Button 
+                color="orange" 
+                radius="md" 
+                size="md" 
+                className="mt-4 sm:mt-6 w-full sm:w-auto" 
+                component="a" 
+                href="/login"
+              >
                 Enroll Now
               </Button>
             </Grid.Col>
             <Grid.Col span={{ base: 12, md: 5 }} className="flex justify-center md:justify-end">
-              <Image src={bapaLogo} alt="BAPA Logo" className="max-w-[250px]" />
+              <Image 
+                src={bapaLogo} 
+                alt="BAPA Logo" 
+                className="max-w-[150px] sm:max-w-[250px]" 
+              />
             </Grid.Col>
           </Grid>
         </div>
@@ -72,8 +85,7 @@ export const HomePage = () => {
                 image={placeholderImg}
                 title={major}
                 category={course.degree}
-                // link={`/courses/${major.replace(/\s+/g, "-").toLowerCase()}`} // Generate a dynamic link
-                link={`/courseoverview`} // Generate a dynamic link
+                link={`/courseoverview`}
               />
             ))}
           </GridComponent>
@@ -95,13 +107,19 @@ interface GridProps {
 export const GridComponent = ({ loadingState, error, children, title }: GridProps) => {
   return (
     <div>
-      <Title order={2} className="text-xl font-semibold text-center mt-10">{title}</Title>
+      <Title order={2} className="text-xl font-semibold text-center mt-6 sm:mt-10">
+        {title}
+      </Title>
       {loadingState ? (
         <Loading />
       ) : error ? (
-        <p className="text-red-500 text-center mt-5">Failed to load {title}. Please try again.</p>
+        <p className="text-red-500 text-center mt-4">Failed to load {title}. Please try again.</p>
       ) : (
-        <SimpleGrid cols={3} spacing="lg" className="mt-5">
+        <SimpleGrid 
+          cols={{ base: 1, sm: 2, md: 3 }} 
+          spacing={{ base: "md", sm: "lg" }} 
+          className="mt-4 sm:mt-5"
+        >
           {children}
         </SimpleGrid>
       )}
