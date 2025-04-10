@@ -7,7 +7,9 @@ import {
   FileButton,
   Group,
   Text,
-  Title
+  Title,
+  Modal,
+  Alert
 } from '@mantine/core';
 import {
   IconArrowLeft,
@@ -17,6 +19,7 @@ import {
 import { HomeHeader } from "../components/homeheader";
 import { Footer } from "../components/footer";
 import { CourseStructure } from '../components/course_structure';
+import { useNavigate } from 'react-router-dom';
 
 // Types
 interface Lecture {
@@ -50,7 +53,10 @@ interface Assessment {
   title: string;
   type: 'Quiz' | 'Assignment' | 'Midterm' | 'Final Exam';
   dueDate: string;
-  weight: number;
+  totalScore: number;
+  score?: number;
+  submitted?: boolean;
+  submittedAt?: Date;
   completed: boolean;
   details: AssessmentDetails;
 }
@@ -64,6 +70,7 @@ interface ActiveLecture {
 }
 
 const SubjectPage: React.FC = () => {
+  const navigate = useNavigate();
   // State for file upload
   const [file, setFile] = useState<File | null>(null);
   const [activeTab, setActiveTab] = useState<'description' | 'lectureNotes' | 'attachFile' | 'comments'>('lectureNotes');
@@ -75,6 +82,10 @@ const SubjectPage: React.FC = () => {
     sectionId: 1
   });
   const [activeAssessment, setActiveAssessment] = useState<Assessment | null>(null);
+
+  // Add new state for submission preview
+  const [showPreview, setShowPreview] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   // Mock data for sections
   const [sections, setSections] = useState<Section[]>([
@@ -243,7 +254,8 @@ const SubjectPage: React.FC = () => {
       title: "Theory Fundamentals Quiz", 
       type: "Quiz", 
       dueDate: "Week 2 (May 15, 2025)", 
-      weight: 10, 
+      totalScore: 100,
+      submitted: false,
       completed: false,
       details: {
         description: "This quiz will test your understanding of basic music theory concepts covered in the first two weeks.",
@@ -259,7 +271,8 @@ const SubjectPage: React.FC = () => {
       title: "Stage Presence Analysis", 
       type: "Assignment", 
       dueDate: "Week 4 (May 29, 2025)", 
-      weight: 15, 
+      totalScore: 100,
+      submitted: false,
       completed: false,
       details: {
         description: "Analyze a recorded performance and evaluate the stage presence of the performer.",
@@ -275,7 +288,8 @@ const SubjectPage: React.FC = () => {
       title: "Midterm Performance", 
       type: "Midterm", 
       dueDate: "Week 6 (June 12, 2025)", 
-      weight: 25, 
+      totalScore: 100,
+      submitted: false,
       completed: false,
       details: {
         description: "Perform a piece of your choice demonstrating the techniques learned so far.",
@@ -291,7 +305,8 @@ const SubjectPage: React.FC = () => {
       title: "Technique Application Project", 
       type: "Assignment", 
       dueDate: "Week 9 (July 3, 2025)", 
-      weight: 20, 
+      totalScore: 100,
+      submitted: false,
       completed: false,
       details: {
         description: "Apply the techniques learned in a creative project of your choice.",
@@ -307,7 +322,8 @@ const SubjectPage: React.FC = () => {
       title: "Final Showcase Performance", 
       type: "Final Exam", 
       dueDate: "Week 12 (July 24, 2025)", 
-      weight: 30, 
+      totalScore: 100,
+      submitted: false,
       completed: false,
       details: {
         description: "Perform a final piece demonstrating all the skills and techniques learned throughout the course.",
@@ -370,6 +386,53 @@ const SubjectPage: React.FC = () => {
     setActiveTab('attachFile');
   };
 
+  // Add function to check if deadline has passed
+  const isDeadlinePassed = (dueDate: string) => {
+    const deadline = new Date(dueDate);
+    return new Date() > deadline;
+  };
+
+  // Add unsubmit handler
+  const handleUnsubmit = (assessmentId: number) => {
+    setAssessments(prev => prev.map(assessment => 
+      assessment.id === assessmentId 
+        ? { ...assessment, submitted: false, submittedAt: undefined }
+        : assessment
+    ));
+  };
+
+  // Add file preview handler
+  const handleFileSelect = (file: File | null) => {
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setPreviewUrl(url);
+      setFile(file);
+    } else {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+      setPreviewUrl(null);
+      setFile(null);
+    }
+  };
+
+  // Add submission handler
+  const handleSubmit = () => {
+    if (file && activeAssessment) {
+      setAssessments(prev => prev.map(assessment => 
+        assessment.id === activeAssessment.id
+          ? { ...assessment, submitted: true, submittedAt: new Date() }
+          : assessment
+      ));
+      setShowPreview(false);
+      setFile(null);
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+        setPreviewUrl(null);
+      }
+    }
+  };
+
   // Calculate overall progress
   const overallProgress = Math.round(
     sections.reduce((acc, section) => acc + section.progress, 0) / sections.length
@@ -384,7 +447,12 @@ const SubjectPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <Group justify="space-between" className="w-full">
             <Group gap="md">
-              <ActionIcon size="lg" variant="subtle">
+              <ActionIcon 
+                size="lg" 
+                variant="subtle" 
+                onClick={() => navigate('/subjectlist')}
+                className="cursor-pointer hover:bg-gray-100"
+              >
                 <IconArrowLeft size={20} />
               </ActionIcon>
               <div>
@@ -499,7 +567,7 @@ const SubjectPage: React.FC = () => {
                               <Text size="xs" c="dimmed">Due: {activeAssessment.dueDate}</Text>
                             </Group>
                           </div>
-                          <Text fw={500} size="lg" color="blue">{activeAssessment.weight}%</Text>
+                            <Text fw={500} size="lg" color="blue">{activeAssessment.score ?? 0}/{activeAssessment.totalScore}</Text>
                         </Group>
 
                         <div className="mb-6">
@@ -521,29 +589,139 @@ const SubjectPage: React.FC = () => {
                         </div>
 
                         <div className="mt-6">
-                          {/* Existing file upload component */}
                           <Text size="sm" className="mb-3">Attach Your Submission</Text>
                           <div className="border-2 border-dashed border-gray-300 rounded-md p-6 text-center">
-                            <FileButton onChange={setFile} accept="image/png,image/jpeg,application/pdf">
+                            <FileButton 
+                              onChange={handleFileSelect} 
+                              accept="image/png,image/jpeg,application/pdf"
+                            >
                               {(props) => (
                                 <div {...props} className="cursor-pointer">
                                   <IconFileUpload size={32} className="mx-auto text-gray-400 mb-2" />
-                                  <Text size="sm">Drag and drop a file or <span className="text-blue-500">browse file</span></Text>
+                                  <Text size="sm">
+                                    Drag and drop a file or <span className="text-blue-500">browse file</span>
+                                  </Text>
+                                  <Text size="xs" color="dimmed" mt={8}>
+                                    Supported formats: PNG, JPEG, PDF
+                                  </Text>
                                 </div>
                               )}
                             </FileButton>
                           </div>
 
                           {file && (
-                            <Text size="sm" className="mt-2">
-                              Selected file: {file.name}
-                            </Text>
+                            <div className="mt-4 space-y-4">
+                              <div className="flex items-center justify-between bg-gray-50 p-3 rounded-md">
+                                <div>
+                                  <Text size="sm" fw={500}>{file.name}</Text>
+                                  <Text size="xs" color="dimmed">
+                                    {(file.size / 1024 / 1024).toFixed(2)} MB
+                                  </Text>
+                                </div>
+                                <Button 
+                                  variant="subtle" 
+                                  color="red" 
+                                  size="sm"
+                                  onClick={() => handleFileSelect(null)}
+                                >
+                                  Remove
+                                </Button>
+                              </div>
+
+                              {previewUrl && (
+                                <div className="border rounded-md p-4">
+                                  <Text size="sm" fw={500} className="mb-2">Preview:</Text>
+                                  {file.type.startsWith('image/') ? (
+                                    <img 
+                                      src={previewUrl} 
+                                      alt="Preview" 
+                                      className="max-h-[400px] mx-auto rounded-md"
+                                    />
+                                  ) : file.type === 'application/pdf' ? (
+                                    <iframe
+                                      src={previewUrl}
+                                      className="w-full h-[400px] rounded-md"
+                                      title="PDF Preview"
+                                    />
+                                  ) : null}
+                                </div>
+                              )}
+
+                              <Group justify="flex-end" className="mt-4">
+                                <Button 
+                                  variant="default" 
+                                  onClick={() => handleFileSelect(null)}
+                                >
+                                  Cancel
+                                </Button>
+                                <Button 
+                                  color="blue"
+                                  onClick={() => setShowPreview(true)}
+                                  disabled={!file}
+                                >
+                                  Review Submission
+                                </Button>
+                              </Group>
+                            </div>
                           )}
 
-                          <Group justify="flex-end" className="mt-4">
-                            <Button variant="default" onClick={() => setFile(null)}>Cancel</Button>
-                            <Button color="blue">Submit File</Button>
-                          </Group>
+                          {/* Submission Review Modal */}
+                          <Modal
+                            opened={showPreview}
+                            onClose={() => setShowPreview(false)}
+                            title="Review Your Submission"
+                            size="lg"
+                          >
+                            <div className="space-y-4">
+                              <div className="bg-gray-50 p-4 rounded-md">
+                                <Text fw={500}>{activeAssessment?.title}</Text>
+                                <Text size="sm" color="dimmed">Due: {activeAssessment?.dueDate}</Text>
+                              </div>
+
+                              <div className="border rounded-md p-4">
+                                <Text size="sm" fw={500} className="mb-2">File Details:</Text>
+                                <Text size="sm">{file?.name}</Text>
+                                <Text size="xs" color="dimmed">
+                                  Size: {file && (file.size / 1024 / 1024).toFixed(2)} MB
+                                </Text>
+                              </div>
+
+                              {previewUrl && (
+                                <div className="border rounded-md p-4">
+                                  <Text size="sm" fw={500} className="mb-2">Preview:</Text>
+                                  {file?.type.startsWith('image/') ? (
+                                    <img 
+                                      src={previewUrl} 
+                                      alt="Preview" 
+                                      className="max-h-[400px] mx-auto rounded-md"
+                                    />
+                                  ) : file?.type === 'application/pdf' ? (
+                                    <iframe
+                                      src={previewUrl}
+                                      className="w-full h-[400px] rounded-md"
+                                      title="PDF Preview"
+                                    />
+                                  ) : null}
+                                </div>
+                              )}
+
+                              <Alert color="blue" className="mt-4">
+                                <Text size="sm">
+                                  Please review your submission carefully. Once submitted, you can only 
+                                  unsubmit before the deadline.
+                                </Text>
+                              </Alert>
+
+                              <Group justify="flex-end" mt="xl">
+                                <Button variant="default" onClick={() => setShowPreview(false)}>
+                                  Back to Edit
+                                </Button>
+                                <Button color="blue" onClick={handleSubmit}>
+                                  Confirm & Submit
+                                </Button>
+                              </Group>
+                            </div>
+                          </Modal>
                         </div>
                       </>
                     ) : (
@@ -591,11 +769,41 @@ const SubjectPage: React.FC = () => {
                               <Text size="xs" c="dimmed">Due: {assessment.dueDate}</Text>
                             </Group>
                           </div>
-                          <Text size="sm" fw={500}>{assessment.weight}%</Text>
+                          <div className="text-right">
+                            <Text size="sm" fw={500} className={assessment.score ? 'text-green-600' : 'text-gray-600'}>
+                              {assessment.score ?? 0}/{assessment.totalScore}
+                            </Text>
+                            {assessment.submitted && !isDeadlinePassed(assessment.dueDate) && (
+                              <Button
+                                variant="subtle"
+                                size="xs"
+                                color="red"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleUnsubmit(assessment.id);
+                                }}
+                                className="mt-1"
+                              >
+                                Unsubmit
+                              </Button>
+                            )}
+                          </div>
                         </Group>
-                        {assessment.completed && (
+                        {assessment.submitted && (
+                          <div className="mt-2 text-blue-600 text-sm flex items-center justify-between">
+                            <div className="flex items-center">
+                              <span className="mr-1">📤</span> Submitted
+                              {assessment.submittedAt && (
+                                <Text size="xs" c="dimmed" className="ml-2">
+                                  on {assessment.submittedAt.toLocaleDateString()}
+                                </Text>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                        {assessment.score && (
                           <div className="mt-2 text-green-600 text-sm flex items-center">
-                            <span className="mr-1">✓</span> Completed
+                            <span className="mr-1">✓</span> Graded
                           </div>
                         )}
                       </div>
