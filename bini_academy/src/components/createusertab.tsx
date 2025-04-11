@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Button, Select, TextInput, FileButton, Avatar, Modal, Image, Group } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import { GenderLabel, UserRoleLabel } from "../types";
+import { GenderLabel, User, UserRoleLabel } from "../types";
 import { useForm } from "@mantine/form";
-
+import { createUser } from "../supabase/api/user";
+import { useMutation } from "@tanstack/react-query";
 
 export const CreateUserTab = () => {
   const form = useForm({
@@ -13,9 +14,9 @@ export const CreateUserTab = () => {
       password: "",
       role: "",
       address: "",
-      status: "",
       gender: "",
-      birthDate: ""
+      birthDate: "",
+      phoneNumber: "",
     },
     validate: {
       name: (value) => (value ? null : "This field is required"),
@@ -23,30 +24,49 @@ export const CreateUserTab = () => {
       password: (value) => (value ? null : "This field is required"),
       role: (value) => (value ? null : "This field is required"),
       address: (value) => (value ? null : "This field is required"),
-      status: (value) => (value ? null : "This field is required"),
       gender: (value) => (value ? null : "This field is required"),
       birthDate: (value) => (value ? null : "This field is required"),
+      phoneNumber: (value) => (value ? null : "This field is required"),
     },
   });
 
-  const createNewUser = async () => {
-
-    try {
+  const createUserMutation = useMutation({
+    mutationFn: async () => {
+      return createUser({
+        name: form.values.name,
+        password: form.values.password,
+        address: form.values.address,
+        email: form.values.email,
+        user_role: form.values.role,
+        gender: form.values.gender,
+        birth_date: new Date(),
+        phone_number: form.values.phoneNumber,
+        profile_picture: ''
+      } as User);
+    },
+    onSuccess: () => {
       notifications.show({
         title: 'Success',
         message: 'User Created Successfully',
-        color: 'green'
-      })
-    } catch (error) {
+        color: 'green',
+      });
+      setConfirmOpened(false)
+    },
+    onError: (error: any) => {
       notifications.show({
         title: 'Error',
-        message: 'Cannot Create user an error has occured',
-        color: 'red'
-      })
-    } finally {
-      setConfirmOpened(false)
+        message: error.message || 'Cannot create user, an error has occurred',
+        color: 'red',
+      });
+    },
+  });
+
+  const createAccount = () => {
+    form.validate();
+    if (form.isValid()) {
+      createUserMutation.mutate();
     }
-  }
+  };
 
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [errors, setErrors] = useState<Record<string, boolean>>({});
@@ -62,12 +82,13 @@ export const CreateUserTab = () => {
     });
     if (!profileImage) newErrors["profileImage"] = true;
     setErrors(newErrors);
+    console.log("Form Errors:", newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleCreateUser = () => {
+  const handleCreateUser = async() => {
     if (validateForm()) {
-      setConfirmOpened(true); // Open confirmation modal if no errors
+      setConfirmOpened(true);
     }
   };
 
@@ -116,13 +137,12 @@ export const CreateUserTab = () => {
             onChange={(event) => form.setFieldValue('address', event.currentTarget.value)}
             error={errors.address ? "This field is required" : false}
           />
-          <Select
-            label="Status"
-            placeholder="Select status"
-            data={["Active", "Inactive"]}
-            value={form.values.status}
-            onChange={(value) => form.setFieldValue('status', value || "")}
-            error={errors.status ? "This field is required" : false}
+          <TextInput
+            label="Phone Number"
+            placeholder="Enter Phone number"
+            value={form.values.phoneNumber}
+            onChange={(event) => form.setFieldValue('phoneNumber', event.currentTarget.value)}
+            error={errors.address ? "This field is required" : false}
           />
           <Select
             label='Gender'
@@ -130,7 +150,7 @@ export const CreateUserTab = () => {
             data={GenderLabel}
             value={form.values.gender}
             onChange={(value) => form.setFieldValue('gender', value || "")}
-            error={errors.status ? "This field is required" : false}
+            error={errors.gender ? "This field is required" : false}
           ></Select>
           <Group grow mt="md">
             {/* Native React Date Input */}
@@ -142,8 +162,8 @@ export const CreateUserTab = () => {
                 type="date"
                 max={new Date().toISOString().split('T')[0]}
                 value={form.values.birthDate ? new Date(form.values.birthDate).toISOString().split('T')[0] : ''}
-                onChange={(e) =>
-                  form.setFieldValue('dob', e.target.value ? new Date(e.target.value) : null)
+                onChange={(event) =>
+                  form.setFieldValue('birthDate', event.target.value)
                 }
                 style={{
                   padding: '8px',
@@ -152,7 +172,7 @@ export const CreateUserTab = () => {
                 }}
                 required
               />
-              {form.errors.dob && (
+              {form.errors.birthDate && (
                 <span style={{ color: 'red', fontSize: '12px' }}>{form.errors.dob}</span>
               )}
             </div>
@@ -165,7 +185,7 @@ export const CreateUserTab = () => {
           <Button variant="outline" color="gray">
             Cancel
           </Button>
-          <Button color="orange" onClick={handleCreateUser}>
+          <Button color="orange" onClick={() => handleCreateUser()}>
             Create User
           </Button>
         </div>
@@ -207,7 +227,7 @@ export const CreateUserTab = () => {
           <Button variant="outline" color="gray" onClick={() => setConfirmOpened(false)}>
             Cancel
           </Button>
-          <Button color="orange" onClick={createNewUser}>
+          <Button color="orange" onClick={() => createAccount()}>
             Confirm
           </Button>
         </div>
