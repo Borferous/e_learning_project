@@ -20,7 +20,7 @@ import bapaLogo from '../assets/bapalogo.svg';
 import campusImage from '../assets/campus.jpg';
 import { Header } from '../components/header';
 import { User, UserRole } from '../types';
-import { signupUser } from '../supabase/api/user';
+import { createUser } from '../supabase/api/user';
 
 export const UserCreatePage = () => {
   const navigate = useNavigate();
@@ -53,7 +53,7 @@ export const UserCreatePage = () => {
 
   const createUserMutation = useMutation({
     mutationFn: async () => {
-      return signupUser({
+      return createUser({
         name: `${form.values.firstName} ${form.values.lastName}`,
         password: form.values.password,
         address: form.values.address,
@@ -62,7 +62,7 @@ export const UserCreatePage = () => {
         gender: form.values.gender,
         birth_date: new Date(form.values.dob),
         phone_number: form.values.phone,
-        profile_picture: ''
+        profile_picture: '',
       } as User);
     },
     onSuccess: () => {

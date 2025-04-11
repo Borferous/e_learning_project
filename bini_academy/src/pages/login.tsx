@@ -6,7 +6,8 @@ import { useState } from 'react';
 import { notifications } from '@mantine/notifications';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
-import { loginUser } from '../supabase/api/user.ts';
+import { getCurrentUser, loginUser } from '../supabase/api/user.ts';
+import { User, UserRole } from '../types.tsx';
 
 
 export const LoginPage = () => {
@@ -21,9 +22,23 @@ export const LoginPage = () => {
       }
       await loginUser(email, password);
     },
-    onSuccess: () => {
+    onSuccess: async() => {
       notifications.show({ title: "Success", color: "green", message: "Login Successful"});
-      navigate('/')
+      const loggedUser = await getCurrentUser() as User;
+      switch (loggedUser?.user_role) {
+        case UserRole.Admin:
+          navigate('/usermanage');
+          break;
+        case UserRole.Teacher:
+          navigate('/instructorcreatecourse');
+          break;
+        case UserRole.Student:
+          navigate('/');
+          break;
+        default:
+          navigate('/error-page');
+          break
+      }
     },
     onError: () => {
       notifications.show({ title: "Error", color: "red", message: "Login Failed"});
@@ -87,7 +102,7 @@ export const LoginPage = () => {
             <TextInput label="Email" placeholder="Email address..." type="email" mt="md" required onChange={e => setEmail(e.target.value)} />
             <PasswordInput label="Password" placeholder="Create password" mt="md" required onChange={e => setPassword(e.target.value)} />
             <Checkbox label="Remember me" mt="md" required />
-            <Button fullWidth mt="xl" color="orange" onClick={attemptLogin}>Sign In</Button>
+            <Button fullWidth mt="xl" color="orange" onClick={() => attemptLogin()}>Sign In</Button>
           </Paper>
         </Grid.Col>
       </Grid>

@@ -24,6 +24,7 @@ import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ErrorPage } from './pages/error';
 
 const queryClient = new QueryClient()
 
@@ -43,13 +44,14 @@ function App() {
               <Route path='/usermanage' element={<ManageUsers />}/>
               <Route path='/hostevents' element={<HostEvents />}/>
               <Route path='/courselist' element={<CourseListPage />}/>
-              <Route path='/courseoverview' element={<CourseOverview />}/>
+              <Route path='/courseoverview/:majorId' element={<CourseOverview />}/>
               <Route path='/payment-information' element={<PaymentInformation />}/>
               <Route path='/terms-and-conditions' element={<TermsAndCondition />}/>
               <Route path='/subjectlist' element={<SubjectListPage />}/>
               <Route path='/subjectpage' element={<SubjectPage />}/>
               <Route path='/events' element={<EventsPage />}/>
               <Route path='/event/:eventId' element={<EventLivePage />}/>
+              <Route path='error-page' element={<ErrorPage />}/>
             </Routes>
           </Router>
         </QueryClientProvider>
