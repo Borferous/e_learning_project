@@ -17,9 +17,9 @@ const CourseDescription = ({ description, keyPoints }: CourseDescriptionProps) =
         {description}
       </Text>
       
-      <Text className="mb-6 leading-relaxed">
+      {/* <Text className="mb-6 leading-relaxed">
         In this comprehensive course, you'll master the essential techniques to project your voice, control your breathing, and move with purpose. Learn the same techniques used by professional performers, Broadway actors, and vocal coaches to captivate any audience.
-      </Text>
+      </Text> */}
       
       <Text className="font-bold mb-2 leading-relaxed">You'll explore:</Text>
       <List
@@ -33,9 +33,9 @@ const CourseDescription = ({ description, keyPoints }: CourseDescriptionProps) =
         ))}
       </List>
       
-      <Text className="leading-relaxed">
+      {/* <Text className="leading-relaxed">
         By the end of this course, you'll step onto any stage with the confidence and presence of a true performer!
-      </Text>
+      </Text> */}
     </div>
   );
 };
