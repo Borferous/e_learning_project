@@ -6,6 +6,11 @@ import { Loading } from "../components/loading";
 import { Footer } from "../components/footer";
 import placeholderImg from "../assets/placeholder-image.svg";
 import schoolBg from "../assets/school-bg.png";
+import { getCoursesAndMajor } from "../supabase/api/course";
+import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { Major } from "../types";
+import { useNavigate } from "react-router-dom";
 
 const courses = [
   {
@@ -28,6 +33,24 @@ const courses = [
 ];
 
 export const HomePage = () => {
+  const navigate = useNavigate();
+  const [courseMajor, setCourseMajor] = useState<any[]>([]);
+  const {isError, isLoading, refetch} = useQuery({
+    queryKey: ["coursesAndMajors"],
+    queryFn: async () => {
+      const data = await getCoursesAndMajor();
+      setCourseMajor(data as any[]);
+      return data; // Ensure the query function returns the fetched data
+    },
+  })
+
+  if (isError) {
+    navigate('/error-page')
+  }
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
   
   return (
     <>
@@ -77,19 +100,20 @@ export const HomePage = () => {
         </div>
 
         {/* Bachelor’s Degrees Sections */}
-        {courses.map((course, index) => (
+        {isLoading ? <Loading/> : courseMajor.map((course, index) => (
           <GridComponent key={index} title={course.degree} loadingState={false}>
-            {course.majors.map((major, idx) => (
+            {course.majors.map((major: Major, idx: number) => (
               <CourseCard
                 key={idx}
                 image={placeholderImg}
-                title={major}
+                title={major.title}
                 category={course.degree}
-                link={`/courseoverview`}
+                link={`/courseoverview/${major.id}`}
               />
             ))}
           </GridComponent>
         ))}
+        
 
       </Container>
       <Footer />
