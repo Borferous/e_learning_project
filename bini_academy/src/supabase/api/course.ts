@@ -22,6 +22,30 @@ export const getMajor = async (courseId: string) => {
     return data;
 }
 
+export const getAllMajor = async (): Promise<Major[]> => {
+    const { data, error } = await supabase
+        .from('majors')
+        .select('*');
+
+    if (error) {
+        throw new Error(`Error fetching majors: ${error.message}`);
+    }
+
+    if (!data) return [];
+
+    return data.map((major) => {
+        const { data: urlData } = supabase
+            .storage
+            .from('major-thumbnail')
+            .getPublicUrl(major.major_thumbnail); // assuming it's a path like 'public/something.png'
+
+        return {
+            ...major,
+            thumbnail: urlData.publicUrl,
+        };
+    });
+};
+
 export const getCoursesAndMajor = async () => {
     const { data, error } = await supabase
         .from('courses')
@@ -30,10 +54,25 @@ export const getCoursesAndMajor = async () => {
         throw new Error(`Error fetching courses and majors: ${error.message}`);
     }
     if (data) {
-        const formatted = data.map((course) => ({
+        const formatted = await Promise.all(data.map(async (course) => ({
             degree: course.degree,
-            majors: course.majors.map((major: Major) => ({id: major.id,title: major.title, subtitle: major.subtitle, price: major.price}))
-        }))
+            majors: await Promise.all(course.majors.map(async (major: Major) => {
+                const { data: urlData } = major.thumbnail
+                    ? supabase
+                        .storage
+                        .from('major-thumbnail')
+                        .getPublicUrl(major.thumbnail)
+                    : { data: null };
+                
+                return {
+                    id: major.id,
+                    title: major.title,
+                    subtitle: major.subtitle,
+                    price: major.price,
+                    thumbnail: urlData?.publicUrl ?? '',
+                };
+            }))
+        })));
         console.log("Formatted data: ", formatted);
         return formatted;
     }

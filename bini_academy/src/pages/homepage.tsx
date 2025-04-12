@@ -105,7 +105,7 @@ export const HomePage = () => {
             {course.majors.map((major: Major, idx: number) => (
               <CourseCard
                 key={idx}
-                image={placeholderImg}
+                image={major.thumbnail || placeholderImg}
                 title={major.title}
                 category={course.degree}
                 link={`/courseoverview/${major.id}`}
