@@ -14,6 +14,7 @@ import { TermsAndCondition } from './pages/terms_and_conditions';
 import { SubjectListPage } from './pages/subject_list_page';
 import { EventsPage } from './pages/events_page';
 import { EventLivePage } from './pages/event_live';
+import { ProfilePage } from './pages/profile_page';
 
 import SubjectPage from './pages/subject_page';
 
@@ -50,6 +51,7 @@ function App() {
               <Route path='/subjectpage' element={<SubjectPage />}/>
               <Route path='/events' element={<EventsPage />}/>
               <Route path='/event/:eventId' element={<EventLivePage />}/>
+              <Route path='/profile' element={<ProfilePage />}/>
             </Routes>
           </Router>
         </QueryClientProvider>
