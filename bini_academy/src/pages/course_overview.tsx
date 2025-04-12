@@ -67,28 +67,29 @@ export const CourseOverview = () => {
                 </>
               )}
 
-              <div className="relative w-full aspect-video bg-gray-100 rounded overflow-hidden mb-6">
-                <iframe
-                  width="100%"
-                  height="100%"
-                  src="https://www.youtube.com/embed/_L70tC-YRb4"
-                  title="YouTube video player"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                ></iframe>
-              </div>
+              {courseData?.trailer_link && courseData.trailer_link.includes("youtube.com/embed") && (
+                <div className="relative w-full aspect-video bg-gray-100 rounded overflow-hidden mb-6">
+                  <iframe
+                    width="100%"
+                    height="100%"
+                    src={courseData.trailer_link}
+                    title="YouTube video player"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+              )}
             </div>
 
             <div className="w-full md:w-1/3 bg-gray-50 p-6 rounded-lg border border-gray-200">
               <Text fw={700} size="xl" className="mb-4">
-                {courseData?.price}
+                P {courseData?.price}
               </Text>
               <Group className="mb-4">
                 <IconCalendar size={16} />
                 <Text size="sm">Course Duration:</Text>
                 <Text size="sm" fw={500}>
-                  {duration}
+                  {courseData?.duration}
                 </Text>
               </Group>
 
