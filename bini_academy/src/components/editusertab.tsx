@@ -1,16 +1,88 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Table, Button, Select, TextInput, Modal, Avatar, FileInput, PasswordInput } from "@mantine/core";
-import { ActiveStatusLabel, User, UserRoleLabel } from "../types";
+import { User, UserRoleLabel } from "../types";
+import { deleteUser, editUser, getAllUsers } from "../supabase/api/user";
+import { useMutation } from "@tanstack/react-query";
+import { notifications } from "@mantine/notifications";
 
 export const EditUsersTab = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
 
+  const fetchUsers = async () => {
+    const usersData = await getAllUsers();
+    setUsers(usersData);
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
   const handleEditClick = (user: User) => {
     setSelectedUser(user);
     setModalOpen(true);
   };
+
+  const editUserMutation = useMutation({
+    mutationFn: async () => {
+      if (selectedUser) {
+        await editUser(selectedUser);
+      }
+    },
+    onSuccess: () => {
+      notifications.show({
+        title: 'Success',
+        message: 'User Updated Successfully',
+        color: 'green',
+      });
+      fetchUsers();
+    },
+    onError: (error: any) => {
+      notifications.show({
+        title: 'Error',
+        message: error.message || 'Cannot update user, an error has occurred',
+        color: 'red',
+      });
+    },
+  })
+
+  const deleteUserMutation = useMutation({
+    mutationFn: async () => {
+      if (selectedUser) {
+        await deleteUser(selectedUser.id || "");
+      }
+    },
+    onSuccess: () => {
+      notifications.show({
+        title: 'Success',
+        message: 'User Deleted Successfully',
+        color: 'green',
+      });
+      fetchUsers();
+    },
+    onError: (error: any) => {
+      notifications.show({
+        title: 'Error',
+        message: error.message || 'Cannot delete user, an error has occurred',
+        color: 'red',
+      });
+    },
+  })
+
+  const handleEditUser = () => {
+    if (selectedUser) {
+      editUserMutation.mutate();
+      setModalOpen(false);
+    }
+  }
+
+  const handleDeleteUser = () => {
+    if (selectedUser) {
+      deleteUserMutation.mutate();
+      setModalOpen(false);
+    }
+  }
 
   return (
     <div className="bg-white p-6 rounded-md shadow">
@@ -24,13 +96,12 @@ export const EditUsersTab = () => {
               <th className="p-3">Email</th>
               <th className="p-3">Address</th>
               <th className="p-3">Role</th>
-              <th className="p-3">Status</th>
               <th className="p-3 text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
             {users && users.map((user) => (
-              <tr key={user.user_id} className="border-b">
+              <tr key={user.id} className="border-b">
                 <td className="p-3">
                   <Avatar src={user.profile_picture || "/default-avatar.png"} alt={user.name} radius="xl" />
                 </td>
@@ -38,7 +109,6 @@ export const EditUsersTab = () => {
                 <td className="p-3">{user.email}</td>
                 <td className="p-3">{user.address}</td>
                 <td className="p-3">{user.user_role}</td>
-                <td className="p-3">{user.status}</td>
                 <td className="p-3 text-center">
                   <Button color="orange" size="xs" onClick={() => handleEditClick(user)}>Edit</Button>
                 </td>
@@ -66,7 +136,6 @@ export const EditUsersTab = () => {
               <PasswordInput label="Password" value={selectedUser.password} onChange={(e) => setSelectedUser({ ...selectedUser, password: e.target.value })} />
               <TextInput label="Address" value={selectedUser.address} onChange={(e) => setSelectedUser({ ...selectedUser, address: e.target.value })} />
               <Select label="Role" data={UserRoleLabel} value={selectedUser.user_role} onChange={(value) => setSelectedUser({ ...selectedUser, user_role: value || "" })} />
-              <Select label="Status" data={ActiveStatusLabel} value={selectedUser.status} onChange={(value) => setSelectedUser({ ...selectedUser, status: value || "1"})} />                            
             </div>
 
             {/* Right Side: Profile Photo */}
@@ -99,8 +168,8 @@ export const EditUsersTab = () => {
 
             {/* Buttons: Delete & Save */}
             <div className="col-span-3 flex justify-between mt-4">
-              <Button color="red">Delete</Button>
-              <Button color="orange">Save</Button>
+              <Button color="red" onClick={() => handleDeleteUser()}>Delete</Button>
+              <Button color="orange" onClick={() => handleEditUser()}>Save</Button>
             </div>
           </div>
         )}

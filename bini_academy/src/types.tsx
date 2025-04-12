@@ -1,20 +1,19 @@
 export interface User {
-    user_id? :string,
+    id? :string,
     name: string,
     password: string,
     address: string,
     user_role: string,
-    gender: string,
+    gender: Gender,
     email: string,
     birth_date: Date
     profile_picture?: string,
     phone_number: string,
-    status?: string
 }
 
 export enum ActiveStatus {
-    Active = "active",
-    Inactive = "inactive"
+    Active = 1,
+    Inactive = 0
 }
 
 export const ActiveStatusLabel = [
@@ -35,13 +34,21 @@ export const UserRoleLabel = [
 ]
 
 export interface Course {
-    teacher_id: string,
-    course_title: string,
-    program_category: string,
-    price: string | number,
+    id: string,
+    degree: string,
+    majors?: Major[]
+}
+
+export interface Major {
+    id: string,
+    course_id: string,
+    title: string,
+    subtitle: string,
+    price: number,
     description: string,
-    course_level: string,
-    course_topic: string
+    duration: string,
+    trailer_link: string,
+    thumbnail?: string,
 }
 
 export enum CourseCategory {
