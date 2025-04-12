@@ -8,17 +8,9 @@ export const HeaderAdmin = ({ title }: { title: string }) => {
       {/* Title */}
       <h2 className="text-lg font-semibold">{title}</h2>
 
-      {/* Search Bar & Icons */}
+      
       <div className="flex items-center gap-4">
-        <Input
-          placeholder="Search"
-          rightSection={<IconSearch size={16} />}
-          className="w-64"
-        />
-
-        {/* Notification Icon */}
-        <IconBell size={20} className="text-gray-600 cursor-pointer" />
-
+       
         {/* Avatar - Replace with dynamic user profile image */}
         <Avatar
           src="../assets/user-avatar.png" // Placeholder avatar, replace with real profile image URL

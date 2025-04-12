@@ -43,8 +43,8 @@ function App() {
               <Route path='/usercreate' element={<UserCreatePage/>}/>
               <Route path='/homepage' element={<HomePage />}/>
               <Route path='/instructorcreatecourse' element={<InstructorCreateCourse />}/>
-              <Route path='/usermanage' element={<ManageUsers />}/>
-              <Route path='/hostevents' element={<HostEvents />}/>
+              <Route path='/admin/usermanage' element={<ManageUsers />}/>
+              <Route path='/admin/hostevents' element={<HostEvents />}/>
               <Route path='/courselist' element={<CourseListPage />}/>
               <Route path='/courseoverview/:majorId' element={<CourseOverview />}/>
               <Route path='/payment-information' element={<PaymentInformation />}/>
