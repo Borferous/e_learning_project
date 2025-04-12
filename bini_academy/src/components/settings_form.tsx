@@ -9,6 +9,12 @@ import {
   Paper,
   Text,
 } from '@mantine/core';
+import { SocialMediaSection } from './social_media';
+interface SocialMedia {
+  id: string;
+  platform: string;
+  url: string;
+}
 
 interface SettingsFormProps {
   initialData: {
@@ -19,6 +25,7 @@ interface SettingsFormProps {
     phone: string;
     address: string;
     email: string;
+    socialMedia?: SocialMedia[];
   };
   onSubmit: (values: any) => void;
 }
@@ -39,6 +46,7 @@ export const SettingsForm = ({ initialData, onSubmit }: SettingsFormProps) => {
       currentPassword: '',
       newPassword: '',
       confirmNewPassword: '',
+      socialMedia: initialData.socialMedia || [],
     },
     validate: {
       firstName: (value) => (value.trim().length > 0 ? null : 'First name is required'),
@@ -147,6 +155,13 @@ export const SettingsForm = ({ initialData, onSubmit }: SettingsFormProps) => {
               {...form.getInputProps('confirmNewPassword')}
             />
           </Group>
+        </div>
+
+        <div className="mt-6">
+          <SocialMediaSection
+            socialMedia={form.values.socialMedia}
+            onChange={(value) => form.setFieldValue('socialMedia', value)}
+          />
         </div>
 
         <Group justify="flex-end" mt="xl">

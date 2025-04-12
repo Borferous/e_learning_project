@@ -25,13 +25,12 @@ import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ErrorPage } from './pages/error';
 
 const queryClient = new QueryClient()
 
 function App() {
   return (
-    <>
+    <ProfileProvider>
       <MantineProvider >
         <Notifications position='top-right' autoClose={3000} limit={3} />
         <QueryClientProvider client={queryClient}>
@@ -58,7 +57,7 @@ function App() {
           </Router>
         </QueryClientProvider>
       </MantineProvider>
-    </>
+    </ProfileProvider>
   );
 }
 
