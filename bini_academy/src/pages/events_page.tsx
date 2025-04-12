@@ -22,8 +22,8 @@ const events: EventCardProps[] = [
     mediaType: "Live Streamed",
     category: "Workshop",
     registrationDate: "April 5, 2025",
-    startDate: "April 8, 2025",
-    endDate: "April 12, 2025",
+    startDate: "April 12, 2025",
+    endDate: "April 20, 2025",
     description:
       "Join our vocal coach in this intensive live session to boost your performance skills.",
     welcomeMessage: "Welcome to the Live Vocal Workshop! We're excited to see you!",
