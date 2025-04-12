@@ -15,6 +15,7 @@ import { SubjectListPage } from './pages/subject_list_page';
 import { EventsPage } from './pages/events_page';
 import { EventLivePage } from './pages/event_live';
 import { ProfilePage } from './pages/profile_page';
+import { ErrorPage } from './pages/error';
 
 import SubjectPage from './pages/subject_page';
 
