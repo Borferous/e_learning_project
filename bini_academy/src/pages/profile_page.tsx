@@ -394,11 +394,11 @@ export const ProfilePage = () => {
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <HomeHeader />
       
-      <main className="flex-1 w-full">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <Paper shadow="sm" radius="md" p="md">
+      <main className="flex-1 w-full py-4 md:py-6">
+        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+          <Paper shadow="sm" radius="md" p="md" className="overflow-hidden">
             {/* Profile Header */}
-            <Group className="mb-6 flex-col sm:flex-row">
+            <Group className="mb-6 flex-col sm:flex-row p-2 md:p-4">
               <Avatar size={120} src={profilePicUrl} className="mx-auto sm:mx-0" />
               <div className="text-center sm:text-left mt-4 sm:mt-0">
                 <Text size="xl" fw={700}>{userProfile.firstName} {userProfile.lastName}</Text>
@@ -436,317 +436,341 @@ export const ProfilePage = () => {
 
             {/* Update Tabs container */}
             <Tabs value={activeTab} onChange={(value) => value && setActiveTab(value)}>
-              <Tabs.List className="overflow-x-auto">
-                <Tabs.Tab value="dashboard" leftSection={<IconClipboardList size={16} />}>
+              <Tabs.List className="overflow-x-auto flex flex-nowrap md:flex-wrap">
+                <Tabs.Tab 
+                  value="dashboard" 
+                  leftSection={<IconClipboardList size={16} />}
+                  className="min-w-[120px] md:min-w-0"
+                >
                   Dashboard
                 </Tabs.Tab>
-                <Tabs.Tab value="grades" leftSection={<IconSchool size={16} />}>
+                <Tabs.Tab 
+                  value="grades" 
+                  leftSection={<IconSchool size={16} />}
+                  className="min-w-[120px] md:min-w-0"
+                >
                   Grades
                 </Tabs.Tab>
-                <Tabs.Tab value="teachers" leftSection={<IconUser size={16} />}>
+                <Tabs.Tab 
+                  value="teachers" 
+                  leftSection={<IconUser size={16} />}
+                  className="min-w-[120px] md:min-w-0"
+                >
                   Teachers
                 </Tabs.Tab>
-                <Tabs.Tab value="settings" leftSection={<IconSettings size={16} />}>
+                <Tabs.Tab 
+                  value="settings" 
+                  leftSection={<IconSettings size={16} />}
+                  className="min-w-[120px] md:min-w-0"
+                >
                   Settings
                 </Tabs.Tab>
               </Tabs.List>
 
-              {/* Update tab panels with responsive grids */}
-              <Tabs.Panel value="dashboard" pt="xl">
-                <div className="space-y-6">
-                  {/* Assignments Section */}
-                  <div>
-                    <Group justify="space-between" className="mb-4 flex-col sm:flex-row">
-                      <Text fw={700} size="lg">Recent Assignments & Quizzes</Text>
-                      <Menu shadow="md" width={200}>
-                        <Menu.Target>
-                          <Button variant="light" leftSection={<IconFilter size={16} />}>
-                            {assignmentFilter.charAt(0).toUpperCase() + assignmentFilter.slice(1)}
-                          </Button>
-                        </Menu.Target>
+              {/* Update the container structure for tab panels */}
+              <div className="mt-6 px-2 md:px-4">
+                <Tabs.Panel value="dashboard" pt="xl">
+                  <div className="space-y-6 max-w-full overflow-x-hidden">
+                    {/* Assignments Section */}
+                    <div>
+                      <Group justify="space-between" className="mb-4 flex-col sm:flex-row">
+                        <Text fw={700} size="lg">Recent Assignments & Quizzes</Text>
+                        <Menu shadow="md" width={200}>
+                          <Menu.Target>
+                            <Button 
+                              variant="light" 
+                              leftSection={<IconFilter size={16} />}
+                              className="w-full sm:w-auto"
+                            >
+                              {assignmentFilter.charAt(0).toUpperCase() + assignmentFilter.slice(1)}
+                            </Button>
+                          </Menu.Target>
 
-                        <Menu.Dropdown>
-                          <Menu.Item onClick={() => setAssignmentFilter('all')}>All</Menu.Item>
-                          <Menu.Item onClick={() => setAssignmentFilter('missing')}>Missing</Menu.Item>
-                          <Menu.Item onClick={() => setAssignmentFilter('pending')}>Pending</Menu.Item>
-                          <Menu.Item onClick={() => setAssignmentFilter('graded')}>Graded</Menu.Item>
-                        </Menu.Dropdown>
-                      </Menu>
-                    </Group>
-                    <div className="grid gap-4">
-                      {filteredAssignments.map(assignment => (
-                        <Paper 
-                          key={assignment.id} 
-                          p="md" 
-                          withBorder 
-                          className="cursor-pointer hover:bg-gray-50"
-                          onClick={() => navigate(`/subject/${assignment.subject.toLowerCase().replace(' ', '-')}`)}
-                        >
-                          <Group justify="apart">
-                            <div>
-                              <Group gap="xs">
-                                <Text fw={500}>{assignment.title}</Text>
-                                <ActionIcon 
+                          <Menu.Dropdown>
+                            <Menu.Item onClick={() => setAssignmentFilter('all')}>All</Menu.Item>
+                            <Menu.Item onClick={() => setAssignmentFilter('missing')}>Missing</Menu.Item>
+                            <Menu.Item onClick={() => setAssignmentFilter('pending')}>Pending</Menu.Item>
+                            <Menu.Item onClick={() => setAssignmentFilter('graded')}>Graded</Menu.Item>
+                          </Menu.Dropdown>
+                        </Menu>
+                      </Group>
+                      <div className="grid gap-4">
+                        {filteredAssignments.map(assignment => (
+                          <Paper 
+                            key={assignment.id} 
+                            p="md" 
+                            withBorder 
+                            className="cursor-pointer hover:bg-gray-50"
+                            onClick={() => navigate(`/subject/${assignment.subject.toLowerCase().replace(' ', '-')}`)}
+                          >
+                            <Group justify="apart">
+                              <div>
+                                <Group gap="xs">
+                                  <Text fw={500}>{assignment.title}</Text>
+                                  <ActionIcon 
+                                    size="sm" 
+                                    variant="subtle"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      navigate(`/subject/${assignment.subject.toLowerCase().replace(' ', '-')}`);
+                                    }}
+                                  >
+                                    <IconExternalLink size={16} />
+                                  </ActionIcon>
+                                </Group>
+                                <Text size="sm" c="dimmed">{assignment.subject}</Text>
+                              </div>
+                              <div className="text-right">
+                                <Text size="sm">Due: {new Date(assignment.dueDate).toLocaleDateString()}</Text>
+                                <Text 
                                   size="sm" 
-                                  variant="subtle"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    navigate(`/subject/${assignment.subject.toLowerCase().replace(' ', '-')}`);
-                                  }}
+                                  c={assignment.status === 'graded' ? 'green' : 'orange'}
                                 >
-                                  <IconExternalLink size={16} />
-                                </ActionIcon>
-                              </Group>
-                              <Text size="sm" c="dimmed">{assignment.subject}</Text>
-                            </div>
-                            <div className="text-right">
-                              <Text size="sm">Due: {new Date(assignment.dueDate).toLocaleDateString()}</Text>
-                              <Text 
-                                size="sm" 
-                                c={assignment.status === 'graded' ? 'green' : 'orange'}
-                              >
-                                {assignment.status.charAt(0).toUpperCase() + assignment.status.slice(1)}
-                                {assignment.score ? ` - ${assignment.score}` : ''}
-                              </Text>
-                            </div>
-                          </Group>
-                        </Paper>
-                      ))}
+                                  {assignment.status.charAt(0).toUpperCase() + assignment.status.slice(1)}
+                                  {assignment.score ? ` - ${assignment.score}` : ''}
+                                </Text>
+                              </div>
+                            </Group>
+                          </Paper>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Events Section */}
+                    <div>
+                      <Group justify="space-between" className="mb-4 flex-col sm:flex-row">
+                        <Text fw={700} size="lg">My Events</Text>
+                        <Menu shadow="md" width={200}>
+                          <Menu.Target>
+                            <Button variant="light" leftSection={<IconFilter size={16} />}>
+                              {eventFilter.charAt(0).toUpperCase() + eventFilter.slice(1)}
+                            </Button>
+                          </Menu.Target>
+
+                          <Menu.Dropdown>
+                            <Menu.Item onClick={() => setEventFilter('all')}>All Events</Menu.Item>
+                            <Menu.Item onClick={() => setEventFilter('upcoming')}>Upcoming</Menu.Item>
+                            <Menu.Item onClick={() => setEventFilter('past')}>Past Events</Menu.Item>
+                          </Menu.Dropdown>
+                        </Menu>
+                      </Group>
+                      <div className="grid gap-4">
+                        {filteredEvents.map(event => (
+                          <Paper 
+                            key={event.id} 
+                            p="md" 
+                            withBorder 
+                            className="cursor-pointer hover:bg-gray-50"
+                            onClick={() => navigate(`/events/${event.id}`)}
+                          >
+                            <Group justify="apart">
+                              <div>
+                                <Group gap="xs">
+                                  <Text fw={500}>{event.title}</Text>
+                                  <Badge 
+                                    color={event.status === 'upcoming' ? 'blue' : 'green'}
+                                    variant="light"
+                                  >
+                                    {event.status === 'upcoming' ? 'Upcoming' : 'Completed'}
+                                  </Badge>
+                                </Group>
+                                <Group gap="xs" mt={4}>
+                                  <Text size="sm" c="dimmed">
+                                    {new Date(event.date).toLocaleDateString()}
+                                  </Text>
+                                  <Text size="sm" c="dimmed">•</Text>
+                                  <Text size="sm" c="dimmed">{event.category}</Text>
+                                </Group>
+                              </div>
+                              <div className="text-right">
+                                {event.status === 'upcoming' && event.category === 'Performance' && (
+                                  <Badge 
+                                    color={event.performanceSubmitted ? 'green' : 'yellow'}
+                                    variant="light"
+                                  >
+                                    {event.performanceSubmitted ? 'Video Submitted' : 'Video Required'}
+                                  </Badge>
+                                )}
+                                {event.status === 'completed' && event.recording && (
+                                  <Button
+                                    variant="light"
+                                    size="xs"
+                                    leftSection={<IconExternalLink size={14} />}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      window.open(event.recording, '_blank');
+                                    }}
+                                  >
+                                    View Recording
+                                  </Button>
+                                )}
+                              </div>
+                            </Group>
+                          </Paper>
+                        ))}
+                      </div>
                     </div>
                   </div>
+                </Tabs.Panel>
 
-                  {/* Events Section */}
-                  <div>
-                    <Group justify="space-between" className="mb-4 flex-col sm:flex-row">
-                      <Text fw={700} size="lg">My Events</Text>
-                      <Menu shadow="md" width={200}>
-                        <Menu.Target>
-                          <Button variant="light" leftSection={<IconFilter size={16} />}>
-                            {eventFilter.charAt(0).toUpperCase() + eventFilter.slice(1)}
-                          </Button>
-                        </Menu.Target>
-
-                        <Menu.Dropdown>
-                          <Menu.Item onClick={() => setEventFilter('all')}>All Events</Menu.Item>
-                          <Menu.Item onClick={() => setEventFilter('upcoming')}>Upcoming</Menu.Item>
-                          <Menu.Item onClick={() => setEventFilter('past')}>Past Events</Menu.Item>
-                        </Menu.Dropdown>
-                      </Menu>
+                <Tabs.Panel value="grades" pt="xl">
+                  <div className="space-y-4 max-w-full overflow-x-hidden">
+                    <Group justify="space-between" mb="xl" className="flex-col sm:flex-row">
+                      <Text fw={700} size="lg">My Grades</Text>
+                      <Select
+                        value={selectedSemester}
+                        onChange={(value) => value && setSelectedSemester(value)}
+                        data={Array.from(new Set(subjects.map(s => s.semester)))}
+                        placeholder="Select semester"
+                        className="w-full sm:w-[200px]"
+                      />
                     </Group>
                     <div className="grid gap-4">
-                      {filteredEvents.map(event => (
-                        <Paper 
-                          key={event.id} 
-                          p="md" 
-                          withBorder 
-                          className="cursor-pointer hover:bg-gray-50"
-                          onClick={() => navigate(`/events/${event.id}`)}
-                        >
-                          <Group justify="apart">
+                      {subjects
+                        .filter(subject => subject.semester === selectedSemester)
+                        .map(subject => (
+                          <Paper 
+                            key={subject.id} 
+                            p="md" 
+                            withBorder 
+                            className="cursor-pointer hover:bg-gray-50"
+                            onClick={() => navigate(`/subject/${subject.name.toLowerCase().replace(' ', '-')}`)}
+                          >
+                            <Group justify="space-between" mb={12}>
+                              <div>
+                                <Group gap="xs">
+                                  <Text fw={500}>{subject.name}</Text>
+                                  <ActionIcon 
+                                    size="sm" 
+                                    variant="subtle"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      navigate(`/subject/${subject.name.toLowerCase().replace(' ', '-')}`);
+                                    }}
+                                  >
+                                    <IconExternalLink size={16} />
+                                  </ActionIcon>
+                                </Group>
+                                <Text size="sm" c="dimmed">Teacher: {subject.teacher}</Text>
+                              </div>
+                              <Text fw={700} size="lg" c={subject.grade >= 75 ? 'green' : 'red'}>
+                                {subject.grade}
+                              </Text>
+                            </Group>
+                            
                             <div>
-                              <Group gap="xs">
-                                <Text fw={500}>{event.title}</Text>
-                                <Badge 
-                                  color={event.status === 'upcoming' ? 'blue' : 'green'}
-                                  variant="light"
-                                >
-                                  {event.status === 'upcoming' ? 'Upcoming' : 'Completed'}
-                                </Badge>
+                              <Group justify="space-between" mb={4}>
+                                <Text size="sm">Course Progress</Text>
+                                <Text size="sm" c="dimmed">{subject.progress}%</Text>
                               </Group>
-                              <Group gap="xs" mt={4}>
-                                <Text size="sm" c="dimmed">
-                                  {new Date(event.date).toLocaleDateString()}
-                                </Text>
-                                <Text size="sm" c="dimmed">•</Text>
-                                <Text size="sm" c="dimmed">{event.category}</Text>
-                              </Group>
+                              <div className="bg-gray-200 rounded-full h-2 overflow-hidden">
+                                <div 
+                                  className="bg-blue-500 h-full transition-all duration-300"
+                                  style={{ width: `${subject.progress}%` }}
+                                />
+                              </div>
                             </div>
-                            <div className="text-right">
-                              {event.status === 'upcoming' && event.category === 'Performance' && (
-                                <Badge 
-                                  color={event.performanceSubmitted ? 'green' : 'yellow'}
-                                  variant="light"
-                                >
-                                  {event.performanceSubmitted ? 'Video Submitted' : 'Video Required'}
-                                </Badge>
-                              )}
-                              {event.status === 'completed' && event.recording && (
-                                <Button
-                                  variant="light"
-                                  size="xs"
-                                  leftSection={<IconExternalLink size={14} />}
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    window.open(event.recording, '_blank');
-                                  }}
-                                >
-                                  View Recording
-                                </Button>
-                              )}
-                            </div>
-                          </Group>
-                        </Paper>
-                      ))}
+                          </Paper>
+                        ))}
                     </div>
                   </div>
-                </div>
-              </Tabs.Panel>
+                </Tabs.Panel>
 
-              <Tabs.Panel value="grades" pt="xl">
-                <Group justify="space-between" mb="xl" className="flex-col sm:flex-row">
-                  <Text fw={700} size="lg">My Grades</Text>
-                  <Select
-                    value={selectedSemester}
-                    onChange={(value) => value && setSelectedSemester(value)}
-                    data={Array.from(new Set(subjects.map(s => s.semester)))}
-                    placeholder="Select semester"
-                    className="w-full sm:w-[200px]"
-                  />
-                </Group>
-                <div className="grid gap-4">
-                  {subjects
-                    .filter(subject => subject.semester === selectedSemester)
-                    .map(subject => (
+                <Tabs.Panel value="teachers" pt="xl">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    {teachers.map(teacher => (
                       <Paper 
-                        key={subject.id} 
+                        key={teacher.id} 
                         p="md" 
-                        withBorder 
-                        className="cursor-pointer hover:bg-gray-50"
-                        onClick={() => navigate(`/subject/${subject.name.toLowerCase().replace(' ', '-')}`)}
+                        withBorder
+                        className="cursor-pointer hover:bg-gray-50 transition-colors"
+                        onClick={() => {
+                          setSelectedTeacher(teacher);
+                          setShowProfileModal(true);
+                        }}
                       >
-                        <Group justify="space-between" mb={12}>
-                          <div>
-                            <Group gap="xs">
-                              <Text fw={500}>{subject.name}</Text>
-                              <ActionIcon 
-                                size="sm" 
-                                variant="subtle"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  navigate(`/subject/${subject.name.toLowerCase().replace(' ', '-')}`);
-                                }}
-                              >
-                                <IconExternalLink size={16} />
-                              </ActionIcon>
-                            </Group>
-                            <Text size="sm" c="dimmed">Teacher: {subject.teacher}</Text>
+                        <Group>
+                          <Avatar src={teacher.profilePic} size="lg" />
+                          <div className="flex-grow">
+                            <Text fw={500}>{teacher.name}</Text>
+                            <Text size="sm">{teacher.subject}</Text>
+                            <Text size="sm" c="dimmed">{teacher.email}</Text>
                           </div>
-                          <Text fw={700} size="lg" c={subject.grade >= 75 ? 'green' : 'red'}>
-                            {subject.grade}
-                          </Text>
+                          <ActionIcon 
+                            variant="light" 
+                            color="blue"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedTeacher(teacher);
+                              setShowEmailModal(true);
+                            }}
+                          >
+                            <IconMail size={16} />
+                          </ActionIcon>
                         </Group>
-                        
-                        <div>
-                          <Group justify="space-between" mb={4}>
-                            <Text size="sm">Course Progress</Text>
-                            <Text size="sm" c="dimmed">{subject.progress}%</Text>
-                          </Group>
-                          <div className="bg-gray-200 rounded-full h-2 overflow-hidden">
-                            <div 
-                              className="bg-blue-500 h-full transition-all duration-300"
-                              style={{ width: `${subject.progress}%` }}
-                            />
-                          </div>
-                        </div>
                       </Paper>
                     ))}
-                </div>
-              </Tabs.Panel>
+                  </div>
 
-              <Tabs.Panel value="teachers" pt="xl">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {teachers.map(teacher => (
-                    <Paper 
-                      key={teacher.id} 
-                      p="md" 
-                      withBorder
-                      className="cursor-pointer hover:bg-gray-50 transition-colors"
-                      onClick={() => {
-                        setSelectedTeacher(teacher);
-                        setShowProfileModal(true);
+                  {/* Email Modal */}
+                  {selectedTeacher && (
+                    <EmailModal
+                      teacher={selectedTeacher}
+                      opened={showEmailModal}
+                      onClose={() => {
+                        setShowEmailModal(false);
+                        setSelectedTeacher(null);
                       }}
-                    >
+                    />
+                  )}
+
+                  {/* Teacher Profile Modal */}
+                  {selectedTeacher && (
+                    <TeacherProfileModal
+                      teacher={selectedTeacher}
+                      opened={showProfileModal}
+                      onClose={() => {
+                        setShowProfileModal(false);
+                        setSelectedTeacher(null);
+                      }}
+                      onEmailClick={() => {
+                        setShowProfileModal(false);
+                        setShowEmailModal(true);
+                      }}
+                    />
+                  )}
+                </Tabs.Panel>
+
+                <Tabs.Panel value="settings" pt="xl">
+                  <div className="max-w-3xl mx-auto px-2 md:px-0">
+                    <Text size="xl" fw={700} className="mb-6">Account Settings</Text>
+                    
+                    <Paper shadow="xs" p="md" className="mb-6">
+                      <Text fw={500} size="sm" className="mb-4">Profile Picture</Text>
                       <Group>
-                        <Avatar src={teacher.profilePic} size="lg" />
-                        <div className="flex-grow">
-                          <Text fw={500}>{teacher.name}</Text>
-                          <Text size="sm">{teacher.subject}</Text>
-                          <Text size="sm" c="dimmed">{teacher.email}</Text>
+                        <Avatar size={100} src={profilePicUrl} />
+                        <div>
+                          <FileInput
+                            placeholder="Change profile picture"
+                            accept="image/*"
+                            onChange={handleProfilePicChange}
+                            leftSection={<IconUpload size={16} />}
+                            size="sm"
+                          />
+                          <Text size="xs" c="dimmed" mt={8}>
+                            Recommended: Square image, at least 200x200px
+                          </Text>
                         </div>
-                        <ActionIcon 
-                          variant="light" 
-                          color="blue"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSelectedTeacher(teacher);
-                            setShowEmailModal(true);
-                          }}
-                        >
-                          <IconMail size={16} />
-                        </ActionIcon>
                       </Group>
                     </Paper>
-                  ))}
-                </div>
 
-                {/* Email Modal */}
-                {selectedTeacher && (
-                  <EmailModal
-                    teacher={selectedTeacher}
-                    opened={showEmailModal}
-                    onClose={() => {
-                      setShowEmailModal(false);
-                      setSelectedTeacher(null);
-                    }}
-                  />
-                )}
-
-                {/* Teacher Profile Modal */}
-                {selectedTeacher && (
-                  <TeacherProfileModal
-                    teacher={selectedTeacher}
-                    opened={showProfileModal}
-                    onClose={() => {
-                      setShowProfileModal(false);
-                      setSelectedTeacher(null);
-                    }}
-                    onEmailClick={() => {
-                      setShowProfileModal(false);
-                      setShowEmailModal(true);
-                    }}
-                  />
-                )}
-              </Tabs.Panel>
-
-              <Tabs.Panel value="settings" pt="xl">
-                <div className="max-w-3xl mx-auto">
-                  <Text size="xl" fw={700} className="mb-6">Account Settings</Text>
-                  
-                  <Paper shadow="xs" p="md" className="mb-6">
-                    <Text fw={500} size="sm" className="mb-4">Profile Picture</Text>
-                    <Group>
-                      <Avatar size={100} src={profilePicUrl} />
-                      <div>
-                        <FileInput
-                          placeholder="Change profile picture"
-                          accept="image/*"
-                          onChange={handleProfilePicChange}
-                          leftSection={<IconUpload size={16} />}
-                          size="sm"
-                        />
-                        <Text size="xs" c="dimmed" mt={8}>
-                          Recommended: Square image, at least 200x200px
-                        </Text>
-                      </div>
-                    </Group>
-                  </Paper>
-
-                  <SettingsForm 
-                    initialData={currentUserData}
-                    onSubmit={handleSettingsSubmit}
-                  />
-                </div>
-              </Tabs.Panel>
+                    <SettingsForm 
+                      initialData={currentUserData}
+                      onSubmit={handleSettingsSubmit}
+                    />
+                  </div>
+                </Tabs.Panel>
+              </div>
             </Tabs>
           </Paper>
         </div>

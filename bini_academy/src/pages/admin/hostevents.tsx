@@ -1,35 +1,78 @@
 import { useState } from "react";
+import { Tabs, Button, Group } from "@mantine/core";
+import { IconList, IconPlus, IconCalendarEvent, IconSettings } from "@tabler/icons-react";
 import { HeaderAdmin } from "../../components/headeradmin";
-import { HostEventsTabs } from "../../components/hosteventstab";
-import { BasicInfoEventTab } from "../../components/basicinfoeventtab";
-import { AdvancedInfoEventTab } from "../../components/advanceinfoeventtab";
-import { StartEventTab } from "../../components/starteventtab";
-import { UserRole } from "../../types";
 import { Sidebar } from "../../components/sidebar";
+import { EventsList } from "../../components/events/EventsList";
+import { CreateEvent } from "../../components/events/CreateEvent";
+import { EventSettings } from "../../components/events/EventSettings";
+import { UserRole } from "../../types";
+import { EventType } from "../../types/events";
 
 export const HostEvents = () => {
-  const [activeTab, setActiveTab] = useState<string>("basic");
+  const [activeTab, setActiveTab] = useState<string>("list");
+  const [selectedEvent, setSelectedEvent] = useState<EventType | null>(null);
 
   return (
     <div className="flex">
-      {/* Sidebar */}
       <Sidebar role={UserRole.Admin} />
 
       <div className="flex flex-col flex-1">
-        {/* Header with dynamic title */}
-        <HeaderAdmin title="Host Events" />
+        <HeaderAdmin title="Event Management" />
 
-        {/* Tabs for switching between event sections */}
         <div className="p-6">
-          <HostEventsTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+          <Tabs value={activeTab} onChange={(value) => value && setActiveTab(value)}>
+            <Tabs.List>
+              <Tabs.Tab 
+                value="list" 
+                leftSection={<IconList size={16} />}
+              >
+                Events List
+              </Tabs.Tab>
+              <Tabs.Tab 
+                value="create" 
+                leftSection={<IconPlus size={16} />}
+              >
+                Create Event
+              </Tabs.Tab>
+              <Tabs.Tab 
+                value="settings" 
+                leftSection={<IconSettings size={16} />}
+              >
+                Settings
+              </Tabs.Tab>
+            </Tabs.List>
 
-          {/* Render the correct tab content */}
-          <div className="mt-4">
-            {activeTab === "basic" && <BasicInfoEventTab />}
-            {activeTab === "advanced" && <AdvancedInfoEventTab />}
-            {activeTab === "start" && <StartEventTab />}
-           
-          </div>
+            <div className="mt-6">
+              <Tabs.Panel value="list">
+                <EventsList 
+                  onEdit={(event: EventType) => {
+                    setSelectedEvent(event);
+                    setActiveTab("create");
+                  }}
+                />
+              </Tabs.Panel>
+
+              <Tabs.Panel value="create">
+                <CreateEvent 
+                  event={selectedEvent}
+                  onSubmit={() => {
+                    setSelectedEvent(null);
+                    setActiveTab("list");
+                  }}
+                  onCancel={() => {
+                    setSelectedEvent(null);
+                    setActiveTab("list");
+                  }}
+                />
+              </Tabs.Panel>
+
+
+              <Tabs.Panel value="settings">
+                <EventSettings />
+              </Tabs.Panel>
+            </div>
+          </Tabs>
         </div>
       </div>
     </div>

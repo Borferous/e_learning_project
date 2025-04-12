@@ -11,9 +11,9 @@ export const Sidebar = ({role}: {role: UserRole}) => {
     switch (role) {
       case UserRole.Admin:
         return [
-          { label: "User Management", icon: IconPlus, path: "/usermanage" },
-          { label: "My Courses", icon: IconLayersOff, path: "/admin-mycourses" },
-          { label: "Host Events", icon: IconLayersOff, path: "/hostevents" },
+          { label: "User Management", icon: IconPlus, path: "/admin/usermanage" },
+          { label: "My Courses", icon: IconLayersOff, path: "/admin/mycourses" },
+          { label: "Host Events", icon: IconLayersOff, path: "/admin/hostevents" },
         ]
       case UserRole.Teacher:
         return [
