@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Tabs, Container, Paper, Avatar, Text, Group, Button, FileInput, Select, Menu, ActionIcon, Badge, Modal, TextInput, Textarea } from '@mantine/core';
-import { IconUser, IconSchool, IconClipboardList, IconSettings, IconUpload, IconFilter, IconExternalLink, IconMail, IconCheck, IconX } from '@tabler/icons-react';
+import { IconUser, IconSchool, IconClipboardList, IconSettings, IconUpload, IconFilter, IconExternalLink, IconMail, IconCheck, IconX, IconBrandFacebook, IconBrandTwitter, IconBrandInstagram, IconBrandLinkedin, IconBrandYoutube } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { HomeHeader } from '../components/homeheader';
 import { Footer } from '../components/footer';
 import { SettingsForm } from '../components/settings_form';
 import { notifications } from '@mantine/notifications';
-
+import { useProfile } from '../contexts/ProfileContext';
 interface Subject {
   id: string;
   name: string;
@@ -37,6 +37,12 @@ interface Teacher {
   bio?: string;
 }
 
+interface SocialMedia {
+  id: string;
+  platform: string;
+  url: string;
+}
+
 interface UserProfile {
   firstName: string;
   lastName: string;
@@ -44,6 +50,7 @@ interface UserProfile {
   degree: string;
   currentSemester: string;
   profilePic?: string;
+  socialMedia: SocialMedia[];
 }
 
 interface Event {
@@ -170,9 +177,9 @@ const TeacherProfileModal: React.FC<{
 
 export const ProfilePage = () => {
   const navigate = useNavigate();
+  const { profilePicUrl, updateProfilePic } = useProfile();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [profilePic, setProfilePic] = useState<File | null>(null);
-  const [profilePicUrl, setProfilePicUrl] = useState<string | undefined>("https://placekitten.com/200/200");
   const [assignmentFilter, setAssignmentFilter] = useState<'all' | 'missing' | 'pending' | 'graded'>('all');
   const [eventFilter, setEventFilter] = useState<'upcoming' | 'past' | 'all'>('all');
   const [selectedSemester, setSelectedSemester] = useState('1st Semester 2025');
@@ -241,7 +248,14 @@ export const ProfilePage = () => {
     email: 'student@example.com',
     degree: 'Bachelor of Music',
     currentSemester: '1st Semester 2025',
-    profilePic: undefined
+    profilePic: undefined,
+    socialMedia: [
+      {
+        id: '1',
+        platform: 'facebook',
+        url: 'https://facebook.com/johndoe'
+      }
+    ]
   });
 
   // Add dummy user data
@@ -277,7 +291,6 @@ export const ProfilePage = () => {
 
   const handleSettingsSubmit = async (values: any) => {
     try {
-      // Show loading notification
       const notificationId = notifications.show({
         loading: true,
         title: 'Saving changes',
@@ -289,15 +302,15 @@ export const ProfilePage = () => {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 2000));
       
-      // Update local state
+      // Update local state including social media
       setUserProfile(prev => ({
         ...prev,
         firstName: values.firstName,
         lastName: values.lastName,
         email: values.email,
+        socialMedia: values.socialMedia // Add this line
       }));
 
-      // Update loading notification with success
       notifications.update({
         id: notificationId,
         title: 'Success',
@@ -309,7 +322,6 @@ export const ProfilePage = () => {
       });
 
     } catch (error) {
-      // Show error notification
       notifications.show({
         title: 'Error',
         message: 'Failed to update profile. Please try again.',
@@ -322,8 +334,7 @@ export const ProfilePage = () => {
   const handleProfilePicChange = (file: File | null) => {
     if (file) {
       const url = URL.createObjectURL(file);
-      setProfilePic(file);
-      setProfilePicUrl(url);
+      updateProfilePic(url);
 
       // Show success notification for profile picture update
       notifications.show({
@@ -396,6 +407,29 @@ export const ProfilePage = () => {
                   <Text size="sm" fw={500}>{userProfile.degree}</Text>
                   <Text size="sm" c="dimmed">•</Text>
                   <Text size="sm" c="dimmed">{userProfile.currentSemester}</Text>
+                </Group>
+                {/* Add social media icons */}
+                <Group gap="xs" mt={4} className="justify-center sm:justify-start">
+                  {userProfile.socialMedia.map((social) => {
+                    const IconComponent = {
+                      facebook: IconBrandFacebook,
+                      twitter: IconBrandTwitter,
+                      instagram: IconBrandInstagram,
+                      linkedin: IconBrandLinkedin,
+                      youtube: IconBrandYoutube,
+                    }[social.platform];
+
+                    return IconComponent ? (
+                      <ActionIcon
+                        key={social.id}
+                        variant="subtle"
+                        color="blue"
+                        onClick={() => window.open(social.url, '_blank')}
+                      >
+                        <IconComponent size={18} />
+                      </ActionIcon>
+                    ) : null;
+                  })}
                 </Group>
               </div>
             </Group>
