@@ -19,7 +19,7 @@ import { IconArrowRight } from '@tabler/icons-react';
 import bapaLogo from '../assets/bapalogo.svg';
 import campusImage from '../assets/campus.jpg';
 import { Header } from '../components/header';
-import { User, UserRole } from '../types';
+import { GenderLabel, User, UserRole } from '../types';
 import { createUser } from '../supabase/api/user';
 
 export const UserCreatePage = () => {
@@ -180,7 +180,7 @@ export const UserCreatePage = () => {
               <Select
                 label="Gender"
                 placeholder="Select Gender"
-                data={['Male', 'Female', 'Other']}
+                data={GenderLabel}
                 {...form.getInputProps('gender')}
                 required
               />
