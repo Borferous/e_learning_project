@@ -4,7 +4,7 @@ export interface User {
     password: string,
     address: string,
     user_role: string,
-    gender: string,
+    gender: Gender,
     email: string,
     birth_date: Date
     profile_picture?: string,
@@ -46,6 +46,9 @@ export interface Major {
     subtitle: string,
     price: number,
     description: string,
+    duration: string,
+    trailer_link: string,
+    thumbnail?: string,
 }
 
 export enum CourseCategory {
