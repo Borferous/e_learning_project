@@ -17,6 +17,7 @@ import { EventLivePage } from './pages/event_live';
 import { ProfilePage } from './pages/profile_page';
 import { ErrorPage } from './pages/error';
 import { CourseManage } from './pages/admin/coursemanage';
+import SubjectManage from './pages/admin/subject_manage';
 
 import SubjectPage from './pages/subject_page';
 
@@ -47,6 +48,7 @@ function App() {
               <Route path='/admin/usermanage' element={<ManageUsers />}/>
               <Route path='/admin/hostevents' element={<HostEvents />}/>
               <Route path='/admin/coursemanage' element={<CourseManage />}/>
+              <Route path='/admin/subjectmanage' element={<SubjectManage />}/>
               <Route path='/courselist' element={<CourseListPage />}/>
               <Route path='/courseoverview/:majorId' element={<CourseOverview />}/>
               <Route path='/payment-information' element={<PaymentInformation />}/>

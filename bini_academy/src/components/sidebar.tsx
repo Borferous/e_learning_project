@@ -1,6 +1,16 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { IconPlus, IconLayersOff, IconLogout, IconMenu2, IconX, IconUsers, IconSchool, IconCalendarEvent } from "@tabler/icons-react";
+import { 
+  IconPlus, 
+  IconLayersOff, 
+  IconLogout, 
+  IconMenu2, 
+  IconX, 
+  IconUsers, 
+  IconSchool, 
+  IconCalendarEvent,
+  IconBook // Add this import for subject icon
+} from "@tabler/icons-react";
 import bapaLogoWhite from "../assets/bapalogowhite.svg"; // Adjust path if necessary
 import { UserRole } from "../types";
 
@@ -13,6 +23,7 @@ export const Sidebar = ({role}: {role: UserRole}) => {
         return [
           { label: "User Management", icon: IconUsers, path: "/admin/usermanage" },
           { label: "Course Management", icon: IconSchool, path: "/admin/coursemanage" },
+          { label: "Subject Management", icon: IconBook, path: "/admin/subjectmanage" }, // Add this line
           { label: "Host Events", icon: IconCalendarEvent, path: "/admin/hostevents" },
         ]
       case UserRole.Teacher:
