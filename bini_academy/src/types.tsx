@@ -40,6 +40,19 @@ export interface Course {
     majors?: Major[]
 }
 
+export interface Subject {
+    id: string;
+    name: string;
+    description: string;
+    credits: number;
+    semester: number;
+    instructorId: string | null;
+}
+
+export interface Curriculum {
+    subjects: Subject[];
+}
+
 export interface Major {
     id: string,
     course_id: string,
@@ -50,7 +63,20 @@ export interface Major {
     duration: string,
     trailer_link: string,
     thumbnail?: string,
-    key_points: string[],
+    key_points: string[]
+}
+
+export interface MajorSelection {
+    degreeId: string | null;
+    majorId: string | null;
+}
+
+export interface Degree {
+    id: string;
+    name: string;
+    description: string;
+    category: string;
+    majors: Major[];
 }
 
 export enum CourseCategory {
@@ -65,6 +91,7 @@ import {
     IconPencil,
     IconBook
 } from '@tabler/icons-react';
+import { Dispatch, SetStateAction } from 'react';
 
 
 export const CourseCategoryLabel = [
@@ -85,7 +112,6 @@ export const CourseLevelLabel = [
     { value: CourseLevel.Intermediate, label: "Intermediate" },
     { value: CourseLevel.Advanced, label: "Advanced" },
 ]
-
 
 export interface ProgramEvent {
     event_host: string,
@@ -142,4 +168,13 @@ export interface Subject {
     semester: Semester,
     year_level: YearLevel
     description: string,
+}
+
+export type TabType = "basic" | "advance" | "curriculum" | "publish";
+
+export interface TabProps {
+  setActiveTab: (tab: TabType) => void;
+  updateProgress: (tab: TabType, completed: number, total: number) => void;
+  selection: MajorSelection;
+  degrees: Degree[];
 }

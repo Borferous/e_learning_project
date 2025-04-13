@@ -1,6 +1,17 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { IconPlus, IconLayersOff, IconLogout, IconMenu2, IconX } from "@tabler/icons-react";
+import { 
+  IconPlus, 
+  IconLayersOff, 
+  IconLogout, 
+  IconMenu2, 
+  IconX, 
+  IconUsers, 
+  IconSchool, 
+  IconCalendarEvent,
+  IconBook,
+  IconClipboardCheck // Add this import for assessment submissions
+} from "@tabler/icons-react";
 import bapaLogoWhite from "../assets/bapalogowhite.svg"; // Adjust path if necessary
 import { UserRole } from "../types";
 
@@ -11,9 +22,11 @@ export const Sidebar = ({role}: {role: UserRole}) => {
     switch (role) {
       case UserRole.Admin:
         return [
-          { label: "User Management", icon: IconPlus, path: "/admin/usermanage" },
-          { label: "My Courses", icon: IconLayersOff, path: "/admin/mycourses" },
-          { label: "Host Events", icon: IconLayersOff, path: "/admin/hostevents" },
+          { label: "User Management", icon: IconUsers, path: "/admin/usermanage" },
+          { label: "Course Management", icon: IconSchool, path: "/admin/coursemanage" },
+          { label: "Subject Management", icon: IconBook, path: "/admin/subjectmanage" },
+          { label: "Assessment Submissions", icon: IconClipboardCheck, path: "/admin/assessment-submissions" }, // Add this line
+          { label: "Host Events", icon: IconCalendarEvent, path: "/admin/hostevents" },
         ]
       case UserRole.Teacher:
         return [
