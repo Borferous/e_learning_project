@@ -15,7 +15,19 @@ export interface Event {
   recordingUrl?: string;
 }
 
-export interface EventType {
+export type SubmissionStatus = 'pending' | 'approved' | 'rejected';
+
+export interface EventSubmission {
+  studentId: string;
+  studentName: string;
+  studentEmail: string;
+  piece: string;
+  submissionDate: string;
+  videoUrl: string;
+  status: SubmissionStatus;
+}
+
+export type EventType = {
   thumbnail: string;
   title: string;
   subtitle: string;
@@ -31,17 +43,10 @@ export interface EventType {
   isRegistered: boolean;
   eventId: string;
   registrationStatus: 'none' | 'pending' | 'approved' | 'rejected';
-  submissions?: {
-    studentId: string;
-    studentName: string;
-    piece: string;
-    submissionDate: string;
-    videoUrl: string;
-    status: string;
-  }[];
+  submissions?: EventSubmission[];
   instructors: string[];
   duration: number;
   streamingPlatform?: 'zoom' | 'teams' | 'gmeet';
   streamingLink?: string;
   recordedVideoUrl?: string;
-}
+};
