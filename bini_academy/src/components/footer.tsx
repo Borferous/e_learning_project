@@ -47,16 +47,11 @@ export const Footer = () => {
                             </li>
                             <li>
                                 <a href="#" className="text-sm sm:text-base hover:text-orange-500 transition-colors">
-                                    Courses →
+                                    Courses
                                 </a>
                             </li>
                             <li>
-                                <a href="#" className="text-sm sm:text-base hover:text-orange-500 transition-colors">
-                                    Contact
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" className="text-sm sm:text-base hover:text-orange-500 transition-colors">
+                                <a href="/events" className="text-sm sm:text-base hover:text-orange-500 transition-colors">
                                     Events
                                 </a>
                             </li>
@@ -67,26 +62,13 @@ export const Footer = () => {
                     <Grid.Col span={{ base: 12, md: 4 }} className="text-center md:text-right mt-6 md:mt-0">
                         <Text className="text-base sm:text-lg font-semibold">SUPPORT</Text>
                         <ul className="space-y-2 mt-2">
+                           
                             <li>
-                                <a href="#" className="text-sm sm:text-base hover:text-orange-500 transition-colors">
-                                    Help Center
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" className="text-sm sm:text-base hover:text-orange-500 transition-colors">
-                                    FAQs
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" className="text-sm sm:text-base hover:text-orange-500 transition-colors">
+                                <a href="/terms-and-conditions" className="text-sm sm:text-base hover:text-orange-500 transition-colors">
                                     Terms & Conditions
                                 </a>
                             </li>
-                            <li>
-                                <a href="#" className="text-sm sm:text-base hover:text-orange-500 transition-colors">
-                                    Privacy Policy
-                                </a>
-                            </li>
+                            
                         </ul>
                     </Grid.Col>
                 </Grid>

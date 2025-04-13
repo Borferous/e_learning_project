@@ -2,6 +2,7 @@ import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { LoginPage } from './pages/login';
 import { UserCreatePage } from './pages/create';
+import { About } from './pages/About';
 
 import { HomePage } from './pages/homepage';
 import { CourseListPage } from './pages/course_list_page';
@@ -61,6 +62,7 @@ function App() {
               <Route path='/event/:eventId' element={<EventLivePage />}/>
               <Route path='/error-page' element={<ErrorPage />}/>
               <Route path='/profile' element={<ProfilePage />}/>
+              <Route path='/about' element={<About />}/>
             </Routes>
           </Router>
         </QueryClientProvider>
