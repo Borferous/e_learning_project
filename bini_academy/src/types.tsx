@@ -159,7 +159,7 @@ export const YearLevelLabel = [
     { value: YearLevel.FourthYear, label: "Fourth Year" },
 ]
 
-export interface Subject {
+export interface SubjectDetail {
     id: string,
     title: string,
     units: number,
