@@ -11,26 +11,28 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Major } from "../types";
 import { useNavigate } from "react-router-dom";
+import { getMySubjects } from "../supabase/api/subjects";
 
-const courses = [
-  {
-    degree: "Bachelor of Music",
-    majors: [
-      "Vocal Performance",
-      "Instrumental Performance",
-      "Music Production",
-      "Composition",
-    ],
-  },
-  {
-    degree: "Bachelor of Fine Arts in Dance",
-    majors: ["Contemporary", "Ballet", "Hip-Hop", "Folk Dance"],
-  },
-  {
-    degree: "Bachelor of Arts in Acting",
-    majors: ["Stage Acting", "Screen Acting", "Musical Theater"],
-  },
-];
+
+// const courses = [
+//   {
+//     degree: "Bachelor of Music",
+//     majors: [
+//       "Vocal Performance",
+//       "Instrumental Performance",
+//       "Music Production",
+//       "Composition",
+//     ],
+//   },
+//   {
+//     degree: "Bachelor of Fine Arts in Dance",
+//     majors: ["Contemporary", "Ballet", "Hip-Hop", "Folk Dance"],
+//   },
+//   {
+//     degree: "Bachelor of Arts in Acting",
+//     majors: ["Stage Acting", "Screen Acting", "Musical Theater"],
+//   },
+// ];
 
 export const HomePage = () => {
   const navigate = useNavigate();
@@ -40,7 +42,7 @@ export const HomePage = () => {
     queryFn: async () => {
       const data = await getCoursesAndMajor();
       setCourseMajor(data as any[]);
-      return data; // Ensure the query function returns the fetched data
+      return data;
     },
   })
 
@@ -48,8 +50,13 @@ export const HomePage = () => {
     navigate('/error-page')
   }
 
+  const fetchMyCourse = async () => {
+    await getMySubjects();
+  }
+
   useEffect(() => {
     refetch();
+    fetchMyCourse();
   }, [refetch]);
   
   return (
@@ -114,7 +121,6 @@ export const HomePage = () => {
           </GridComponent>
         ))}
         
-
       </Container>
       <Footer />
     </>

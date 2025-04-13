@@ -9,6 +9,7 @@ export interface User {
     birth_date: Date
     profile_picture?: string,
     phone_number: string,
+    enrolled_course_id?: string,
 }
 
 export enum ActiveStatus {
@@ -49,6 +50,7 @@ export interface Major {
     duration: string,
     trailer_link: string,
     thumbnail?: string,
+    key_points: string[],
 }
 
 export enum CourseCategory {
@@ -107,8 +109,37 @@ export const GenderLabel = [
     { value: Gender.Others, label: "Others" },
 ]
 
-export interface FileData {
-    file_id: number;
-    file_path: string;
-    file_name: string;
+export enum Semester {
+    FirstSemester = 'first_semester',
+    SecondSemester = 'second_semester',
+}
+
+export const SemesterLabel = [
+    { value: Semester.FirstSemester, label: "First Semester" },
+    { value: Semester.SecondSemester, label: "Second Semester" },
+]
+
+export enum YearLevel {
+    FirstYear = 'first_year',
+    SecondYear = 'second_year',
+    ThirdYear = 'third_year',
+    FourthYear = 'fourth_year',
+}
+
+export const YearLevelLabel = [
+    { value: YearLevel.FirstYear, label: "First Year" },
+    { value: YearLevel.SecondYear, label: "Second Year" },
+    { value: YearLevel.ThirdYear, label: "Third Year" },
+    { value: YearLevel.FourthYear, label: "Fourth Year" },
+]
+
+export interface Subject {
+    id: string,
+    title: string,
+    units: number,
+    teacher_id: string,
+    major_id: string,
+    semester: Semester,
+    year_level: YearLevel
+    description: string,
 }

@@ -2,13 +2,14 @@ import { Container, Group, Button, Text } from "@mantine/core";
 import { IconCalendar, IconCheck } from "@tabler/icons-react";
 import { HomeHeader } from "../components/homeheader";
 import { Footer } from "../components/footer";
-import CourseDescription from "../components/course_description";
-import CourseCurriculum from "../components/course_curriculum";
 import StudentFeedback from "../components/student_feedback";
 import { useNavigate, useParams } from "react-router-dom";
 import { getMajor } from "../supabase/api/course";
 import { useEffect, useState } from "react";
-import { Major } from "../types";
+import { Major, Subject } from "../types";
+import { getSubjects } from "../supabase/api/subjects";
+import { List, ThemeIcon } from '@mantine/core';
+import { IconCircleCheck } from '@tabler/icons-react';
 
 export const CourseOverview = () => {
 
@@ -20,32 +21,24 @@ export const CourseOverview = () => {
     "100% online course",
   ]
 
-  const keyPoints = [
-    "Advanced vocal techniques for stage and studio",
-    "Breath control and endurance for sustained performance",
-    "Mastering stage presence and audience engagement",
-    "Understanding vocal health and longevity",
-  ]
-
-  const duration = "6 Months";
-
-  // const courseData = {
-  //   title: "Bachelor of Music in Vocal Performance",
-  //   subtitle:
-  //     "Develop your voice, master performance techniques, and take center stage.",
-  //   price: "₱5,000",
-  // };
-
   const [courseData, setCourseData] = useState<Major | null>(null)
+  const [courseSubjects, setCourseSubjects] = useState<any[]>([])
 
   const { majorId } = useParams();
   const fetchMajor = async () => {
     const majorData = await getMajor(majorId as string);
     setCourseData(majorData[0] || null);
   }
+
+  const fetchCurriculumn = async () => {
+    const subjectsData = await getSubjects(majorId as string);
+    setCourseSubjects(subjectsData);
+  }
+
   useEffect(() => {
     fetchMajor();
-  }, [majorId])
+    fetchCurriculumn();
+  }, [courseData, courseSubjects]);
 
   const navigate = useNavigate()
 
@@ -93,9 +86,10 @@ export const CourseOverview = () => {
                 </Text>
               </Group>
 
-              <Button color="orange" fullWidth className="mb-4" onClick={() => navigate('/payment-information')}>
+              <Button color="orange" fullWidth className="mb-4" onClick={() => navigate(`/payment-information/${majorId}`)}>
                 Enroll Now
               </Button>
+
               <Text size="xs" c="dimmed" className="mb-4 text-center">
                 30-day money-back guarantee
               </Text>
@@ -116,14 +110,59 @@ export const CourseOverview = () => {
 
           <CourseDescription
             description={courseData?.description || ""}
-            keyPoints={keyPoints}
+            keyPoints={courseData?.key_points || []}
           />
 
-          <CourseCurriculum />
+          <div className="mb-8">
+            <p className="text-2xl">Curriculumn</p>
+            {courseSubjects.length > 0 && (
+              <ul className="list-disc pl-5">
+                {courseSubjects.map((subject: Subject, index: number) => (
+                  <li key={index}>
+                    <Text>{subject.title}</Text>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          
+
           <StudentFeedback />
         </Container>
       </main>
       <Footer />
+    </div>
+  );
+};
+
+interface CourseDescriptionProps {
+  description: string;
+  keyPoints: string[];
+}
+
+const CourseDescription = ({ description, keyPoints }: CourseDescriptionProps) => {
+  return (
+    <div className="mb-12">
+      <Text component="h2" className="text-xl font-bold mb-4">
+        Description
+      </Text>
+      
+      <Text className="mb-6 text-gray-500">
+        {description}
+      </Text>
+      
+      <Text className="font-bold mb-8">You'll explore:</Text>
+      <List
+        spacing="xs"
+        size="sm"
+        className="mb-6"
+        icon={<ThemeIcon><IconCircleCheck size={16} /></ThemeIcon>}
+      >
+        {keyPoints.map((point: string, index: number) => (
+          <List.Item key={index}>{point}</List.Item>
+        ))}
+      </List>
+
     </div>
   );
 };
