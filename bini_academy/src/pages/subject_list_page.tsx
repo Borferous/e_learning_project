@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { HomeHeader } from "../components/homeheader";
 import { Footer } from "../components/footer";
 import { Container, Burger } from "@mantine/core";
 import SubjectCard from "../components/subject_card";
+import { getMySubjects } from "../supabase/api/subjects";
+import { Subject } from "../types";
 
 const semesterData: Record<string, { 
   title: string; 
@@ -49,12 +51,26 @@ const semesterData: Record<string, {
   "8th Semester": [],
 };
 
+const newSemesterData = [
+
+]
+
 const semesterList = Object.keys(semesterData);
 
 export const SubjectListPage = () => {
   const navigate = useNavigate();
   const [activeSemester, setActiveSemester] = useState("1st Semester");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const [mySubjects, setMySubjects] = useState<Subject[]>([]);
+
+  const fetchMyCourse = async() => {
+    setMySubjects(await getMySubjects())
+  }
+
+  useEffect(() => {
+    fetchMyCourse();
+  }, []);
 
   const handleSubjectClick = () => {
     navigate('/subjectpage');

@@ -9,6 +9,7 @@ export interface User {
     birth_date: Date
     profile_picture?: string,
     phone_number: string,
+    enrolled_course_id?: string,
 }
 
 export enum ActiveStatus {
@@ -53,12 +54,16 @@ export interface Curriculum {
 }
 
 export interface Major {
-    id: string;
-    name: string;
-    description: string;
-    curriculum?: {
-        subjects: Subject[];
-    };
+    id: string,
+    course_id: string,
+    title: string,
+    subtitle: string,
+    price: number,
+    description: string,
+    duration: string,
+    trailer_link: string,
+    thumbnail?: string,
+    key_points: string[]
 }
 
 export interface MajorSelection {
@@ -108,7 +113,6 @@ export const CourseLevelLabel = [
     { value: CourseLevel.Advanced, label: "Advanced" },
 ]
 
-
 export interface ProgramEvent {
     event_host: string,
     event_title: string,
@@ -131,10 +135,39 @@ export const GenderLabel = [
     { value: Gender.Others, label: "Others" },
 ]
 
-export interface FileData {
-    file_id: number;
-    file_path: string;
-    file_name: string;
+export enum Semester {
+    FirstSemester = 'first_semester',
+    SecondSemester = 'second_semester',
+}
+
+export const SemesterLabel = [
+    { value: Semester.FirstSemester, label: "First Semester" },
+    { value: Semester.SecondSemester, label: "Second Semester" },
+]
+
+export enum YearLevel {
+    FirstYear = 'first_year',
+    SecondYear = 'second_year',
+    ThirdYear = 'third_year',
+    FourthYear = 'fourth_year',
+}
+
+export const YearLevelLabel = [
+    { value: YearLevel.FirstYear, label: "First Year" },
+    { value: YearLevel.SecondYear, label: "Second Year" },
+    { value: YearLevel.ThirdYear, label: "Third Year" },
+    { value: YearLevel.FourthYear, label: "Fourth Year" },
+]
+
+export interface Subject {
+    id: string,
+    title: string,
+    units: number,
+    teacher_id: string,
+    major_id: string,
+    semester: Semester,
+    year_level: YearLevel
+    description: string,
 }
 
 export type TabType = "basic" | "advance" | "curriculum" | "publish";

@@ -4,11 +4,46 @@ import { Card, Grid, NumberInput, Select, Text, Center, Checkbox, FileInput, Mod
 import { Button } from "@mantine/core"
 import { IconArrowLeft } from "@tabler/icons-react"
 import { IconCloudDownload } from "@tabler/icons-react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { useForm } from "@mantine/form"
 import { useState } from 'react';
+import { enrollUser } from "../supabase/api/enrollment"
+import { getCurrentUser } from "../supabase/api/user"
+import { useMutation } from "@tanstack/react-query"
+import { notifications } from "@mantine/notifications"
 
 export const PaymentInformation = () => {
+
+    const {majorId} = useParams<{majorId: string}>()
+
+    const enrollMutation = useMutation({
+        mutationFn: async () => {
+            const userId = getCurrentUser().id;
+            if (userId && paymentForm.values.amount) {
+                await enrollUser(userId, majorId as string, parseFloat(paymentForm.values.amount));
+            }
+        },
+        onSuccess: () => {
+            notifications.show({
+                title: 'Enrollment Successful',
+                message: 'You have been successfully enrolled in the course.',
+                color: 'green',
+            })
+            navigate('/subjectlist')
+        },
+        onError: (error) => {
+            notifications.show({
+                title: 'Enrollment Unsuccessful',
+                message: `Error enrolling in the course. ${error.message}`,
+                color: 'red',
+            })
+        }
+    });
+
+    const handleEnroll = async () => {
+        enrollMutation.mutate();
+    }
+
     const paymentForm = useForm({
         initialValues: {
             paymentMethod: '',
@@ -156,7 +191,7 @@ export const PaymentInformation = () => {
                             <Button
                                 color="orange"
                                 disabled={!paymentForm.values.agreedToTerms || !paymentForm.values.proofOfPayment}
-                                onClick={() => navigate('/subjectlist')}
+                                onClick={() => handleEnroll()}
                                 size="md"
                             >
                                 Submit

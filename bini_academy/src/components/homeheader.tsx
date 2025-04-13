@@ -1,31 +1,45 @@
 // components/HomeHeader.tsx
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Flex, Button, Burger, Drawer, Stack, Divider, Menu, Avatar } from "@mantine/core";
 import { Link, useNavigate } from "react-router-dom";
 import { IconUser, IconLogout, IconSettings } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 import { useProfile } from '../contexts/ProfileContext';
 import bapaLogo from "../assets/bapalogo.svg";
+import { getCurrentUser, logoutUser } from "../supabase/api/user";
 
 export const HomeHeader = () => {
   const [opened, { toggle, close }] = useDisclosure(false);
   const navigate = useNavigate();
-  const isUserLoggedIn = true; // Replace with actual auth state
   const { profilePicUrl } = useProfile();
 
-  const handleLogout = () => {
-    // Add logout logic here
+  const [isLogin, setIsLogin] = useState(false);
+
+  const checkLogin = async () => {
+    if (await getCurrentUser() !== null) {
+      setIsLogin(true);
+    } else {
+      setIsLogin(false);
+    }
+  };
+
+  useEffect(() => {
+    checkLogin();
+  },[isLogin])
+
+  const handleLogout = async() => {
+    await logoutUser()
     navigate('/login');
   };
 
   const renderAuthSection = () => {
-    if (isUserLoggedIn) {
+    if (isLogin) {
       return (
         <Menu shadow="md" width={200}>
           <Menu.Target>
-            <Avatar 
-              src={profilePicUrl} 
-              size="md" 
+            <Avatar
+              src={profilePicUrl}
+              size="md"
               className="cursor-pointer ring-2 ring-orange-500 ring-offset-2 hover:ring-4 transition-all"
               radius="xl"
             />
@@ -55,19 +69,19 @@ export const HomeHeader = () => {
 
     return (
       <>
-        <Button 
-          component={Link} 
-          to="/usercreate" 
-          variant="light" 
-          color="orange" 
+        <Button
+          component={Link}
+          to="/usercreate"
+          variant="light"
+          color="orange"
           radius="md"
         >
           Create Account
         </Button>
-        <Button 
-          component={Link} 
-          to="/login" 
-          color="orange" 
+        <Button
+          component={Link}
+          to="/login"
+          color="orange"
           radius="md"
         >
           Sign In
@@ -111,24 +125,24 @@ export const HomeHeader = () => {
 
           <Divider my="sm" />
 
-          {isUserLoggedIn ? (
+          {isLogin ? (
             <>
-              <Button 
+              <Button
                 leftSection={<IconUser size={14} />}
-                variant="light" 
-                color="orange" 
-                radius="md" 
-                fullWidth 
-                component={Link} 
+                variant="light"
+                color="orange"
+                radius="md"
+                fullWidth
+                component={Link}
                 to="/profile"
                 onClick={close}
               >
                 Profile
               </Button>
-              <Button 
+              <Button
                 leftSection={<IconLogout size={14} />}
-                color="red" 
-                radius="md" 
+                color="red"
+                radius="md"
                 fullWidth
                 onClick={() => {
                   handleLogout();
@@ -140,22 +154,22 @@ export const HomeHeader = () => {
             </>
           ) : (
             <>
-              <Button 
-                component={Link} 
-                to="/usercreate" 
-                variant="light" 
-                color="orange" 
-                radius="md" 
+              <Button
+                component={Link}
+                to="/usercreate"
+                variant="light"
+                color="orange"
+                radius="md"
                 fullWidth
                 onClick={close}
               >
                 Create Account
               </Button>
-              <Button 
-                component={Link} 
-                to="/login" 
-                color="orange" 
-                radius="md" 
+              <Button
+                component={Link}
+                to="/login"
+                color="orange"
+                radius="md"
                 fullWidth
                 onClick={close}
               >

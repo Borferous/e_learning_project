@@ -36,7 +36,6 @@ export const deleteUser = async (userId: string) => {
     return data
 }
 
-
 export const getAllUsers = async () => {
     const { data, error } = await supabase
         .from('users')
@@ -57,7 +56,7 @@ export const loginUser = async (email: string, password: string) => {
     if (error) {
         throw new Error(`Error logging in user: ${error.message}`);
     }
-    localStorage.setItem('user', JSON.stringify(data));
+    localStorage.setItem('user', data.id);
     return data;
 };
 
@@ -65,10 +64,16 @@ export const logoutUser = async () => {
     localStorage.removeItem('user');
 }
 
-export const getCurrentUser = async () => {
-    const loggedUser = localStorage.getItem('user');
-    const parsedUser = loggedUser ? JSON.parse(loggedUser) : null;
-    console.log('Current User:', parsedUser);
-    return parsedUser as User;
+export const getCurrentUser = async() => {
+    const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('id', localStorage.getItem('user'))
+        .single();
+    if (error) {
+        throw new Error(`Error fetching current user: ${error.message}`);
+    }
+    return data as User;
 }
+
 

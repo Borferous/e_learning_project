@@ -53,7 +53,7 @@ function App() {
               <Route path='/admin/assessment-submissions' element={<AssessmentSubmissions />}/> 
               <Route path='/courselist' element={<CourseListPage />}/>
               <Route path='/courseoverview/:majorId' element={<CourseOverview />}/>
-              <Route path='/payment-information' element={<PaymentInformation />}/>
+              <Route path='/payment-information/:majorId' element={<PaymentInformation />}/>
               <Route path='/terms-and-conditions' element={<TermsAndCondition />}/>
               <Route path='/subjectlist' element={<SubjectListPage />}/>
               <Route path='/subjectpage' element={<SubjectPage />}/>
