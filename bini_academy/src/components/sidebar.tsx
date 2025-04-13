@@ -30,8 +30,9 @@ export const Sidebar = ({role}: {role: UserRole}) => {
         ]
       case UserRole.Teacher:
         return [
-          { label: "Create New Course", icon: IconPlus, path: "/instructorcreatecourse" },
-          { label: "My Courses", icon: IconLayersOff, path: "/my-courses" },
+          { label: "Subject Management", icon: IconBook, path: "/admin/subjectmanage" },
+          { label: "Assessment Submissions", icon: IconClipboardCheck, path: "/admin/assessment-submissions" }, // Add this line
+          { label: "Host Events", icon: IconCalendarEvent, path: "/admin/hostevents" },
         ]
       default:
         return []
