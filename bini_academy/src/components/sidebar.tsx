@@ -9,7 +9,8 @@ import {
   IconUsers, 
   IconSchool, 
   IconCalendarEvent,
-  IconBook // Add this import for subject icon
+  IconBook,
+  IconClipboardCheck // Add this import for assessment submissions
 } from "@tabler/icons-react";
 import bapaLogoWhite from "../assets/bapalogowhite.svg"; // Adjust path if necessary
 import { UserRole } from "../types";
@@ -23,7 +24,8 @@ export const Sidebar = ({role}: {role: UserRole}) => {
         return [
           { label: "User Management", icon: IconUsers, path: "/admin/usermanage" },
           { label: "Course Management", icon: IconSchool, path: "/admin/coursemanage" },
-          { label: "Subject Management", icon: IconBook, path: "/admin/subjectmanage" }, // Add this line
+          { label: "Subject Management", icon: IconBook, path: "/admin/subjectmanage" },
+          { label: "Assessment Submissions", icon: IconClipboardCheck, path: "/admin/assessment-submissions" }, // Add this line
           { label: "Host Events", icon: IconCalendarEvent, path: "/admin/hostevents" },
         ]
       case UserRole.Teacher:
