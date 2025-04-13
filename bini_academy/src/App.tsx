@@ -16,6 +16,7 @@ import { EventsPage } from './pages/events_page';
 import { EventLivePage } from './pages/event_live';
 import { ProfilePage } from './pages/profile_page';
 import { ErrorPage } from './pages/error';
+import { CourseManage } from './pages/admin/coursemanage';
 
 import SubjectPage from './pages/subject_page';
 
@@ -45,6 +46,7 @@ function App() {
               <Route path='/instructorcreatecourse' element={<InstructorCreateCourse />}/>
               <Route path='/admin/usermanage' element={<ManageUsers />}/>
               <Route path='/admin/hostevents' element={<HostEvents />}/>
+              <Route path='/admin/coursemanage' element={<CourseManage />}/>
               <Route path='/courselist' element={<CourseListPage />}/>
               <Route path='/courseoverview/:majorId' element={<CourseOverview />}/>
               <Route path='/payment-information' element={<PaymentInformation />}/>
