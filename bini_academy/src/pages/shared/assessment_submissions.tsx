@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
+import { User } from "../../types";
 import {
   Table,
   Button,
@@ -200,7 +201,8 @@ const formatScore = (score: number, total: number) => {
   return `${score}/${total} (${percentage.toFixed(1)}%)`;
 };
 
-export const AssessmentSubmissions = () => {
+export const SharedAssessmentSubmissions = ({ currentUser }: { currentUser: User }) => {
+    const isTeacher = currentUser.user_role === 'teacher';
   const [submissions] = useState(dummySubmissions);
   const [selectedSubmission, setSelectedSubmission] = useState<typeof dummySubmissions[0] | null>(null);
   const [showGradingModal, setShowGradingModal] = useState(false);
@@ -478,7 +480,6 @@ export const AssessmentSubmissions = () => {
 
   return (
     <div className="flex min-h-screen">
-      <Sidebar role={UserRole.Admin}/>
       <div className="flex-1 bg-gray-50">
         <HeaderAdmin title="Assessment Submissions" />
         
@@ -638,4 +639,4 @@ export const AssessmentSubmissions = () => {
   );
 };
 
-export default AssessmentSubmissions;
+export default SharedAssessmentSubmissions;

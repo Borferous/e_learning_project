@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { User } from "../../types";
 import {
   Table,
   Button,
@@ -169,15 +170,6 @@ interface Submission {
 
 const dummyDegrees: Degree[] = [
   {
-    id: 'degree-1',
-    name: 'Bachelor of Fine Arts in Dance',
-    majors: [
-      { id: 'major-1', name: 'Ballet' },
-      { id: 'major-2', name: 'Hip Hop' },
-      { id: 'major-3', name: 'Folkdance' }
-    ]
-  },
-  {
     id: 'degree-2',
     name: 'Bachelor of Arts in Music',
     majors: [
@@ -321,7 +313,9 @@ const validateCriteria = (criteria: Assessment['details']['criteria']) => {
   return total === 100;
 };
 
-export const SubjectManage = () => {
+
+
+export const SharedSubjectManage = ({ currentUser }: { currentUser: User }) => {
   const [subjects, setSubjects] = useState<Subject[]>(dummySubjects); // Initialize with dummy data
   const [selectedSubject, setSelectedSubject] = useState<Subject | null>(null);
   const [activeTab, setActiveTab] = useState<string | null>(null);
@@ -1154,7 +1148,6 @@ export const SubjectManage = () => {
 
   return (
     <div className="flex min-h-screen">
-      <Sidebar role={UserRole.Admin}/>
       <div className="flex-1 bg-gray-50">
         <HeaderAdmin title="Subject Management" />
 
@@ -1292,4 +1285,4 @@ export const SubjectManage = () => {
   );
 };
 
-export default SubjectManage;
+export default SharedSubjectManage;
