@@ -76,4 +76,16 @@ export const getCurrentUser = async() => {
     return data as User;
 }
 
+export const getUsername = async(userId: string) => {
+    const { data, error } = await supabase
+        .from('users')
+        .select('name')
+        .eq('id', userId)
+        .single();
+    if (error) {
+        throw new Error(`Error fetching username: ${error.message}`);
+    }
+    return data.name as string;
+}
+
 

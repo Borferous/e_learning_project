@@ -1,5 +1,6 @@
 import { Course, Major } from "../../types";
 import supabase from "../supabaseClient";
+import { getCurrentUser } from "./user";
 
 export const getCourses = async () => {
     const { data, error} = await supabase
@@ -11,6 +12,22 @@ export const getCourses = async () => {
     return data as Course[];
 }
 
+export const getMajorOfUser = async () => {
+    const user = await getCurrentUser();
+    if (!user) {
+        throw new Error("Cannot get user");
+    }
+    const { data, error } = await supabase
+        .from('majors')
+        .select('*')
+        .eq('id', user.enrolled_course_id)
+        .single()
+    if (error) {
+        throw new Error(`Error fetching major of user: ${error.message}`);
+    }
+    return data;
+}
+
 export const getMajor = async (courseId: string) => {
     const { data, error } = await supabase
         .from('majors')
@@ -19,7 +36,7 @@ export const getMajor = async (courseId: string) => {
     if (error) {
         throw new Error(`Error fetching majors: ${error.message}`);
     }
-    return data;
+    return data ;
 }
 
 export const getAllMajor = async (): Promise<Major[]> => {

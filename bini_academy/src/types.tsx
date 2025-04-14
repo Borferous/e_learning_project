@@ -50,6 +50,21 @@ export interface Subject {
     instructorId: string | null;
 }
 
+export interface Subject {
+    id: string,
+    title: string,
+    units: number,
+    teacher_id: string,
+    major_id: string,
+    semester: Semester,
+    year_level: YearLevel
+    description: string,
+
+    name: string;
+    credits: number;
+    instructorId: string | null;
+}
+
 export interface Curriculum {
     subjects: Subject[];
 }
@@ -65,6 +80,12 @@ export interface Major {
     trailer_link: string,
     thumbnail?: string,
     key_points: string[]
+
+
+    name: string;
+    curriculum?: {
+        subjects: Subject[];
+    };
 }
 
 export interface MajorSelection {
@@ -92,7 +113,9 @@ import {
     IconPencil,
     IconBook
 } from '@tabler/icons-react';
+
 import { Dispatch, ReactNode, SetStateAction } from 'react';
+
 
 
 export const CourseCategoryLabel = [
@@ -159,6 +182,7 @@ export const YearLevelLabel = [
     { value: YearLevel.ThirdYear, label: "Third Year" },
     { value: YearLevel.FourthYear, label: "Fourth Year" },
 ]
+
 
 export interface SubjectDetail {
     id: string,

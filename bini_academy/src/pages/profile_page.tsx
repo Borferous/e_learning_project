@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react';
-import { Tabs, Container, Paper, Avatar, Text, Group, Button, FileInput, Select, Menu, ActionIcon, Badge, Modal, TextInput, Textarea } from '@mantine/core';
-import { IconUser, IconSchool, IconClipboardList, IconSettings, IconUpload, IconFilter, IconExternalLink, IconMail, IconCheck, IconX, IconBrandFacebook, IconBrandTwitter, IconBrandInstagram, IconBrandLinkedin, IconBrandYoutube } from '@tabler/icons-react';
+import { Tabs, Paper, Avatar, Text, Group, Button, FileInput, Select, Menu, ActionIcon, Badge, Modal, TextInput, Textarea } from '@mantine/core';
+import { IconUser, IconSchool, IconClipboardList, IconSettings, IconUpload, IconFilter, IconExternalLink, IconMail, IconCheck, IconX } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { HomeHeader } from '../components/homeheader';
 import { Footer } from '../components/footer';
 import { SettingsForm } from '../components/settings_form';
 import { notifications } from '@mantine/notifications';
 import { useProfile } from '../contexts/ProfileContext';
+import { getCurrentUser } from '../supabase/api/user';
+import { getMajorOfUser } from '../supabase/api/course';
+
 interface Subject {
   id: string;
   name: string;
@@ -37,20 +40,11 @@ interface Teacher {
   bio?: string;
 }
 
-interface SocialMedia {
-  id: string;
-  platform: string;
-  url: string;
-}
-
 interface UserProfile {
-  firstName: string;
-  lastName: string;
+  name: string;
   email: string;
-  degree: string;
-  currentSemester: string;
+  degree: string | null;
   profilePic?: string;
-  socialMedia: SocialMedia[];
 }
 
 interface Event {
@@ -179,7 +173,6 @@ export const ProfilePage = () => {
   const navigate = useNavigate();
   const { profilePicUrl, updateProfilePic } = useProfile();
   const [activeTab, setActiveTab] = useState('dashboard');
-  const [profilePic, setProfilePic] = useState<File | null>(null);
   const [assignmentFilter, setAssignmentFilter] = useState<'all' | 'missing' | 'pending' | 'graded'>('all');
   const [eventFilter, setEventFilter] = useState<'upcoming' | 'past' | 'all'>('all');
   const [selectedSemester, setSelectedSemester] = useState('1st Semester 2025');
@@ -241,21 +234,27 @@ export const ProfilePage = () => {
     // Add more teachers...
   ];
 
+  const fetchUser = async() => {
+    const user = await getCurrentUser()
+    const major = await getMajorOfUser()
+    
+    setUserProfile({...userProfile,
+      name: user.name,
+      email: user.email,
+      degree: 'Major in ' + major.title || null
+    })
+  }
+
+  useEffect(()=>{
+    fetchUser()
+  },[])
+
   // Add user profile data
   const [userProfile, setUserProfile] = useState<UserProfile>({
-    firstName: 'John',
-    lastName: 'Doe',
+    name: 'John Doe',
     email: 'student@example.com',
     degree: 'Bachelor of Music',
-    currentSemester: '1st Semester 2025',
-    profilePic: undefined,
-    socialMedia: [
-      {
-        id: '1',
-        platform: 'facebook',
-        url: 'https://facebook.com/johndoe'
-      }
-    ]
+    profilePic: undefined
   });
 
   // Add dummy user data
@@ -299,16 +298,13 @@ export const ProfilePage = () => {
         withCloseButton: false,
       });
 
-      // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 2000));
       
-      // Update local state including social media
       setUserProfile(prev => ({
         ...prev,
         firstName: values.firstName,
         lastName: values.lastName,
         email: values.email,
-        socialMedia: values.socialMedia // Add this line
       }));
 
       notifications.update({
@@ -355,13 +351,6 @@ export const ProfilePage = () => {
   }, [profilePicUrl]);
 
   // Group subjects by semester
-  const groupedSubjects = subjects.reduce((acc, subject) => {
-    if (!acc[subject.semester]) {
-      acc[subject.semester] = [];
-    }
-    acc[subject.semester].push(subject);
-    return acc;
-  }, {} as Record<string, Subject[]>);
 
   // Filter assignments based on selected filter
   const filteredAssignments = assignments.filter(assignment => {
@@ -401,35 +390,10 @@ export const ProfilePage = () => {
             <Group className="mb-6 flex-col sm:flex-row p-2 md:p-4">
               <Avatar size={120} src={profilePicUrl} className="mx-auto sm:mx-0" />
               <div className="text-center sm:text-left mt-4 sm:mt-0">
-                <Text size="xl" fw={700}>{userProfile.firstName} {userProfile.lastName}</Text>
+                <Text size="xl" fw={700}>{userProfile.name}</Text>
                 <Text size="sm" c="dimmed">{userProfile.email}</Text>
                 <Group gap="xs" mt={4} className="justify-center sm:justify-start">
                   <Text size="sm" fw={500}>{userProfile.degree}</Text>
-                  <Text size="sm" c="dimmed">•</Text>
-                  <Text size="sm" c="dimmed">{userProfile.currentSemester}</Text>
-                </Group>
-                {/* Add social media icons */}
-                <Group gap="xs" mt={4} className="justify-center sm:justify-start">
-                  {userProfile.socialMedia.map((social) => {
-                    const IconComponent = {
-                      facebook: IconBrandFacebook,
-                      twitter: IconBrandTwitter,
-                      instagram: IconBrandInstagram,
-                      linkedin: IconBrandLinkedin,
-                      youtube: IconBrandYoutube,
-                    }[social.platform];
-
-                    return IconComponent ? (
-                      <ActionIcon
-                        key={social.id}
-                        variant="subtle"
-                        color="blue"
-                        onClick={() => window.open(social.url, '_blank')}
-                      >
-                        <IconComponent size={18} />
-                      </ActionIcon>
-                    ) : null;
-                  })}
                 </Group>
               </div>
             </Group>

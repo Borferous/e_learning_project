@@ -3,7 +3,6 @@ import {
   ActionIcon,
   Button,
   Card,
-  Divider,
   FileButton,
   Group,
   Text,
@@ -455,16 +454,7 @@ const SubjectPage: React.FC = () => {
               >
                 <IconArrowLeft size={20} />
               </ActionIcon>
-              <div>
-                <Title order={4}>Music Theory I</Title>
-                <Group gap={4}>
-                  <Text size="sm" color="dimmed">6 Sections</Text>
-                  <Text size="sm" color="dimmed">•</Text>
-                  <Text size="sm" color="dimmed">202 lectures</Text>
-                  <Text size="sm" color="dimmed">•</Text>
-                  <Text size="sm" color="dimmed">5 months</Text>
-                </Group>
-              </div>
+              <Title order={4}>Music Theory I</Title>
             </Group>
           </Group>
         </div>
@@ -492,26 +482,6 @@ const SubjectPage: React.FC = () => {
               {/* Lecture Info */}
               <div className="mb-6 bg-white rounded-lg p-6">
                 <Title order={3} className="mb-4">{activeLecture.title}</Title>
-                <Group gap="lg">
-                  <Group gap={4}>
-                    {/* Student avatars */}
-                    <div className="flex -space-x-2">
-                      {[...Array(5)].map((_, i) => (
-                        <img
-                          key={i}
-                          src="/api/placeholder/24/24"
-                          alt="student"
-                          className="w-6 h-6 rounded-full border-2 border-white"
-                        />
-                      ))}
-                    </div>
-                    <Text size="sm" color="dimmed">512 Students watching</Text>
-                  </Group>
-                  <Divider orientation="vertical" />
-                  <Text size="sm" color="dimmed">Last updated: Jan 26, 2025</Text>
-                  <Divider orientation="vertical" />
-                  <Text size="sm" color="dimmed">Comments: 154</Text>
-                </Group>
               </div>
 
               {/* Tabs Navigation */}

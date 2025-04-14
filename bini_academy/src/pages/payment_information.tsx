@@ -18,7 +18,7 @@ export const PaymentInformation = () => {
 
     const enrollMutation = useMutation({
         mutationFn: async () => {
-            const userId = getCurrentUser().id;
+            const userId = (await getCurrentUser()).id;
             if (userId && paymentForm.values.amount) {
                 await enrollUser(userId, majorId as string, parseFloat(paymentForm.values.amount));
             }
