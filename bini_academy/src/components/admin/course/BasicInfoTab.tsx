@@ -7,13 +7,7 @@ interface MajorSelection {
   majorId: string | null;
 }
 
-interface Degree {
-  id: string;
-  name: string;
-  description: string;
-  category: string;
-  majors: { id: string; name: string; description: string; }[];
-}
+import { Degree } from '../../../types';
 
 interface BasicInfoTabProps extends TabProps {
   selection: MajorSelection;
@@ -25,6 +19,7 @@ interface BasicCourseInfo {
   title: string;
   subtitle: string;
   description: string;
+  degrees: import("../../../types").Degree[];
   duration: string;
   price: number;
 }
@@ -42,6 +37,7 @@ export const BasicInfoTab = ({
     title: '',
     subtitle: '',
     description: '',
+    degrees: [],
     duration: '',
     price: 0
   });

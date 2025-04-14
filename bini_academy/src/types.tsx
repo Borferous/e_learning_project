@@ -40,7 +40,7 @@ export interface Course {
     majors?: Major[]
 }
 
-export interface Subject {
+export interface SubjectDB {
     title: ReactNode;
     id: string;
     name: string;

@@ -4,7 +4,7 @@ import { RichTextEditor } from "@mantine/tiptap";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
-import { HostMediaUpload } from "./hostmediaupload";
+// import { HostMediaUpload } from "./hostmediaupload";
 import "@mantine/tiptap/styles.css";
 import TextAlign from "@tiptap/extension-text-align";
 
@@ -41,7 +41,7 @@ export const AdvancedInfoEventTab = () => {
     <div className="bg-white p-6 rounded-lg shadow">
       <h2 className="text-xl font-semibold mb-4">Advanced Information</h2>
 
-      <HostMediaUpload onUpload={handleUpload} />
+      {/* <HostMediaUpload onUpload={handleUpload} /> */}
 
       {/* Event Description with Rich Text Editor */}
       <div className="mt-6">
