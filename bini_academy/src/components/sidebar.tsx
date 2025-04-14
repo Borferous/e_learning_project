@@ -25,14 +25,14 @@ export const Sidebar = ({role}: {role: UserRole}) => {
           { label: "User Management", icon: IconUsers, path: "/admin/usermanage" },
           { label: "Course Management", icon: IconSchool, path: "/admin/coursemanage" },
           { label: "Subject Management", icon: IconBook, path: "/admin/subjectmanage" },
-          { label: "Assessment Submissions", icon: IconClipboardCheck, path: "/admin/assessment-submissions" }, // Add this line
+          { label: "Assessment Submissions", icon: IconClipboardCheck, path: "/admin/assessment-submissions" },
           { label: "Host Events", icon: IconCalendarEvent, path: "/admin/hostevents" },
         ]
       case UserRole.Teacher:
         return [
-          { label: "Subject Management", icon: IconBook, path: "/admin/subjectmanage" },
-          { label: "Assessment Submissions", icon: IconClipboardCheck, path: "/admin/assessment-submissions" }, // Add this line
-          { label: "Host Events", icon: IconCalendarEvent, path: "/admin/hostevents" },
+          { label: "Subject Management", icon: IconBook, path: "/subjects" },
+          { label: "Assessment Submissions", icon: IconClipboardCheck, path: "/assessment-submissions" },
+          { label: "Events", icon: IconCalendarEvent, path: "/shared-events" },
         ]
       default:
         return []

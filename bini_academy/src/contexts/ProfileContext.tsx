@@ -5,7 +5,7 @@ interface ProfileContextType {
   updateProfilePic: (url: string) => void;
 }
 
-const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
+export const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
 
 export const ProfileProvider = ({ children }: { children: ReactNode }) => {
   const [profilePicUrl, setProfilePicUrl] = useState<string | undefined>(

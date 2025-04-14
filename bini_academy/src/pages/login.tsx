@@ -9,7 +9,6 @@ import { useMutation } from '@tanstack/react-query';
 import { getCurrentUser, loginUser } from '../supabase/api/user.ts';
 import { User, UserRole } from '../types.tsx';
 
-
 export const LoginPage = () => {
   const navigate = useNavigate()
   const [email, setEmail] = useState<string | null>(null);
@@ -23,25 +22,53 @@ export const LoginPage = () => {
       await loginUser(email, password);
     },
     onSuccess: async() => {
-      notifications.show({ title: "Success", color: "green", message: "Login Successful"});
-      const loggedUser = await getCurrentUser() as User;
-      switch (loggedUser?.user_role) {
-        case UserRole.Admin:
-          navigate('/usermanage');
-          break;
-        case UserRole.Teacher:
-          navigate('/instructorcreatecourse');
-          break;
-        case UserRole.Student:
-          navigate('/');
-          break;
-        default:
-          navigate('/error-page');
-          break
+      try {
+        const loggedUser = await getCurrentUser() as User;
+        
+        if (loggedUser?.user_role === 'teacher') {
+          // For teachers, store minimal required data in localStorage
+          localStorage.setItem('teacherData', JSON.stringify({
+            id: loggedUser.id,
+            name: loggedUser.name,
+            user_role: loggedUser.user_role
+          }));
+        }
+
+        notifications.show({ 
+          title: "Success", 
+          color: "green", 
+          message: "Login Successful"
+        });
+
+        // Direct navigation based on role
+        switch (loggedUser?.user_role) {
+          case 'teacher':
+            navigate('/subjects'); // This matches the first item in teacher sidebar
+            break;
+          case 'admin':
+            navigate('/admin/usermanage');
+            break;
+          case 'student':
+            navigate('/');
+            break;
+          default:
+            navigate('/error-page');
+            break;
+        }
+      } catch (error) {
+        notifications.show({ 
+          title: "Error", 
+          color: "red", 
+          message: "Failed to process login"
+        });
       }
     },
     onError: () => {
-      notifications.show({ title: "Error", color: "red", message: "Login Failed"});
+      notifications.show({ 
+        title: "Error", 
+        color: "red", 
+        message: "Login Failed"
+      });
     },
   });
 
