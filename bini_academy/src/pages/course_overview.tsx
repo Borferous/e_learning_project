@@ -11,6 +11,8 @@ import { getSubjects } from "../supabase/api/subjects";
 import { List, ThemeIcon } from '@mantine/core';
 import { IconCircleCheck } from '@tabler/icons-react';
 import { getCurrentUser } from "../supabase/api/user";
+import { unenrollUser } from "../supabase/api/enrollment";
+import { notifications } from "@mantine/notifications";
 
 export const CourseOverview = () => {
 
@@ -25,8 +27,33 @@ export const CourseOverview = () => {
   const [courseData, setCourseData] = useState<Major | null>(null)
   const [courseSubjects, setCourseSubjects] = useState<any[]>([])
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [enrollId, setEnrollId] = useState<string | null>(null);
 
-  const checkLoggedIn = async() => {
+  const handleUnenroll = async () => {
+    const userId = (await getCurrentUser())?.id;
+    await unenrollUser(userId as string);
+    notifications.show({
+      title: "Unenrolled Successfully",
+      message: "You have been unenrolled from the course.",
+      color: "red",
+    });
+  }
+
+  const checkEnrolled = async () => {
+    const user = await getCurrentUser();
+    if (user) {
+      const enrolledCourseId = user.enrolled_course_id;
+      if (enrolledCourseId) {
+        setEnrollId(enrolledCourseId);
+      } else {
+        setEnrollId(null);
+      }
+    } else {
+      setEnrollId(null);
+    }
+  }
+
+  const checkLoggedIn = async () => {
     const user = await getCurrentUser();
     if (user) {
       if (user.user_role === UserRole.Student) {
@@ -54,7 +81,7 @@ export const CourseOverview = () => {
     fetchMajor();
     fetchCurriculumn();
     checkLoggedIn();
-  }, [courseData, courseSubjects, isLoggedIn]);
+  }, [courseData, courseSubjects, isLoggedIn, enrollId]);
 
   const navigate = useNavigate()
 
@@ -102,9 +129,17 @@ export const CourseOverview = () => {
                 </Text>
               </Group>
 
-              <Button color="orange" fullWidth className="mb-4" onClick={() => navigate(`/payment-information/${majorId}`)} disabled={!isLoggedIn}>
-                Enroll Now
-              </Button>
+              {enrollId === null ? (
+                <Button color="orange" fullWidth className="mb-4" onClick={() => navigate(`/payment-information/${majorId}`)} disabled={!isLoggedIn}>
+                  Enroll Now
+                </Button>
+              ) : (
+                <Button color="red" fullWidth className="mb-4" onClick={() => handleUnenroll()}>
+                  Unenroll
+                </Button>
+              )}
+
+
 
               <Text size="xs" c="dimmed" className="mb-4 text-center">
                 30-day money-back guarantee
@@ -141,7 +176,7 @@ export const CourseOverview = () => {
               </ul>
             )}
           </div>
-          
+
           <StudentFeedback />
         </Container>
       </main>
@@ -161,11 +196,11 @@ const CourseDescription = ({ description, keyPoints }: CourseDescriptionProps) =
       <Text component="h2" className="text-xl font-bold mb-4">
         Description
       </Text>
-      
+
       <Text className="mb-6 text-gray-500">
         {description}
       </Text>
-      
+
       <Text className="font-bold mb-8">You'll explore:</Text>
       <List
         spacing="xs"
