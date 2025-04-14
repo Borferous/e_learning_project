@@ -27,7 +27,7 @@ export const LoginPage = () => {
       const loggedUser = await getCurrentUser() as User;
       switch (loggedUser?.user_role) {
         case UserRole.Admin:
-          navigate('/usermanage');
+          navigate('/admin/usermanage');
           break;
         case UserRole.Teacher:
           navigate('/instructorcreatecourse');

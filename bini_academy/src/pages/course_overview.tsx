@@ -6,10 +6,11 @@ import StudentFeedback from "../components/student_feedback";
 import { useNavigate, useParams } from "react-router-dom";
 import { getMajor } from "../supabase/api/course";
 import { useEffect, useState } from "react";
-import { Major, Subject } from "../types";
+import { Major, Subject, UserRole } from "../types";
 import { getSubjects } from "../supabase/api/subjects";
 import { List, ThemeIcon } from '@mantine/core';
 import { IconCircleCheck } from '@tabler/icons-react';
+import { getCurrentUser } from "../supabase/api/user";
 
 export const CourseOverview = () => {
 
@@ -23,6 +24,20 @@ export const CourseOverview = () => {
 
   const [courseData, setCourseData] = useState<Major | null>(null)
   const [courseSubjects, setCourseSubjects] = useState<any[]>([])
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const checkLoggedIn = async() => {
+    const user = await getCurrentUser();
+    if (user) {
+      if (user.user_role === UserRole.Student) {
+        setIsLoggedIn(true);
+      } else {
+        setIsLoggedIn(false);
+      }
+    } else {
+      setIsLoggedIn(false);
+    }
+  }
 
   const { majorId } = useParams();
   const fetchMajor = async () => {
@@ -38,7 +53,8 @@ export const CourseOverview = () => {
   useEffect(() => {
     fetchMajor();
     fetchCurriculumn();
-  }, [courseData, courseSubjects]);
+    checkLoggedIn();
+  }, [courseData, courseSubjects, isLoggedIn]);
 
   const navigate = useNavigate()
 
@@ -86,7 +102,7 @@ export const CourseOverview = () => {
                 </Text>
               </Group>
 
-              <Button color="orange" fullWidth className="mb-4" onClick={() => navigate(`/payment-information/${majorId}`)}>
+              <Button color="orange" fullWidth className="mb-4" onClick={() => navigate(`/payment-information/${majorId}`)} disabled={!isLoggedIn}>
                 Enroll Now
               </Button>
 
@@ -126,7 +142,6 @@ export const CourseOverview = () => {
             )}
           </div>
           
-
           <StudentFeedback />
         </Container>
       </main>

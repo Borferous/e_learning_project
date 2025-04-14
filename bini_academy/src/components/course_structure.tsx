@@ -1,4 +1,4 @@
-import { Card, Group, Text, Progress, Collapse, Radio } from '@mantine/core';
+import { Group, Text, Progress, Collapse, Radio } from '@mantine/core';
 import { IconClock } from '@tabler/icons-react';
 
 interface Lecture {
@@ -27,9 +27,8 @@ interface CourseStructureProps {
   activeLectureId: number;
 }
 
-export const CourseStructure = ({ 
+export const  CourseStructure = ({ 
   sections, 
-  overallProgress, 
   onToggleSection,
   onLectureComplete,
   onLectureClick,
@@ -37,14 +36,6 @@ export const CourseStructure = ({
 }: CourseStructureProps) => {
   return (
     <div className="w-full">
-      {/* Overall progress */}
-      <Card shadow="sm" p="md" mb="md">
-        <Group justify="space-between" className="mb-2">
-          <Text size="sm" fw={500}>Subject Contents</Text>
-          <Text size="sm" color="green" fw={500}>{overallProgress}% Completed</Text>
-        </Group>
-        <Progress value={overallProgress} color="green" size="sm" />
-      </Card>
 
       {/* Course structure accordion */}
       <div className="space-y-2">

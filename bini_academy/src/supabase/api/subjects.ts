@@ -23,14 +23,14 @@ export const getMySubjects = async() => {
     };
     const {data, error} = await supabase
         .from('subjects')
-        .select('*')
+        .select('*, users:teacher_id(name)')
         .eq('major_id', user.enrolled_course_id)
 
     if (error) {
         throw new Error(`Error fetching subjects: ${error.message}`);
     }
     console.log('Subjects', data)
-    return data as Subject[];
+    return data as any[];
 }
 
 

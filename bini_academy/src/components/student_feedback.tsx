@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Text, Group, Avatar, Rating, Button, Divider } from '@mantine/core';
+import { Text, Group, Avatar, Button, Divider } from '@mantine/core';
 import { IconChevronDown } from '@tabler/icons-react';
 
 const StudentFeedback = () => {
@@ -67,9 +67,7 @@ const StudentFeedback = () => {
               <div>
                 <Group justify="space-between" className="w-full">
                   <Text fw={600}>{review.name}</Text>
-                  <Text size="xs" color="dimmed">{review.date}</Text>
                 </Group>
-                <Rating value={review.rating} readOnly size="sm" className="mb-2" />
                 <Text size="sm">{review.review}</Text>
               </div>
             </Group>
