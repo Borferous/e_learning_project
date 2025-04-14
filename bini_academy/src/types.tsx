@@ -41,6 +41,7 @@ export interface Course {
 }
 
 export interface Subject {
+    title: ReactNode;
     id: string;
     name: string;
     description: string;
@@ -91,7 +92,7 @@ import {
     IconPencil,
     IconBook
 } from '@tabler/icons-react';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, ReactNode, SetStateAction } from 'react';
 
 
 export const CourseCategoryLabel = [
