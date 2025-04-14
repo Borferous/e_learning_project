@@ -7,9 +7,8 @@ This project is a web-based e-learning platform, It aims to provide an interacti
 -  **TypeScript**: For type safety and development efficiency.
 -  **Tailwind CSS**: For utility-first CSS styling.
 - **Tanstack Query**: for advance fetching and stuff
--  **Supabase**: Database but supa
+-  **Supabase**: Database but super
 -  **Mantine UI**: For responsive UI components
--  **LiveKit**: For meeting stuff
   
 # To Run
 
