@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { Table, ActionIcon, Badge, Menu, Text, Group, Select, Button } from "@mantine/core";
-import { IconEdit, IconTrash, IconDotsVertical, IconUsers, IconCalendar } from "@tabler/icons-react";
-import { EventType } from "../../types/events";
+import { Table, ActionIcon, Badge, Menu, Text, Group, Select, Button, Modal } from "@mantine/core";
+import { IconEdit, IconTrash, IconDotsVertical, IconUsers, IconCalendar, IconFileCheck } from "@tabler/icons-react";
+import { EventType, EventSubmission, SubmissionStatus } from '../../types/events';
 import { RegistrationReview } from './RegistrationReview';
+import { SubmissionReview } from './SubmissionReview';
 
 interface EventsListProps {
   onEdit: (event: EventType) => void;
@@ -13,6 +14,9 @@ export const EventsList = ({ onEdit }: EventsListProps) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedEvent, setSelectedEvent] = useState<EventType | null>(null);
   const [showReviewModal, setShowReviewModal] = useState(false);
+  const [selectedSubmission, setSelectedSubmission] = useState<EventSubmission | null>(null);
+  const [showSubmissionModal, setShowSubmissionModal] = useState(false);
+  const [showSubmissionsListModal, setShowSubmissionsListModal] = useState(false);
 
   // Mock data for testing
   const events: EventType[] = [
@@ -61,26 +65,29 @@ export const EventsList = ({ onEdit }: EventsListProps) => {
         {
           studentId: 'STU001',
           studentName: 'Alice Johnson',
+          studentEmail: 'alice@example.com',
           piece: 'Moonlight Sonata - Beethoven',
           submissionDate: '2025-03-20',
           videoUrl: 'submission1.mp4',
-          status: 'pending'
+          status: 'pending' as SubmissionStatus
         },
         {
           studentId: 'STU002',
           studentName: 'Bob Smith',
+          studentEmail: 'bob@example.com',
           piece: 'Rhapsody in Blue - Gershwin',
           submissionDate: '2025-03-21',
           videoUrl: 'submission2.mp4',
-          status: 'approved'
+          status: 'approved' as SubmissionStatus
         },
         {
           studentId: 'STU003',
           studentName: 'Carol White',
+          studentEmail: 'carol@example.com',
           piece: 'Claire de Lune - Debussy',
           submissionDate: '2025-03-22',
           videoUrl: 'submission3.mp4',
-          status: 'pending'
+          status: 'pending' as SubmissionStatus
         }
       ]
     }
@@ -186,6 +193,17 @@ export const EventsList = ({ onEdit }: EventsListProps) => {
                     >
                       Review Registrations
                     </Menu.Item>
+                    {event.submissions && (
+                      <Menu.Item 
+                        leftSection={<IconFileCheck size={14} />}
+                        onClick={() => {
+                          setSelectedEvent(event);
+                          setShowSubmissionsListModal(true);
+                        }}
+                      >
+                        Review Submissions ({event.submissions.length})
+                      </Menu.Item>
+                    )}
                     <Menu.Item 
                       leftSection={<IconEdit size={14} />}
                       onClick={() => onEdit(event)}
@@ -213,6 +231,75 @@ export const EventsList = ({ onEdit }: EventsListProps) => {
           onClose={() => {
             setShowReviewModal(false);
             setSelectedEvent(null);
+          }}
+        />
+      )}
+
+      {selectedEvent && selectedEvent.submissions && (
+        <Modal
+          opened={showSubmissionsListModal}
+          onClose={() => setShowSubmissionsListModal(false)}
+          title={`Submissions for ${selectedEvent.title}`}
+          size="lg"
+        >
+          <Table>
+            <Table.Thead>
+              <Table.Tr>
+                <Table.Th>Student</Table.Th>
+                <Table.Th>Piece</Table.Th>
+                <Table.Th>Status</Table.Th>
+                <Table.Th>Action</Table.Th>
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>
+              {selectedEvent.submissions.map((submission) => (
+                <Table.Tr key={submission.studentId}>
+                  <Table.Td>
+                    <Text fw={500}>{submission.studentName}</Text>
+                    <Text size="xs" c="dimmed">{submission.studentEmail}</Text>
+                  </Table.Td>
+                  <Table.Td>{submission.piece}</Table.Td>
+                  <Table.Td>
+                    <Badge 
+                      color={
+                        submission.status === 'approved' 
+                          ? 'green' 
+                          : submission.status === 'rejected'
+                          ? 'red'
+                          : 'yellow'
+                      }
+                    >
+                      {submission.status}
+                    </Badge>
+                  </Table.Td>
+                  <Table.Td>
+                    <Button
+                      variant="light"
+                      size="xs"
+                      onClick={() => {
+                        setSelectedSubmission(submission);
+                        setShowSubmissionsListModal(false);
+                        setShowSubmissionModal(true);
+                      }}
+                    >
+                      Review
+                    </Button>
+                  </Table.Td>
+                </Table.Tr>
+              ))}
+            </Table.Tbody>
+          </Table>
+        </Modal>
+      )}
+
+      {selectedEvent && selectedSubmission && (
+        <SubmissionReview
+          submission={selectedSubmission}
+          eventTitle={selectedEvent.title}
+          opened={showSubmissionModal}
+          onClose={() => {
+            setShowSubmissionModal(false);
+            setSelectedSubmission(null);
           }}
         />
       )}
