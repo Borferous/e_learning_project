@@ -76,6 +76,24 @@ export const getCurrentUser = async() => {
     return data as User;
 }
 
+export const getProfile = async() => {
+    const user = await getCurrentUser() as User;
+    if (!user) {
+        throw new Error("Cannot get user")
+    }
+
+    if (!user.profile_picture) {
+        return null;
+    }
+    
+    const {data: urlData} = supabase
+        .storage
+        .from('profile-picture')
+        .getPublicUrl(user.profile_picture);
+
+    return urlData.publicUrl;
+}
+
 export const getUsername = async(userId: string) => {
     const { data, error } = await supabase
         .from('users')

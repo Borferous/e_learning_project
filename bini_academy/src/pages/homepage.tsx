@@ -13,27 +13,6 @@ import { Major } from "../types";
 import { useNavigate } from "react-router-dom";
 import { getMySubjects } from "../supabase/api/subjects";
 
-
-// const courses = [
-//   {
-//     degree: "Bachelor of Music",
-//     majors: [
-//       "Vocal Performance",
-//       "Instrumental Performance",
-//       "Music Production",
-//       "Composition",
-//     ],
-//   },
-//   {
-//     degree: "Bachelor of Fine Arts in Dance",
-//     majors: ["Contemporary", "Ballet", "Hip-Hop", "Folk Dance"],
-//   },
-//   {
-//     degree: "Bachelor of Arts in Acting",
-//     majors: ["Stage Acting", "Screen Acting", "Musical Theater"],
-//   },
-// ];
-
 export const HomePage = () => {
   const navigate = useNavigate();
   const [courseMajor, setCourseMajor] = useState<any[]>([]);
