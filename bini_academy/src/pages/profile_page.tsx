@@ -7,7 +7,7 @@ import { Footer } from '../components/footer';
 import { SettingsForm } from '../components/settings_form';
 import { notifications } from '@mantine/notifications';
 import { useProfile } from '../contexts/ProfileContext';
-import { getCurrentUser } from '../supabase/api/user';
+import { getCurrentUser, getProfile } from '../supabase/api/user';
 import { getMajorOfUser } from '../supabase/api/course';
 
 interface Subject {
@@ -256,6 +256,23 @@ export const ProfilePage = () => {
     degree: 'Bachelor of Music',
     profilePic: undefined
   });
+
+  const fetchUserData = async () => {
+    const user = await getCurrentUser();
+    if (user) {
+      const userMajor = await getMajorOfUser();
+      setUserProfile({
+        ...userProfile,
+        name: user.name,
+        email: user.email,
+        degree: userMajor.title,
+      });
+    }
+  }
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
 
   // Add dummy user data
   const currentUserData = {

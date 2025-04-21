@@ -9,7 +9,7 @@ import { User } from '../../types';
 import { EventType } from "../../types/events";
 
 export const SharedEvents = ({ currentUser }: { currentUser: User }) => {
-    const isTeacher = currentUser.user_role === 'teacher';
+  const isTeacher = currentUser.user_role === 'teacher';
   const [activeTab, setActiveTab] = useState<string>("list");
   const [selectedEvent, setSelectedEvent] = useState<EventType | null>(null);
 

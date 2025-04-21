@@ -106,7 +106,7 @@ export const PaymentInformation = () => {
                             size="md" 
                             variant="light" 
                             className="w-auto inline-flex" 
-                            onClick={() => navigate('/courseoverview')}
+                            onClick={() => navigate(`/courseoverview/${majorId}`)}
                         >
                             <IconArrowLeft />
                         </Button>
@@ -121,7 +121,7 @@ export const PaymentInformation = () => {
                             <Select
                                 label='Payment Method'
                                 placeholder='Select payment method'
-                                data={['gCash Christ', 'Metroman Bank']}
+                                data={['GCASH', 'PAYPAL']}
                                 className="mb-4"
                                 {...paymentForm.getInputProps('paymentMethod')}
                             />

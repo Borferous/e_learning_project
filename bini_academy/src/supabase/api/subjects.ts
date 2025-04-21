@@ -1,4 +1,3 @@
-import { Subject } from "../../types";
 import supabase from "../supabaseClient";
 import { getCurrentUser } from "./user";
 
