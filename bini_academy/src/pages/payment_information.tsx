@@ -105,10 +105,13 @@ export const PaymentInformation = () => {
                             color="orange" 
                             size="md" 
                             variant="light" 
-                            className="w-auto inline-flex" 
-                            onClick={() => navigate(`/courseoverview/${majorId}`)}
+
+                            className="w-auto inline-flex items-center gap-2" 
+                            onClick={() => navigate(-1)}  // Changed to use history navigation
+
                         >
-                            <IconArrowLeft />
+                            <IconArrowLeft size={16} />
+                         
                         </Button>
                     </Card.Section>
                     
@@ -121,7 +124,9 @@ export const PaymentInformation = () => {
                             <Select
                                 label='Payment Method'
                                 placeholder='Select payment method'
-                                data={['GCASH', 'PAYPAL']}
+
+                                data={['GCash', 'MetroBank', 'UnionBank', 'PayPal']}
+                         
                                 className="mb-4"
                                 {...paymentForm.getInputProps('paymentMethod')}
                             />

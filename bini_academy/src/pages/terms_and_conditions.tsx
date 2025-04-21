@@ -31,9 +31,9 @@ export const TermsAndCondition = () => {
                             size="md" 
                             variant="light" 
                             className="w-auto inline-flex" 
-                            onClick={() => navigate('/payment-information')}
+                            onClick={() => navigate(-1)}
                         >
-                            <IconArrowLeft />
+                            <IconArrowLeft size={16}/>
                         </Button>
                     </Card.Section>
                     

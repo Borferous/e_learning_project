@@ -14,6 +14,14 @@ import { getCurrentUser } from "../supabase/api/user";
 import { unenrollUser } from "../supabase/api/enrollment";
 import { notifications } from "@mantine/notifications";
 
+const formatPeso = (amount: number) => {
+  return new Intl.NumberFormat('en-PH', {
+    style: 'currency',
+    currency: 'PHP',
+    minimumFractionDigits: 2
+  }).format(amount);
+};
+
 export const CourseOverview = () => {
 
   const features = [
@@ -119,7 +127,7 @@ export const CourseOverview = () => {
 
             <div className="w-full md:w-1/3 bg-gray-50 p-6 rounded-lg border border-gray-200">
               <Text fw={700} size="xl" className="mb-4">
-                P {courseData?.price}
+                {courseData?.price ? formatPeso(courseData.price) : 'PHP 0.00'}
               </Text>
               <Group className="mb-4">
                 <IconCalendar size={16} />
