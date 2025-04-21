@@ -1153,9 +1153,9 @@ export const SubjectManage = () => {
   );
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen relative">
       <Sidebar role={UserRole.Admin}/>
-      <div className="flex-1 bg-gray-50">
+      <div className="flex-1 bg-gray-50 overflow-y-auto">
         <HeaderAdmin title="Subject Management" />
 
         <div className="p-8">

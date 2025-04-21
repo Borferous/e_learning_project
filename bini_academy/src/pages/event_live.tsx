@@ -29,17 +29,22 @@ export const EventLivePage = () => {
     subtitle: "Master your voice with our experts",
     description: "Join our vocal coach in this intensive live session to boost your performance skills.",
     instructor: "Sarah Johnson",
-    youtubeUrl: "https://www.youtube.com/embed/bKI7LHezJA0", // Updated YouTube URL
+    youtubeUrl: "https://www.youtube.com/embed/0Sxs_-MXKFo", // Updated YouTube URL
     startTime: "10:00 AM",
     duration: "2 hours",
     participants: 45,
   };
 
-  // Helper function to ensure proper YouTube embed URL
+  // Update the helper function to ensure proper YouTube embed URL with autoplay
   const getYouTubeEmbedUrl = (url: string) => {
-    if (url.includes('embed')) return url;
+    if (url.includes('embed')) {
+      // Add autoplay parameter if not already present
+      return url.includes('autoplay') ? url : `${url}?autoplay=1&mute=1`;
+    }
+    
+    // Extract video ID and create embed URL with autoplay
     const videoId = url.split('v=')[1];
-    return `https://www.youtube.com/embed/${videoId}`;
+    return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1`;
   };
 
   // Simulate receiving new comments
